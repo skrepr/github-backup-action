@@ -1,0 +1,27 @@
+{
+  "name": "github-backup-action",
+  "version": "1.0.0",
+  "description": "Github action for backing up Github orgs with migrations",
+  "main": "action.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skrepr/github-backup-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/skrepr/github-backup-action/issues"
+  },
+  "homepage": "https://github.com/skrepr/github-backup-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.8.2",
+    "@actions/github": "^5.0.3",
+    "@octokit/core": "^3.6.0",
+    "fs": "^0.0.1-security"
+  }
+}
