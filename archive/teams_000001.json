@@ -1,0 +1,541 @@
+[
+  {
+    "type": "team",
+    "url": "https://github.com/orgs/skrepr/teams/developers",
+    "organization": "https://github.com/skrepr",
+    "parent_team": null,
+    "name": "Developers",
+    "description": "Developer team for all shared repositories",
+    "privacy": "secret",
+    "permissions": [
+      {
+        "repository": "https://github.com/skrepr/skrepr-reservation",
+        "access": "push",
+        "role": "write"
+      },
+      {
+        "repository": "https://github.com/skrepr/skrepr-symfony-template",
+        "access": "push",
+        "role": "write"
+      }
+    ],
+    "members": [
+      {
+        "user": "https://github.com/kingkorf",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/ogerik",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/duwial",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/EvanvanUrk",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/erkens",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/sjoert-skrepr",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/michielpierik",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/jeroenvandermeulen",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/wesleyskrepr",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/DouweGnodde",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/skrepr-github",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/gerritbos",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/ruben-skrepr",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/julian-sawicki-skrepr",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/Arend-Jan-skrepr",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/julianhoog1989skrepr",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/skreprniels",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/AukeSkrepr",
+        "role": "member"
+      }
+    ],
+    "created_at": "2007-10-20T11:24:19Z"
+  },
+  {
+    "type": "team",
+    "url": "https://github.com/orgs/skrepr/teams/infra",
+    "organization": "https://github.com/skrepr",
+    "parent_team": null,
+    "name": "Infra",
+    "description": "Group for all members of Infra",
+    "privacy": "closed",
+    "permissions": [
+      {
+        "repository": "https://github.com/skrepr/skrepr-infrastructure",
+        "access": "admin",
+        "role": "admin"
+      },
+      {
+        "repository": "https://github.com/skrepr/skrepr-monitoring",
+        "access": "admin",
+        "role": "admin"
+      }
+    ],
+    "members": [
+      {
+        "user": "https://github.com/kingkorf",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/jeroenvandermeulen",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/skrepr-github",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/Arend-Jan-skrepr",
+        "role": "member"
+      }
+    ],
+    "created_at": "2021-05-27T07:43:48Z"
+  },
+  {
+    "type": "team",
+    "url": "https://github.com/orgs/skrepr/teams/open-source",
+    "organization": "https://github.com/skrepr",
+    "parent_team": null,
+    "name": "Open source",
+    "description": "Group for all member of Open Source",
+    "privacy": "closed",
+    "permissions": [
+      {
+        "repository": "https://github.com/skrepr/zf1",
+        "access": "push",
+        "role": "maintain"
+      },
+      {
+        "repository": "https://github.com/skrepr/teams-connector",
+        "access": "admin",
+        "role": "admin"
+      },
+      {
+        "repository": "https://github.com/skrepr/math-symfony-bundle",
+        "access": "pull",
+        "role": "read"
+      },
+      {
+        "repository": "https://github.com/skrepr/teams-connector-bundle",
+        "access": "admin",
+        "role": "admin"
+      },
+      {
+        "repository": "https://github.com/skrepr/skrepr-translate",
+        "access": "push",
+        "role": "maintain"
+      }
+    ],
+    "members": [
+      {
+        "user": "https://github.com/erkens",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/jonmldr",
+        "role": "member"
+      }
+    ],
+    "created_at": "2021-05-27T08:36:17Z"
+  },
+  {
+    "type": "team",
+    "url": "https://github.com/orgs/skrepr/teams/food-dev",
+    "organization": "https://github.com/skrepr",
+    "parent_team": null,
+    "name": "food-dev",
+    "description": "Group for Skrepr Food developers",
+    "privacy": "closed",
+    "permissions": [
+      {
+        "repository": "https://github.com/skrepr/skrepr-scalefish",
+        "access": "push",
+        "role": "write"
+      },
+      {
+        "repository": "https://github.com/skrepr/report-template-to-zpl-converter",
+        "access": "push",
+        "role": "write"
+      },
+      {
+        "repository": "https://github.com/skrepr/skrepr-print-server",
+        "access": "push",
+        "role": "write"
+      },
+      {
+        "repository": "https://github.com/skrepr/skrepr-fastfood",
+        "access": "push",
+        "role": "write"
+      }
+    ],
+    "members": [
+      {
+        "user": "https://github.com/khkramer",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/jonmldr",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/wesleyskrepr",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/DouweGnodde",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/MarcelKuijk-skrepr",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/benjaminvanurk",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/Arend-Jan-skrepr",
+        "role": "member"
+      }
+    ],
+    "created_at": "2021-06-23T15:47:28Z"
+  },
+  {
+    "type": "team",
+    "url": "https://github.com/orgs/skrepr/teams/dno-dev",
+    "organization": "https://github.com/skrepr",
+    "parent_team": null,
+    "name": "dno-dev",
+    "description": "Group for DNO Energie developers",
+    "privacy": "closed",
+    "permissions": [
+      {
+        "repository": "https://github.com/skrepr/dno-noodvermogen",
+        "access": "pull",
+        "role": "read"
+      },
+      {
+        "repository": "https://github.com/skrepr/dno-portaal",
+        "access": "pull",
+        "role": "read"
+      },
+      {
+        "repository": "https://github.com/skrepr/dno-login",
+        "access": "pull",
+        "role": "read"
+      },
+      {
+        "repository": "https://github.com/skrepr/dno-meetdata",
+        "access": "pull",
+        "role": "read"
+      }
+    ],
+    "members": [
+
+    ],
+    "created_at": "2021-06-30T13:48:02Z"
+  },
+  {
+    "type": "team",
+    "url": "https://github.com/orgs/skrepr/teams/interns",
+    "organization": "https://github.com/skrepr",
+    "parent_team": null,
+    "name": "Interns",
+    "description": "Group for Interns at skrepr",
+    "privacy": "closed",
+    "permissions": [
+      {
+        "repository": "https://github.com/skrepr/skrepr-reservation",
+        "access": "pull",
+        "role": "read"
+      }
+    ],
+    "members": [
+      {
+        "user": "https://github.com/benjaminvanurk",
+        "role": "member"
+      }
+    ],
+    "created_at": "2021-07-15T08:57:12Z"
+  },
+  {
+    "type": "team",
+    "url": "https://github.com/orgs/skrepr/teams/jl-dev",
+    "organization": "https://github.com/skrepr",
+    "parent_team": null,
+    "name": "jl-dev",
+    "description": "Group for Jurr Legal developers",
+    "privacy": "closed",
+    "permissions": [
+      {
+        "repository": "https://github.com/skrepr/jl-platform",
+        "access": "admin",
+        "role": "admin"
+      }
+    ],
+    "members": [
+      {
+        "user": "https://github.com/michielpierik",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/julian-sawicki-skrepr",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/Arend-Jan-skrepr",
+        "role": "member"
+      }
+    ],
+    "created_at": "2021-08-20T12:26:50Z"
+  },
+  {
+    "type": "team",
+    "url": "https://github.com/orgs/skrepr/teams/skrepr-dev",
+    "organization": "https://github.com/skrepr",
+    "parent_team": null,
+    "name": "skrepr-dev",
+    "description": "Group for developers working on skrepr repositories",
+    "privacy": "closed",
+    "permissions": [
+      {
+        "repository": "https://github.com/skrepr/skrepr-shop-connector",
+        "access": "push",
+        "role": "write"
+      }
+    ],
+    "members": [
+      {
+        "user": "https://github.com/michielpierik",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/jeroenvandermeulen",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/julianhoog1989skrepr",
+        "role": "member"
+      }
+    ],
+    "created_at": "2021-11-16T08:04:58Z"
+  },
+  {
+    "type": "team",
+    "url": "https://github.com/orgs/skrepr/teams/vdl-dev",
+    "organization": "https://github.com/skrepr",
+    "parent_team": null,
+    "name": "vdl-dev",
+    "description": "Group for Van der Lee developers",
+    "privacy": "closed",
+    "permissions": [
+      {
+        "repository": "https://github.com/skrepr/skrepr-automation",
+        "access": "push",
+        "role": "write"
+      }
+    ],
+    "members": [
+      {
+        "user": "https://github.com/DouweGnodde",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/Arend-Jan-skrepr",
+        "role": "member"
+      }
+    ],
+    "created_at": "2021-11-16T08:10:29Z"
+  },
+  {
+    "type": "team",
+    "url": "https://github.com/orgs/skrepr/teams/fifocolor-dev",
+    "organization": "https://github.com/skrepr",
+    "parent_team": null,
+    "name": "fifocolor-dev",
+    "description": "Group for Fifocolor developers",
+    "privacy": "closed",
+    "permissions": [
+      {
+        "repository": "https://github.com/skrepr/fifocolor-cms",
+        "access": "push",
+        "role": "write"
+      }
+    ],
+    "members": [
+      {
+        "user": "https://github.com/sjoert-skrepr",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/michielpierik",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/jeroenvandermeulen",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/ruben-skrepr",
+        "role": "member"
+      }
+    ],
+    "created_at": "2021-11-16T08:28:26Z"
+  },
+  {
+    "type": "team",
+    "url": "https://github.com/orgs/skrepr/teams/software-engineering",
+    "organization": "https://github.com/skrepr",
+    "parent_team": null,
+    "name": "Software Engineering",
+    "description": "Group for alle members of Software Engineering",
+    "privacy": "closed",
+    "permissions": [
+      {
+        "repository": "https://github.com/skrepr/math-symfony-bundle",
+        "access": "pull",
+        "role": "read"
+      }
+    ],
+    "members": [
+      {
+        "user": "https://github.com/duwial",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/khkramer",
+        "role": "member"
+      }
+    ],
+    "created_at": "2021-11-16T08:55:04Z"
+  },
+  {
+    "type": "team",
+    "url": "https://github.com/orgs/skrepr/teams/quality-assurance",
+    "organization": "https://github.com/skrepr",
+    "parent_team": null,
+    "name": "Quality Assurance",
+    "description": "Group for all members of Quality Assurance",
+    "privacy": "closed",
+    "permissions": [
+      {
+        "repository": "https://github.com/skrepr/skrepr-symfony-test-demo",
+        "access": "admin",
+        "role": "admin"
+      }
+    ],
+    "members": [
+      {
+        "user": "https://github.com/gerritbos",
+        "role": "maintainer"
+      }
+    ],
+    "created_at": "2021-11-16T09:01:53Z"
+  },
+  {
+    "type": "team",
+    "url": "https://github.com/orgs/skrepr/teams/vcc-dev",
+    "organization": "https://github.com/skrepr",
+    "parent_team": null,
+    "name": "vcc-dev",
+    "description": "Group for Van Campen Consulting developers",
+    "privacy": "closed",
+    "permissions": [
+
+    ],
+    "members": [
+      {
+        "user": "https://github.com/jeroenvandermeulen",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/julianhoog1989skrepr",
+        "role": "member"
+      }
+    ],
+    "created_at": "2022-04-05T14:10:05Z"
+  },
+  {
+    "type": "team",
+    "url": "https://github.com/orgs/skrepr/teams/inttaal-devs",
+    "organization": "https://github.com/skrepr",
+    "parent_team": null,
+    "name": "inttaal-devs",
+    "description": "Alle developers working on Intertaal software",
+    "privacy": "closed",
+    "permissions": [
+      {
+        "repository": "https://github.com/skrepr/inttaal-platform",
+        "access": "push",
+        "role": "write"
+      }
+    ],
+    "members": [
+      {
+        "user": "https://github.com/jonmldr",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/jeroenvandermeulen",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/julianhoog1989skrepr",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/skreprniels",
+        "role": "member"
+      },
+      {
+        "user": "https://github.com/AukeSkrepr",
+        "role": "member"
+      }
+    ],
+    "created_at": "2022-04-25T11:06:12Z"
+  }
+]

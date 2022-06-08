@@ -1,0 +1,144 @@
+[
+  {
+    "type": "repository",
+    "url": "https://github.com/skrepr/github-backup-action",
+    "owner": "https://github.com/skrepr",
+    "name": "github-backup-action",
+    "description": null,
+    "website": null,
+    "private": true,
+    "has_issues": true,
+    "has_wiki": true,
+    "has_downloads": true,
+    "labels": [
+      {
+        "url": "https://github.com/skrepr/github-backup-action/labels/ansible",
+        "name": "ansible",
+        "color": "3B363E",
+        "description": "This is related to Ansible",
+        "created_at": "2022-06-07T07:39:17Z"
+      },
+      {
+        "url": "https://github.com/skrepr/github-backup-action/labels/bug",
+        "name": "bug",
+        "color": "d73a4a",
+        "description": "Something isn't working",
+        "created_at": "2022-06-07T07:39:17Z"
+      },
+      {
+        "url": "https://github.com/skrepr/github-backup-action/labels/docker",
+        "name": "docker",
+        "color": "45FBF7",
+        "description": "This is related to Docker",
+        "created_at": "2022-06-07T07:39:17Z"
+      },
+      {
+        "url": "https://github.com/skrepr/github-backup-action/labels/documentation",
+        "name": "documentation",
+        "color": "0075ca",
+        "description": "Improvements or additions to documentation",
+        "created_at": "2022-06-07T07:39:17Z"
+      },
+      {
+        "url": "https://github.com/skrepr/github-backup-action/labels/duplicate",
+        "name": "duplicate",
+        "color": "cfd3d7",
+        "description": "This issue or pull request already exists",
+        "created_at": "2022-06-07T07:39:17Z"
+      },
+      {
+        "url": "https://github.com/skrepr/github-backup-action/labels/enhancement",
+        "name": "enhancement",
+        "color": "a2eeef",
+        "description": "New feature or request",
+        "created_at": "2022-06-07T07:39:17Z"
+      },
+      {
+        "url": "https://github.com/skrepr/github-backup-action/labels/good%20first%20issue",
+        "name": "good first issue",
+        "color": "7057ff",
+        "description": "Good for newcomers",
+        "created_at": "2022-06-07T07:39:17Z"
+      },
+      {
+        "url": "https://github.com/skrepr/github-backup-action/labels/help%20wanted",
+        "name": "help wanted",
+        "color": "008672",
+        "description": "Extra attention is needed",
+        "created_at": "2022-06-07T07:39:17Z"
+      },
+      {
+        "url": "https://github.com/skrepr/github-backup-action/labels/invalid",
+        "name": "invalid",
+        "color": "e4e669",
+        "description": "This doesn't seem right",
+        "created_at": "2022-06-07T07:39:18Z"
+      },
+      {
+        "url": "https://github.com/skrepr/github-backup-action/labels/question",
+        "name": "question",
+        "color": "d876e3",
+        "description": "Further information is requested",
+        "created_at": "2022-06-07T07:39:18Z"
+      },
+      {
+        "url": "https://github.com/skrepr/github-backup-action/labels/wontfix",
+        "name": "wontfix",
+        "color": "ffffff",
+        "description": "This will not be worked on",
+        "created_at": "2022-06-07T07:39:18Z"
+      }
+    ],
+    "collaborators": [
+
+    ],
+    "created_at": "2022-06-07T07:39:17Z",
+    "git_url": "tarball://root/repositories/skrepr/github-backup-action.git",
+    "default_branch": "master",
+    "webhooks": [
+
+    ],
+    "page": null,
+    "public_keys": [
+
+    ],
+    "repository_topics": [
+
+    ],
+    "security_and_analysis": {
+      "dependency_graph": true,
+      "vulnerability_alerts": true,
+      "vulnerability_updates": true,
+      "advanced_security": false,
+      "token_scanning": false,
+      "token_scanning_push_protection": false
+    },
+    "autolinks": [
+
+    ],
+    "general_settings": {
+      "template": false,
+      "allow_forking": false,
+      "sponsorships": false,
+      "discussions": false,
+      "merge_commit": true,
+      "squash_merge": true,
+      "rebase_merge": true,
+      "auto_merge": false,
+      "delete_branch_heads": false,
+      "update_branch": false,
+      "git_lfs_in_archives": false
+    },
+    "actions_general_settings": {
+      "actions_disabled": false,
+      "allows_all_actions": true,
+      "allows_local_actions_only": false,
+      "allows_github_owned_actions": false,
+      "allows_verified_actions": false,
+      "allows_specific_actions_patterns": false,
+      "patterns": [
+
+      ]
+    }
+  }
+]
