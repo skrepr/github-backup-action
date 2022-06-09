@@ -30138,7 +30138,8 @@ var import_s3 = __toESM(require_s33());
 var fs = __toESM(require("fs"));
 var https = __toESM(require("https"));
 require_main().config();
-var githubOrganisation = process.env.GH_ORG;
+var githubOrganization = process.env.GH_ORG;
+var githubRepository = process.env.GH_REPO;
 var octokit = new import_core.Octokit({
   auth: process.env.GH_APIKEY
 });
@@ -30147,8 +30148,11 @@ var region = process.env.AWS_BUCKET_REGION;
 var accessKeyId = process.env.AWS_ACCESS_KEY;
 var secretAccessKey = process.env.AWS_SECRET_KEY;
 var s3 = new import_s3.default({ region, accessKeyId, secretAccessKey });
-if (!githubOrganisation) {
+if (!githubOrganization) {
   throw new Error("GH_ORG is undefined");
+}
+if (!githubRepository) {
+  throw new Error("GH_REPO is undefined");
 }
 if (!bucketName) {
   throw new Error("AWS_BUCKET_NAME is undefined");
@@ -30162,24 +30166,24 @@ if (!accessKeyId) {
 if (!secretAccessKey) {
   throw new Error("AWS_SECRET_KEY is undefined");
 }
-async function run(organization) {
+async function run(organization, repository) {
   console.log("Starting migration...");
   const migration = await octokit.request("POST /orgs/{org}/migrations", {
-    org: `${organization}`,
+    org: organization,
     repositories: [
-      "skrepr/github-backup-action"
+      repository
     ],
     lock_repositories: false
   });
   console.log(`Migration started successfully! 
  The current migration id is ${migration.data.id} and the state is currently on ${migration.data.state}`);
-  let state = migration.data.state;
   function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
+  let state = migration.data.state;
   while (state !== "exported") {
     const check = await octokit.request("GET /orgs/{org}/migrations/{migration_id}", {
-      org: `${organization}`,
+      org: organization,
       migration_id: migration.data.id
     });
     console.log(`State is ${check.data.state}... 
@@ -30190,12 +30194,11 @@ async function run(organization) {
   console.log(`State changed to ${state}! 
  Requesting download url of archive...`);
   const archive = await octokit.request("GET /orgs/{org}/migrations/{migration_id}/archive", {
-    org: `${organization}`,
+    org: organization,
     migration_id: migration.data.id
   });
-  console.log("Archive url:");
   console.log(archive.url);
-  function downloadFile(url, filename2) {
+  function downloadArchive(url, filename2) {
     https.get(url, (res) => {
       const writeStream = fs.createWriteStream(filename2);
       console.log(`State changed to ${state}! 
@@ -30203,14 +30206,14 @@ async function run(organization) {
       res.pipe(writeStream);
       writeStream.on("finish", () => {
         console.log("Download Completed");
-        uploadFile(filename2);
+        uploadArchive(filename2);
       });
       writeStream.on("error", () => {
         console.log("Error while downloading file");
       });
     });
   }
-  async function uploadFile(filename2) {
+  async function uploadArchive(filename2) {
     const fileStream = fs.createReadStream(filename2);
     const uploadParams = {
       Bucket: bucketName,
@@ -30219,10 +30222,18 @@ async function run(organization) {
     };
     return s3.upload(uploadParams).promise();
   }
-  const filename = "gh_org_archive_" + githubOrganisation + "_" + new Date().toJSON().slice(0, 10) + ".tar.gz";
-  downloadFile(archive.url, filename);
+  const filename = "gh_org_archive_" + githubOrganization + "_" + new Date().toJSON().slice(0, 10) + ".tar.gz";
+  downloadArchive(archive.url, filename);
+  async function deleteArchive(organization2, migrationId) {
+    console.log("Deleting organization migration archive from GitHub");
+    await octokit.request("DELETE /orgs/{org}/migrations/{migration_id}/archive", {
+      org: organization2,
+      migration_id: migrationId
+    });
+  }
+  deleteArchive(organization, migration.data.id);
 }
-run(githubOrganisation);
+run(githubOrganization, githubRepository);
 /*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
  *
