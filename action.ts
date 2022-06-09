@@ -3,6 +3,7 @@ import S3, { PutObjectRequest } from 'aws-sdk/clients/s3';
 import * as fs from 'fs';
 import * as https from 'https';
 
+// Will read out all the environment variables in $ENV or .env
 require('dotenv').config();
 
 // All the GitHub variables
