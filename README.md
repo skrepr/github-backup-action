@@ -1,6 +1,6 @@
 <a href="https://skrepr.com/">
   <p align="center">
-    <img width="200" height="100" src="https://skrepr.com/wp-content/uploads/2021/10/skrepr_logo_liggend.svg" alt="skrepr" />
+    <img width="200" height="100" src="https://cdn.skrepr.com/logo/skrepr_liggend.svg" alt="skrepr_logo" alt="skrepr" />
   </p>
 </a>
 <h1 align="center">Github Backup Actiony</h1>
@@ -51,7 +51,7 @@ The Migrations API is only available to authenticated organization owners. For m
                 "s3:ListBucket"
             ],
             "Resource": [
-                "arn:aws:s3:::skrepr-backup-github"
+                "arn:aws:s3:::your-bucket-here"
             ]
         },
         {
@@ -61,7 +61,7 @@ The Migrations API is only available to authenticated organization owners. For m
                 "s3:GetObject"
             ],
             "Resource": [
-                "arn:aws:s3:::skrepr-backup-github/*"
+                "arn:aws:s3:::your-bucket-here/*"
             ]
         }
     ]
@@ -85,4 +85,4 @@ MIT / BSD
 
 ## Author Information
 
-This role was created in 2021 by [Jeroen van der Meulen](https://github.com/jeroenvandermeulen), commisioned by [Skrepr](https://skrepr.com)
+This Github Action was created in 2022 by [Jeroen van der Meulen](https://github.com/jeroenvandermeulen), commisioned by [Skrepr](https://skrepr.com)
