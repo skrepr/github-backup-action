@@ -30176,7 +30176,7 @@ async function run(organization, repository) {
     lock_repositories: false
   });
   console.log(`Migration started successfully! 
- The current migration id is ${migration.data.id} and the state is currently on ${migration.data.state}`);
+The current migration id is ${migration.data.id} and the state is currently on ${migration.data.state}`);
   function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
@@ -30192,28 +30192,15 @@ async function run(organization, repository) {
     await sleep(5e3);
   }
   console.log(`State changed to ${state}! 
- Requesting download url of archive...`);
+Requesting download url of archive...
+`);
   const archive = await octokit.request("GET /orgs/{org}/migrations/{migration_id}/archive", {
     org: organization,
     migration_id: migration.data.id
   });
   console.log(archive.url);
-  function downloadArchive(url, filename2) {
-    https.get(url, (res) => {
-      const writeStream = fs.createWriteStream(filename2);
-      console.log(`State changed to ${state}! 
- Downloading archive file...`);
-      res.pipe(writeStream);
-      writeStream.on("finish", () => {
-        console.log("Download Completed");
-        uploadArchive(filename2);
-      });
-      writeStream.on("error", () => {
-        console.log("Error while downloading file");
-      });
-    });
-  }
   async function uploadArchive(filename2) {
+    console.log("Uploading Archive to our own S3 bucket");
     const fileStream = fs.createReadStream(filename2);
     const uploadParams = {
       Bucket: bucketName,
@@ -30222,8 +30209,6 @@ async function run(organization, repository) {
     };
     return s3.upload(uploadParams).promise();
   }
-  const filename = "gh_org_archive_" + githubOrganization + "_" + new Date().toJSON().slice(0, 10) + ".tar.gz";
-  downloadArchive(archive.url, filename);
   async function deleteArchive(organization2, migrationId) {
     console.log("Deleting organization migration archive from GitHub");
     await octokit.request("DELETE /orgs/{org}/migrations/{migration_id}/archive", {
@@ -30231,7 +30216,25 @@ async function run(organization, repository) {
       migration_id: migrationId
     });
   }
-  deleteArchive(organization, migration.data.id);
+  function downloadArchive(url, filename2) {
+    https.get(url, (res) => {
+      const writeStream = fs.createWriteStream(filename2);
+      console.log(`
+Downloading archive file...`);
+      res.pipe(writeStream);
+      writeStream.on("finish", () => {
+        console.log("Download Completed!");
+        uploadArchive(filename2);
+        deleteArchive(organization, migration.data.id);
+        console.log("Backup completed! Goodbye.");
+      });
+      writeStream.on("error", () => {
+        console.log("Error while downloading file");
+      });
+    });
+  }
+  const filename = "gh_org_archive_" + githubOrganization + "_" + new Date().toJSON().slice(0, 10) + ".tar.gz";
+  downloadArchive(archive.url, filename);
 }
 run(githubOrganization, githubRepository);
 /*!
