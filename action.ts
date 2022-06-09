@@ -89,7 +89,7 @@ async function run(organization: string, repository: string) {
     
     // Function for uploading archive to our own S3 Bucket
     async function uploadArchive(filename: string) {
-        console.log('Uploading Archive to our own S3 bucket');
+        console.log('Uploading archive to our own S3 bucket');
         const fileStream = fs.createReadStream(filename);
         const uploadParams: PutObjectRequest = {
             Bucket: bucketName,
@@ -118,7 +118,7 @@ async function run(organization: string, repository: string) {
             res.pipe(writeStream);
             
             writeStream.on('finish', () => {
-                console.log('Download Completed!');
+                console.log('Download completed!');
                 // Upload archive to our own S3 Bucket
                 uploadArchive(filename)
                 // Deletes a the migration archive. Migration archives are otherwise automatically deleted after seven days.

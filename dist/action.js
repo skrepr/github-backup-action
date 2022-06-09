@@ -30200,7 +30200,7 @@ Requesting download url of archive...
   });
   console.log(archive.url);
   async function uploadArchive(filename2) {
-    console.log("Uploading Archive to our own S3 bucket");
+    console.log("Uploading archive to our own S3 bucket");
     const fileStream = fs.createReadStream(filename2);
     const uploadParams = {
       Bucket: bucketName,
@@ -30223,7 +30223,7 @@ Requesting download url of archive...
 Downloading archive file...`);
       res.pipe(writeStream);
       writeStream.on("finish", () => {
-        console.log("Download Completed!");
+        console.log("Download completed!");
         uploadArchive(filename2);
         deleteArchive(organization, migration.data.id);
         console.log("Backup completed! Goodbye.");
