@@ -5,19 +5,27 @@ import * as https from 'https';
 
 require('dotenv').config();
 
-const githubOrganisation = process.env.GH_ORG;
+// All the GitHub variables
+const githubOrganization = process.env.GH_ORG;
+const githubRepository = process.env.GH_REPO;
 const octokit = new Octokit({
     auth: process.env.GH_APIKEY
-})
+});
 
+// All the AWS variables
 const bucketName = process.env.AWS_BUCKET_NAME;
 const region = process.env.AWS_BUCKET_REGION;
 const accessKeyId = process.env.AWS_ACCESS_KEY;
 const secretAccessKey = process.env.AWS_SECRET_KEY;
 const s3 = new S3({  region,  accessKeyId,  secretAccessKey});
 
-if (!githubOrganisation) {
+// Check if all the variables necessary are defined
+if (!githubOrganization) {
     throw new Error('GH_ORG is undefined');
+}
+
+if (!githubRepository) {
+    throw new Error('GH_REPO is undefined');
 }
 
 if (!bucketName) {
@@ -36,27 +44,33 @@ if (!secretAccessKey) {
     throw new Error('AWS_SECRET_KEY is undefined');
 }
 
-async function run(organization: string) {
+// Main function for running the migration
+async function run(organization: string, repository: string) {
     console.log('Starting migration...');
+
+    // Start the migration on GitHub
     const migration = await octokit.request('POST /orgs/{org}/migrations', {
-        org: `${organization}`,
+        org: organization,
         repositories: [
-            'skrepr/github-backup-action'
+            repository
         ],
         lock_repositories: false
     })
 
     console.log(`Migration started successfully! \n The current migration id is ${migration.data.id} and the state is currently on ${migration.data.state}`);
 
-    let state = migration.data.state;
-
+    // Add sleep function to reduce calls to GitHub API when checking the status of the migration
     function sleep(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    // Need a migration status when entering the while loop for the first time
+    let state = migration.data.state;
+
+    // Wait for status of migration to be exported
     while (state !== 'exported') {
         const check = await octokit.request('GET /orgs/{org}/migrations/{migration_id}', {
-            org: `${organization}`,
+            org: organization,
             migration_id: migration.data.id
             })
         console.log(`State is ${check.data.state}... \n`);
@@ -66,14 +80,14 @@ async function run(organization: string) {
 
     console.log(`State changed to ${state}! \n Requesting download url of archive...`);
     const archive = await octokit.request('GET /orgs/{org}/migrations/{migration_id}/archive', {
-        org: `${organization}`,
+        org: organization,
         migration_id: migration.data.id
     })
 
-    console.log('Archive url:');
     console.log(archive.url);
     
-    function downloadFile(url: string, filename: string) {
+    // Function for downloading archive from Github S3 environment
+    function downloadArchive(url: string, filename: string) {
        https.get(url, (res) => {
             const writeStream = fs.createWriteStream(filename);
             console.log(`State changed to ${state}! \n Downloading archive file...`);
@@ -81,7 +95,8 @@ async function run(organization: string) {
             
             writeStream.on('finish', () => {
                 console.log('Download Completed');
-                uploadFile(filename)
+                // Upload archive to our own S3 Bucket
+                uploadArchive(filename)
             });
 
             writeStream.on('error', () => {
@@ -90,8 +105,8 @@ async function run(organization: string) {
         });
     }
 
-    // Upload file to S3
-    async function uploadFile(filename: string) {
+    // Function for uploading archive to our own S3 Bucket
+    async function uploadArchive(filename: string) {
         const fileStream = fs.createReadStream(filename);
         const uploadParams: PutObjectRequest = {
             Bucket: bucketName,
@@ -102,9 +117,40 @@ async function run(organization: string) {
         return s3.upload(uploadParams).promise(); // this will upload file to S3}
     }
 
-    const filename = 'gh_org_archive_' + githubOrganisation + '_' + new Date().toJSON().slice(0,10) + '.tar.gz';
+    // Create a name for the file which has the current date attached to it
+    const filename = 'gh_org_archive_' + githubOrganization + '_' + new Date().toJSON().slice(0,10) + '.tar.gz';
 
-    downloadFile(archive.url, filename);
+    // Download archive from Github and upload it to our own S3 bucket
+    downloadArchive(archive.url, filename);
+
+    // Fucntion for deleting archive from Github
+    async function deleteArchive(organization:string, migrationId:number) {
+        console.log('Deleting organization migration archive from GitHub');
+        await octokit.request('DELETE /orgs/{org}/migrations/{migration_id}/archive', {
+            org: organization,
+            migration_id: migrationId
+        })
+    }
+ 
+    // Deletes a the migration archive. Migration archives are otherwise automatically deleted after seven days.
+    deleteArchive(organization, migration.data.id)
 }
 
-run(githubOrganisation);
+// Start the backup script
+run(githubOrganization, githubRepository);
+
+// async function listRepo(organization:string) {
+//     const repositories = await octokit.request('GET /orgs/{org}/repos?visibility=all', {
+//         org: organization
+//     })
+
+//     console.log(repositories.data)
+
+//     let repoNames = []
+
+//     repositories.data.forEach(element => repoNames.push(element['full_name']))
+
+//     console.log(repoNames)
+// }
+
+// listRepo(githubOrganization);
