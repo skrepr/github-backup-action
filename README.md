@@ -3,7 +3,7 @@
     <img width="200" height="100" src="https://cdn.skrepr.com/logo/skrepr_liggend.svg" alt="skrepr_logo" alt="skrepr" />
   </p>
 </a>
-<h1 align="center">Github Backup Actiony</h1>
+<h1 align="center">Github Backup Action</h1>
 <div align="center">
   <a href="https://github.com/skrepr/github-backup-action/releases"><img src="https://img.shields.io/github/release/skrepr/github-backup-action.svg" alt="Releases"/></a><a> </a>
   <a href="https://github.com/skrepr/github-backup-action/blob/main/LICENSE"><img src="https://img.shields.io/github/license/skrepr/github-backup-action" alt="LICENSE"/></a><a> </a>
@@ -74,7 +74,7 @@ Github migrations only archives your .git from every repository.
 
 To recover your code from the archive:
 
-1. Place all the repo.git file in a .git folder.
+1. Place all the repo.git files in a .git folder.
 2. Execute the command `git init`
 3. After Git has reinitialized the project, execute `git reset --hard HEAD`
 
