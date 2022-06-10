@@ -9,16 +9,12 @@ require('dotenv').config();
 // All the GitHub variables
 const githubOrganization = process.env.GH_ORG;
 const githubRepository = process.env.GH_REPO;
-const octokit = new Octokit({
-    auth: process.env.GH_APIKEY
-});
 
 // All the AWS variables
 const bucketName = process.env.AWS_BUCKET_NAME;
 const region = process.env.AWS_BUCKET_REGION;
 const accessKeyId = process.env.AWS_ACCESS_KEY;
 const secretAccessKey = process.env.AWS_SECRET_KEY;
-const s3 = new S3({  region,  accessKeyId,  secretAccessKey});
 
 // Check if all the variables necessary are defined
 if (!githubOrganization) {
@@ -44,6 +40,12 @@ if (!accessKeyId) {
 if (!secretAccessKey) {
     throw new Error('AWS_SECRET_KEY is undefined');
 }
+
+const s3 = new S3({  region,  accessKeyId,  secretAccessKey});
+const octokit = new Octokit({
+    auth: process.env.GH_APIKEY
+});
+
 
 // Main function for running the migration
 async function run(organization: string, repository: string) {
