@@ -2,12 +2,16 @@
   "name": "github-backup-action",
   "version": "1.0.0",
   "description": "Github action for backing up Github orgs with migrations",
-  "main": "action.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "esbuild action.ts --platform=node --target=node16 --bundle --outfile=dist/action.js",
-    "watch": "esbuild action.ts --platform=node --target=node16 --bundle --outfile=dist/action.js --watch",
-    "serve": "yarn build && node app.js"
+    "build": "esbuild src/main.ts --platform=node --target=node16 --bundle --outfile=dist/index.js",
+    "watch": "esbuild src/main.ts --platform=node --target=node16 --bundle --outfile=dist/index.js --watch",
+    "format": "prettier --write '**/*.ts'",
+    "format-check": "prettier --check '**/*.ts'",
+    "lint": "eslint src/**/*.ts",
+    "package": "ncc build --source-map --license licenses.txt",
+    "test": "jest",
+    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
   },
   "repository": {
     "type": "git",
@@ -28,6 +32,11 @@
     "aws-sdk": "^2.1150.0",
     "dotenv": "^16.0.1",
     "esbuild": "^0.14.43",
-    "fs": "^0.0.1-security"
+    "eslint": "^8.17.0",
+    "fs": "^0.0.1-security",
+    "jest": "^28.1.1",
+    "jshint": "^2.13.4",
+    "prettier": "^2.6.2",
+    "ts-jest": "^28.0.4"
   }
 }
