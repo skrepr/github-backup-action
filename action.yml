@@ -1,4 +1,4 @@
-name: 'Github Backup'
+name: 'Github Migrations Backup'
 author: 'Skrepr'
 description: 'Backup a Github Org with one Action'
 inputs:
