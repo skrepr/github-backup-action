@@ -16,7 +16,7 @@
 
 # About
 
-This GitHub Action allows to backup and archive a organization repository to an S3 Bucket with the help of the [GitHub Organization migrations API](https://docs.github.com/en/rest/migrations/orgs#start-an-organization-migration)
+This GitHub Action allows you to backup and archive a organization repository to an S3 Bucket with the help of the [GitHub Organization migrations API](https://docs.github.com/en/rest/migrations/orgs#start-an-organization-migration)
 
 # Requirements
 
@@ -26,7 +26,7 @@ The Migrations API is only available to authenticated organization owners. For m
 
 ```yaml
     - name: Github Org Backup
-      uses: skrepr/github-backup-action@v1
+      uses: skrepr/github-backup-action@1.0.0
       env:
         GH_ORG: ${GITHUB_ACTOR}
         GH_APIKEY: ${GITHUB_TOKEN}
@@ -38,7 +38,7 @@ The Migrations API is only available to authenticated organization owners. For m
         AWS_SECRET_KEY: ${AWS_SECRET_KEY} # Github Secret is advised
 ```
 
-# AWS policy for S3 bucket
+# AWS policy for S3 bucket user
 
 ```json
 {
