@@ -5,15 +5,12 @@ inputs:
   GH_ORG:
     description: 'The GitHub org you want to make a backup for'
     required: true
-    default: '${GITHUB_ACTOR}'
   GH_APIKEY:
     description: 'The API token necessary to talk to the GitHub API'
     required: true
-    default: '${GITHUB_TOKEN}'
   GH_REPO:
     description: 'The GitHub repo you want to backup'
     required: true
-    default: '${GITHUB_REPOSITORY}'
   AWS_BUCKET_NAME:
     description: 'The S3 bucket in which the archive will be stored'
     required: true
