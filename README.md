@@ -7,7 +7,6 @@
 <div align="center">
   <a href="https://github.com/skrepr/github-backup-action/releases"><img src="https://img.shields.io/github/release/skrepr/github-backup-action.svg" alt="Releases"/></a><a> </a>
   <a href="https://github.com/skrepr/github-backup-action/blob/main/LICENSE"><img src="https://img.shields.io/github/license/skrepr/github-backup-action.svg" alt="LICENSE"/></a><a> </a>
-  <a href="https://github.com/skrepr/github-backup-action/actions/workflows/ci.yml"><img src="https://github.com/skrepr/github-backup-action/actions/workflows/ci.yml/badge.svg" alt="CI"/></a><a> </a>
   <a href="https://github.com/skrepr/github-backup-action/issues"><img src="https://img.shields.io/github/issues/skrepr/github-backup-action.svg" alt="Issues"/></a><a> </a>
   <a href="https://github.com/skrepr/github-backup-action/pulls"><img src="https://img.shields.io/github/issues-pr/skrepr/github-backup-action.svg" alt="PR"/></a><a> </a>
   <a href="https://github.com/skrepr/github-backup-action/commits"><img src="https://img.shields.io/github/commit-activity/m/skrepr/github-backup-action" alt="Commits"/></a><a> </a>
