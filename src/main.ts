@@ -92,6 +92,8 @@ async function run(organization: string, repository: string): Promise<void> {
     console.log(
         `State changed to ${state}! \nRequesting download url of archive...\n`
     )
+
+    // Fetches the URL to a migration archive
     const archive = await octokit.request(
         'GET /orgs/{org}/migrations/{migration_id}/archive',
         {
@@ -142,7 +144,7 @@ async function run(organization: string, repository: string): Promise<void> {
                 console.log('Download completed!')
                 // Upload archive to our own S3 Bucket
                 uploadArchive(filename)
-                // Deletes a the migration archive. Migration archives are otherwise automatically deleted after seven days.
+                // Deletes the migration archive. Migration archives are otherwise automatically deleted after seven days.
                 deleteArchive(organization, migration.data.id)
                 console.log('Backup completed! Goodbye.')
             })
