@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "allowJs": true,
+        "experimentalDecorators": true,
+        "types": [
+            "@types/node",
+        ],
+        "outDir": "build",
+        "target": "ESNext",
+        "moduleResolution": "Node",
+        "sourceMap": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "downlevelIteration": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "*"
+            ]
+        }
+    }
+}

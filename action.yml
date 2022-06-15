@@ -1,0 +1,42 @@
+name: 'Github Backup'
+author: 'Skrepr'
+description: 'Backup a Github Org with one Action'
+inputs:
+  GH_ORG:
+    description: 'The GitHub org you want to make a backup for'
+    required: true
+    default: '${GITHUB_ACTOR}'
+  GH_APIKEY:
+    description: 'The API token necessary to talk to the GitHub API'
+    required: true
+    default: '${GITHUB_TOKEN}'
+  GH_REPO:
+    description: 'The GitHub repo you want to backup'
+    required: true
+    default: '${GITHUB_REPOSITORY}'
+  AWS_BUCKET_NAME:
+    description: 'The S3 bucket in which the archive will be stored'
+    required: true
+    default: ''
+  AWS_BUCKET_REGION:
+    description: 'The region in which the S3 bucket is located'
+    required: true
+    default: ''
+  AWS_ARN:
+    description: 'The AWS ARN of the S3 bucket'
+    required: true
+    default: ''
+  AWS_ACCESS_KEY:
+    description: 'The Access Key needed to authenticate to AWS'
+    required: true
+    default: ''
+  AWS_SECRET_KEY:
+    description: 'The Secret Key needed to complete authentication to AWS'
+    required: true
+    default: ''
+runs:
+  using: 'node16'
+  main: 'dist/action.js'
+branding:
+  icon: 'upload-cloud'  
+  color: 'orange'
