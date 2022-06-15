@@ -25,17 +25,30 @@ The Migrations API is only available to authenticated organization owners. For m
 # Github Action example config
 
 ```yaml
-    - name: Github Org Backup
+name: Backup repository
+
+on:
+  schedule:
+    - cron: '0 1 * * 0'  # At 01:00 on Sunday
+  workflow_dispatch:
+
+jobs:
+  backup:
+    name: Backup repository
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Github Migrations Backup
       uses: skrepr/github-backup-action@1.0.0
       env:
-        GH_ORG: ${GITHUB_ACTOR}
-        GH_APIKEY: ${GITHUB_TOKEN}
-        GH_REPO: ${GITHUB_REPOSITORY}
-        AWS_BUCKET_NAME: "your-bucket-here"
-        AWS_BUCKET_REGION: "eu-west-1"
-        AWS_ARN: "arn:aws:s3:::your-bucket-here"
-        AWS_ACCESS_KEY: ${AWS_ACCESS_KEY} # Github Secret is advised
-        AWS_SECRET_KEY: ${AWS_SECRET_KEY} # Github Secret is advised
+        GH_ORG: 'your-org-here'
+        GH_REPO: 'your-repo-here'
+        GH_APIKEY: ${{ secrets.GH_PAT }} # You can't use GITHUB_TOKEN to use the API
+        AWS_BUCKET_NAME: 'your-bucket-here'
+        AWS_BUCKET_REGION: 'eu-west-1'
+        AWS_ARN: 'arn:aws:s3:::your-bucket-here'
+        AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }} # Github Secret is advised
+        AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }} # Github Secret is advised
 ```
 
 # AWS policy for S3 bucket user
