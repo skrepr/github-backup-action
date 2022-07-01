@@ -34,7 +34,7 @@
     "esbuild": "^0.14.43",
     "eslint-plugin-github": "^4.3.6",
     "fs": "^0.0.1-security",
-    "jest": "^28.1.1",
+    "jest": "^28.1.2",
     "jshint": "^2.13.4",
     "prettier": "^2.6.2",
     "ts-jest": "^28.0.4"
