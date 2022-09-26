@@ -29,7 +29,7 @@
     "@actions/github": "^5.0.3",
     "@octokit/core": "^3.6.0",
     "@types/node": "^18.7.14",
-    "aws-sdk": "^2.1150.0",
+    "aws-sdk": "^2.1223.0",
     "dotenv": "^16.0.2",
     "esbuild": "^0.15.6",
     "eslint-plugin-github": "^4.3.7",
