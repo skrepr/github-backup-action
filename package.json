@@ -30,7 +30,7 @@
     "@octokit/core": "^4.0.5",
     "@types/node": "^18.7.21",
     "aws-sdk": "^2.1150.0",
-    "dotenv": "^16.0.2",
+    "dotenv": "^16.0.3",
     "esbuild": "^0.15.9",
     "eslint-plugin-github": "^4.3.7",
     "fs": "^0.0.1-security",
