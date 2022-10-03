@@ -4,8 +4,8 @@
   "description": "Github action for backing up Github orgs with migrations",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild src/main.ts --platform=node --target=node16 --bundle --outfile=index.js",
-    "watch": "esbuild src/main.ts --platform=node --target=node16 --bundle --outfile=index.js --watch",
+    "build": "esbuild src/main.ts --platform=node --target=node16 --bundle --outfile=dist/index.js",
+    "watch": "esbuild src/main.ts --platform=node --target=node16 --bundle --outfile=dist/index.js --watch",
     "format": "prettier --write '**/*.ts'",
     "format-check": "prettier --check '**/*.ts'",
     "lint": "eslint src/**/*.ts",
