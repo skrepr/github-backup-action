@@ -22,6 +22,17 @@ This GitHub Action allows you to backup and archive a organization repository to
 
 The Migrations API is only available to authenticated organization owners. For more information, see "Roles in an organization" and "Other authentication methods."
 
+Ensure that you have owner permissions on the source organization's repositories.
+[Generate an access token](https://docs.github.com/en/enterprise-server@3.6/articles/creating-an-access-token-for-command-line-use) with the `repo` and `admin:org` scopes on GitHub.com.
+To minimize downtime, make a list of repositories you want to export from the source instance. You can add multiple repositories to an export at once using a text file that lists the URL of each repository on a separate line.
+
+# Commands
+
+To build the project: `npm build`
+To watch project during developement: `npm watch`
+To run the script: `npm dist/main.ts`
+List all repos: `curl "https://api.github.com/orgs/skrepr/repos" \
+     -u 'username:<personal access token>'`
 # Github Action example config
 
 ```yaml
