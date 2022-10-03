@@ -59,12 +59,32 @@ async function sleep(ms: number): Promise<void> {
 
 // Main function for running the migration
 async function run(organization: string, repository: string): Promise<void> {
+    console.log('Get list of repositories...')
+
+    let repoNames: string[] = []
+    let fetchMore = true
+    let page = 1
+
+    while (fetchMore) {
+        const repos = await octokit.request('GET /orgs/{org}/repos', {
+            org: organization,
+            type: 'all',
+            per_page: 10,
+            sort: 'full_name',
+            page: page++
+        })
+        repoNames = repoNames.concat(repos.data.map(item => item.full_name))
+        fetchMore = repos.data.length >= 100
+    }
+
+    console.log(repoNames)
+
     console.log('Starting migration...')
 
     // Start the migration on GitHub
     const migration = await octokit.request('POST /orgs/{org}/migrations', {
         org: organization,
-        repositories: [repository],
+        repositories: repoNames,
         lock_repositories: false
     })
 

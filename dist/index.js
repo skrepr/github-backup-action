@@ -1,9 +1,3 @@
-require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
-/******/ 	var __webpack_modules__ = ({
-
-/***/ 34:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -25,7 +19,10 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // node_modules/universal-user-agent/dist-node/index.js
@@ -699,7 +696,7 @@ var require_mappingTable = __commonJS({
 var require_tr46 = __commonJS({
   "node_modules/tr46/index.js"(exports, module2) {
     "use strict";
-    var punycode = __nccwpck_require__(477);
+    var punycode = require("punycode");
     var mappingTable = require_mappingTable();
     var PROCESSING_OPTIONS = {
       TRANSITIONAL: 0,
@@ -861,7 +858,7 @@ var require_tr46 = __commonJS({
 var require_url_state_machine = __commonJS({
   "node_modules/whatwg-url/lib/url-state-machine.js"(exports, module2) {
     "use strict";
-    var punycode = __nccwpck_require__(477);
+    var punycode = require("punycode");
     var tr46 = require_tr46();
     var specialSchemes = {
       ftp: 21,
@@ -2291,12 +2288,12 @@ var require_lib2 = __commonJS({
     function _interopDefault(ex) {
       return ex && typeof ex === "object" && "default" in ex ? ex["default"] : ex;
     }
-    var Stream = _interopDefault(__nccwpck_require__(781));
-    var http = _interopDefault(__nccwpck_require__(685));
-    var Url = _interopDefault(__nccwpck_require__(310));
+    var Stream = _interopDefault(require("stream"));
+    var http = _interopDefault(require("http"));
+    var Url = _interopDefault(require("url"));
     var whatwgUrl = _interopDefault(require_public_api());
-    var https2 = _interopDefault(__nccwpck_require__(687));
-    var zlib = _interopDefault(__nccwpck_require__(796));
+    var https2 = _interopDefault(require("https"));
+    var zlib = _interopDefault(require("zlib"));
     var Readable = Stream.Readable;
     var BUFFER = Symbol("buffer");
     var TYPE = Symbol("type");
@@ -2411,7 +2408,7 @@ var require_lib2 = __commonJS({
     FetchError.prototype.name = "FetchError";
     var convert;
     try {
-      convert = (__nccwpck_require__(756).convert);
+      convert = require("encoding").convert;
     } catch (e) {
     }
     var INTERNALS = Symbol("Body internals");
@@ -2468,11 +2465,14 @@ var require_lib2 = __commonJS({
       blob() {
         let ct = this.headers && this.headers.get("content-type") || "";
         return consumeBody.call(this).then(function(buf) {
-          return Object.assign(new Blob2([], {
-            type: ct.toLowerCase()
-          }), {
-            [BUFFER]: buf
-          });
+          return Object.assign(
+            new Blob2([], {
+              type: ct.toLowerCase()
+            }),
+            {
+              [BUFFER]: buf
+            }
+          );
         });
       },
       json() {
@@ -3529,12 +3529,15 @@ var require_dist_node5 = __commonJS({
       let status;
       let url;
       const fetch = requestOptions.request && requestOptions.request.fetch || nodeFetch;
-      return fetch(requestOptions.url, Object.assign({
-        method: requestOptions.method,
-        body: requestOptions.body,
-        headers: requestOptions.headers,
-        redirect: requestOptions.redirect
-      }, requestOptions.request)).then(async (response) => {
+      return fetch(requestOptions.url, Object.assign(
+        {
+          method: requestOptions.method,
+          body: requestOptions.body,
+          headers: requestOptions.headers,
+          redirect: requestOptions.redirect
+        },
+        requestOptions.request
+      )).then(async (response) => {
         url = response.url;
         status = response.status;
         for (const keyAndValue of response.headers) {
@@ -4133,7 +4136,10 @@ var require_helpers = __commonJS({
           });
         }
         if (!hostPattern.test(label)) {
-          throw AWS2.util.error(new Error(), { code: "ValidationError", message: label + " is not hostname compatible." });
+          throw AWS2.util.error(
+            new Error(),
+            { code: "ValidationError", message: label + " is not hostname compatible." }
+          );
         }
       });
     }
@@ -4736,7 +4742,11 @@ var require_query = __commonJS({
       }
       var parser = new AWS2.XML.Parser();
       if (shape && shape.members && !shape.members._XAMZRequestId) {
-        var requestIdShape = Shape.create({ type: "string" }, { api: { protocol: "query" } }, "requestId");
+        var requestIdShape = Shape.create(
+          { type: "string" },
+          { api: { protocol: "query" } },
+          "requestId"
+        );
         shape.members._XAMZRequestId = requestIdShape;
       }
       var data = parser.parse(resp.httpResponse.body.toString(), shape);
@@ -4948,7 +4958,11 @@ var require_rest_json = __commonJS({
         var body = resp.httpResponse.body;
         if (payloadMember.isEventStream) {
           parser = new JsonParser();
-          resp.data[payload] = util.createEventStream(AWS.HttpClient.streamsApiVersion === 2 ? resp.httpResponse.stream : body, parser, payloadMember);
+          resp.data[payload] = util.createEventStream(
+            AWS.HttpClient.streamsApiVersion === 2 ? resp.httpResponse.stream : body,
+            parser,
+            payloadMember
+          );
         } else if (payloadMember.type === "structure" || payloadMember.type === "list") {
           var parser = new JsonParser();
           resp.data[rules.payload] = parser.parse(body, payloadMember);
@@ -5043,7 +5057,11 @@ var require_rest_xml = __commonJS({
         var payloadMember = output.members[payload2];
         if (payloadMember.isEventStream) {
           parser = new AWS2.XML.Parser();
-          resp.data[payload2] = util.createEventStream(AWS2.HttpClient.streamsApiVersion === 2 ? resp.httpResponse.stream : resp.httpResponse.body, parser, payloadMember);
+          resp.data[payload2] = util.createEventStream(
+            AWS2.HttpClient.streamsApiVersion === 2 ? resp.httpResponse.stream : resp.httpResponse.body,
+            parser,
+            payloadMember
+          );
         } else if (payloadMember.type === "structure") {
           parser = new AWS2.XML.Parser();
           resp.data[payload2] = parser.parse(body.toString(), payloadMember);
@@ -5230,7 +5248,9 @@ var require_builder2 = __commonJS({
       }
     }
     function serializeScalar(xml, value, shape) {
-      xml.addChildNode(new XmlText(shape.toWireFormat(value)));
+      xml.addChildNode(
+        new XmlText(shape.toWireFormat(value))
+      );
     }
     function applyNamespaces(xml, shape, isRoot) {
       var uri, prefix = "xmlns";
@@ -5265,7 +5285,11 @@ var require_operation = __commonJS({
       property(this, "httpMethod", operation.http.method || "POST");
       property(this, "httpPath", operation.http.requestUri || "/");
       property(this, "authtype", operation.authtype || "");
-      property(this, "endpointDiscoveryRequired", operation.endpointdiscovery ? operation.endpointdiscovery.required ? "REQUIRED" : "OPTIONAL" : "NULL");
+      property(
+        this,
+        "endpointDiscoveryRequired",
+        operation.endpointdiscovery ? operation.endpointdiscovery.required ? "REQUIRED" : "OPTIONAL" : "NULL"
+      );
       var httpChecksumRequired = operation.httpChecksumRequired || operation.httpChecksum && operation.httpChecksum.requestChecksumRequired;
       property(this, "httpChecksumRequired", httpChecksumRequired, false);
       memoizedProperty(this, "input", function() {
@@ -6555,6 +6579,36 @@ var require_metadata = __commonJS({
       emrserverless: {
         prefix: "emr-serverless",
         name: "EMRServerless"
+      },
+      m2: {
+        name: "M2"
+      },
+      connectcampaigns: {
+        name: "ConnectCampaigns"
+      },
+      redshiftserverless: {
+        prefix: "redshift-serverless",
+        name: "RedshiftServerless"
+      },
+      rolesanywhere: {
+        name: "RolesAnywhere"
+      },
+      licensemanagerusersubscriptions: {
+        prefix: "license-manager-user-subscriptions",
+        name: "LicenseManagerUserSubscriptions"
+      },
+      backupstorage: {
+        name: "BackupStorage"
+      },
+      privatenetworks: {
+        name: "PrivateNetworks"
+      },
+      supportapp: {
+        prefix: "support-app",
+        name: "SupportApp"
+      },
+      controltower: {
+        name: "ControlTower"
       }
     };
   }
@@ -6611,7 +6665,11 @@ var require_api = __commonJS({
           property(self, "endpointOperation", util.string.lowerFirst(name));
         }
         if (operation.endpointdiscovery && !self.hasRequiredEndpointDiscovery) {
-          property(self, "hasRequiredEndpointDiscovery", operation.endpointdiscovery.required === true);
+          property(
+            self,
+            "hasRequiredEndpointDiscovery",
+            operation.endpointdiscovery.required === true
+          );
         }
       }
       property(this, "operations", new Collection(api.operations, options, function(name, operation) {
@@ -6630,6 +6688,7 @@ var require_api = __commonJS({
         property(this, "documentation", api.documentation);
         property(this, "documentationUrl", api.documentationUrl);
       }
+      property(this, "errorCodeMapping", api.awsQueryCompatible);
     }
     module2.exports = Api;
   }
@@ -6950,11 +7009,14 @@ var require_sequential_executor = __commonJS({
       },
       addNamedListeners: function addNamedListeners(callback) {
         var self = this;
-        callback(function() {
-          self.addNamedListener.apply(self, arguments);
-        }, function() {
-          self.addNamedAsyncListener.apply(self, arguments);
-        });
+        callback(
+          function() {
+            self.addNamedListener.apply(self, arguments);
+          },
+          function() {
+            self.addNamedAsyncListener.apply(self, arguments);
+          }
+        );
         return this;
       }
     });
@@ -7305,7 +7367,10 @@ var require_service = __commonJS({
     AWS2.Service = inherit({
       constructor: function Service(config) {
         if (!this.loadServiceClass) {
-          throw AWS2.util.error(new Error(), "Service must be constructed with `new' operator");
+          throw AWS2.util.error(
+            new Error(),
+            "Service must be constructed with `new' operator"
+          );
         }
         if (config) {
           if (config.region) {
@@ -7476,7 +7541,10 @@ var require_service = __commonJS({
             request.addListeners(list[i]);
         }
         if (!this.config.paramValidation) {
-          request.removeListener("validate", AWS2.EventListeners.Core.VALIDATE_PARAMETERS);
+          request.removeListener(
+            "validate",
+            AWS2.EventListeners.Core.VALIDATE_PARAMETERS
+          );
         }
         if (this.config.logger) {
           request.addListeners(AWS2.EventListeners.Logger);
@@ -7642,6 +7710,8 @@ var require_service = __commonJS({
           version = this.config.signatureVersion;
         } else if (authtype === "v4" || authtype === "v4-unsigned-body") {
           version = "v4";
+        } else if (authtype === "bearer") {
+          version = "bearer";
         } else {
           version = this.api.signatureVersion;
         }
@@ -8085,6 +8155,52 @@ var require_config = __commonJS({
           finish(credError("No credentials to load"));
         }
       },
+      getToken: function getToken(callback) {
+        var self = this;
+        function finish(err) {
+          callback(err, err ? null : self.token);
+        }
+        function tokenError(msg, err) {
+          return new AWS2.util.error(err || new Error(), {
+            code: "TokenError",
+            message: msg,
+            name: "TokenError"
+          });
+        }
+        function getAsyncToken() {
+          self.token.get(function(err) {
+            if (err) {
+              var msg = "Could not load token from " + self.token.constructor.name;
+              err = tokenError(msg, err);
+            }
+            finish(err);
+          });
+        }
+        function getStaticToken() {
+          var err = null;
+          if (!self.token.token) {
+            err = tokenError("Missing token");
+          }
+          finish(err);
+        }
+        if (self.token) {
+          if (typeof self.token.get === "function") {
+            getAsyncToken();
+          } else {
+            getStaticToken();
+          }
+        } else if (self.tokenProvider) {
+          self.tokenProvider.resolve(function(err, token) {
+            if (err) {
+              err = tokenError("Could not load token from any providers", err);
+            }
+            self.token = token;
+            finish(err);
+          });
+        } else {
+          finish(tokenError("No token to load"));
+        }
+      },
       update: function update(options, allowUnknownKeys) {
         allowUnknownKeys = allowUnknownKeys || false;
         options = this.extractCredentials(options);
@@ -8168,7 +8284,8 @@ var require_config = __commonJS({
         hostPrefixEnabled: true,
         stsRegionalEndpoints: "legacy",
         useFipsEndpoint: false,
-        useDualstackEndpoint: false
+        useDualstackEndpoint: false,
+        token: null
       },
       extractCredentials: function extractCredentials(options) {
         if (options.accessKeyId && options.secretAccessKey) {
@@ -8584,23 +8701,36 @@ var require_event_listeners = __commonJS({
     }
     AWS2.EventListeners = {
       Core: new SequentialExecutor().addNamedListeners(function(add, addAsync) {
-        addAsync("VALIDATE_CREDENTIALS", "validate", function VALIDATE_CREDENTIALS(req, done) {
-          if (!req.service.api.signatureVersion && !req.service.config.signatureVersion)
-            return done();
-          req.service.config.getCredentials(function(err) {
-            if (err) {
-              req.response.error = AWS2.util.error(err, { code: "CredentialsError", message: "Missing credentials in config, if using AWS_CONFIG_FILE, set AWS_SDK_LOAD_CONFIG=1" });
-            }
-            done();
-          });
-        });
+        addAsync(
+          "VALIDATE_CREDENTIALS",
+          "validate",
+          function VALIDATE_CREDENTIALS(req, done) {
+            if (!req.service.api.signatureVersion && !req.service.config.signatureVersion)
+              return done();
+            req.service.config.getCredentials(function(err) {
+              if (err) {
+                req.response.error = AWS2.util.error(
+                  err,
+                  { code: "CredentialsError", message: "Missing credentials in config, if using AWS_CONFIG_FILE, set AWS_SDK_LOAD_CONFIG=1" }
+                );
+              }
+              done();
+            });
+          }
+        );
         add("VALIDATE_REGION", "validate", function VALIDATE_REGION(req) {
           if (!req.service.isGlobalEndpoint) {
             var dnsHostRegex = new RegExp(/^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])$/);
             if (!req.service.config.region) {
-              req.response.error = AWS2.util.error(new Error(), { code: "ConfigError", message: "Missing region in config" });
+              req.response.error = AWS2.util.error(
+                new Error(),
+                { code: "ConfigError", message: "Missing region in config" }
+              );
             } else if (!dnsHostRegex.test(req.service.config.region)) {
-              req.response.error = AWS2.util.error(new Error(), { code: "ConfigError", message: "Invalid region in config" });
+              req.response.error = AWS2.util.error(
+                new Error(),
+                { code: "ConfigError", message: "Invalid region in config" }
+              );
             }
           }
         });
@@ -8716,7 +8846,10 @@ var require_event_listeners = __commonJS({
           var err = this.response.error;
           if (!err || !err.retryable)
             return;
-          this.httpRequest = new AWS2.HttpRequest(this.service.endpoint, this.service.region);
+          this.httpRequest = new AWS2.HttpRequest(
+            this.service.endpoint,
+            this.service.region
+          );
           if (this.response.retryCount < this.service.config.maxRetries) {
             this.response.retryCount++;
           } else {
@@ -8732,30 +8865,51 @@ var require_event_listeners = __commonJS({
           var authtype = operation ? operation.authtype : "";
           if (!service.api.signatureVersion && !authtype && !service.config.signatureVersion)
             return done();
-          service.config.getCredentials(function(err, credentials) {
-            if (err) {
-              req.response.error = err;
-              return done();
-            }
-            try {
-              var date = service.getSkewCorrectedDate();
-              var SignerClass = service.getSignerClass(req);
-              var signer = new SignerClass(req.httpRequest, service.getSigningName(req), {
-                signatureCache: service.config.signatureCache,
-                operation,
-                signatureVersion: service.api.signatureVersion
-              });
-              signer.setServiceClientId(service._clientId);
-              delete req.httpRequest.headers["Authorization"];
-              delete req.httpRequest.headers["Date"];
-              delete req.httpRequest.headers["X-Amz-Date"];
-              signer.addAuthorization(credentials, date);
-              req.signedAt = date;
-            } catch (e) {
-              req.response.error = e;
-            }
-            done();
-          });
+          if (authtype === "bearer" || service.config.signatureVersion === "bearer") {
+            service.config.getToken(function(err, token) {
+              if (err) {
+                req.response.error = err;
+                return done();
+              }
+              try {
+                var SignerClass = service.getSignerClass(req);
+                var signer = new SignerClass(req.httpRequest);
+                signer.addAuthorization(token);
+              } catch (e) {
+                req.response.error = e;
+              }
+              done();
+            });
+          } else {
+            service.config.getCredentials(function(err, credentials) {
+              if (err) {
+                req.response.error = err;
+                return done();
+              }
+              try {
+                var date = service.getSkewCorrectedDate();
+                var SignerClass = service.getSignerClass(req);
+                var signer = new SignerClass(
+                  req.httpRequest,
+                  service.getSigningName(req),
+                  {
+                    signatureCache: service.config.signatureCache,
+                    operation,
+                    signatureVersion: service.api.signatureVersion
+                  }
+                );
+                signer.setServiceClientId(service._clientId);
+                delete req.httpRequest.headers["Authorization"];
+                delete req.httpRequest.headers["Date"];
+                delete req.httpRequest.headers["X-Amz-Date"];
+                signer.addAuthorization(credentials, date);
+                req.signedAt = date;
+              } catch (e) {
+                req.response.error = e;
+              }
+              done();
+            });
+          }
         });
         add("VALIDATE_RESPONSE", "validateResponse", function VALIDATE_RESPONSE(resp) {
           if (this.service.successfulResponse(resp, this)) {
@@ -8763,9 +8917,21 @@ var require_event_listeners = __commonJS({
             resp.error = null;
           } else {
             resp.data = null;
-            resp.error = AWS2.util.error(new Error(), { code: "UnknownError", message: "An unknown error occurred." });
+            resp.error = AWS2.util.error(
+              new Error(),
+              { code: "UnknownError", message: "An unknown error occurred." }
+            );
           }
         });
+        add("ERROR", "error", function ERROR(err, resp) {
+          var errorCodeMapping = resp.request.service.api.errorCodeMapping;
+          if (errorCodeMapping && err && err.code) {
+            var mapping = errorCodeMapping[err.code];
+            if (mapping) {
+              resp.error.code = mapping.code;
+            }
+          }
+        }, true);
         addAsync("SEND", "send", function SEND(resp, done) {
           resp.httpResponse._abortCallback = done;
           resp.error = null;
@@ -8778,7 +8944,10 @@ var require_event_listeners = __commonJS({
             var operationName = resp.request.operation;
             var operation = api.operations[operationName] || {};
             httpResp.on("headers", function onHeaders(statusCode, headers, statusMessage) {
-              resp.request.emit("httpHeaders", [statusCode, headers, resp, statusMessage]);
+              resp.request.emit(
+                "httpHeaders",
+                [statusCode, headers, resp, statusMessage]
+              );
               if (!resp.httpResponse.streaming) {
                 if (AWS2.HttpClient.streamsApiVersion === 2) {
                   if (operation.hasEventOutput && service.successfulResponse(resp)) {
@@ -8836,7 +9005,12 @@ var require_event_listeners = __commonJS({
             var http = AWS2.HttpClient.getInstance();
             var httpOptions = resp.request.service.config.httpOptions || {};
             try {
-              var stream = http.handleRequest(resp.request.httpRequest, httpOptions, callback, error);
+              var stream = http.handleRequest(
+                resp.request.httpRequest,
+                httpOptions,
+                callback,
+                error
+              );
               progress(stream);
             } catch (err) {
               error(err);
@@ -8854,22 +9028,26 @@ var require_event_listeners = __commonJS({
             executeSend();
           }
         });
-        add("HTTP_HEADERS", "httpHeaders", function HTTP_HEADERS(statusCode, headers, resp, statusMessage) {
-          resp.httpResponse.statusCode = statusCode;
-          resp.httpResponse.statusMessage = statusMessage;
-          resp.httpResponse.headers = headers;
-          resp.httpResponse.body = AWS2.util.buffer.toBuffer("");
-          resp.httpResponse.buffers = [];
-          resp.httpResponse.numBytes = 0;
-          var dateHeader = headers.date || headers.Date;
-          var service = resp.request.service;
-          if (dateHeader) {
-            var serverTime = Date.parse(dateHeader);
-            if (service.config.correctClockSkew && service.isClockSkewed(serverTime)) {
-              service.applyClockOffset(serverTime);
+        add(
+          "HTTP_HEADERS",
+          "httpHeaders",
+          function HTTP_HEADERS(statusCode, headers, resp, statusMessage) {
+            resp.httpResponse.statusCode = statusCode;
+            resp.httpResponse.statusMessage = statusMessage;
+            resp.httpResponse.headers = headers;
+            resp.httpResponse.body = AWS2.util.buffer.toBuffer("");
+            resp.httpResponse.buffers = [];
+            resp.httpResponse.numBytes = 0;
+            var dateHeader = headers.date || headers.Date;
+            var service = resp.request.service;
+            if (dateHeader) {
+              var serverTime = Date.parse(dateHeader);
+              if (service.config.correctClockSkew && service.isClockSkewed(serverTime)) {
+                service.applyClockOffset(serverTime);
+              }
             }
           }
-        });
+        );
         add("HTTP_DATA", "httpData", function HTTP_DATA(chunk, resp) {
           if (chunk) {
             if (AWS2.util.isNode()) {
@@ -9031,7 +9209,7 @@ var require_event_listeners = __commonJS({
               var inputShape = req.service.api.operations[req.operation].input;
               censoredParams = filterSensitiveLog(inputShape, req.params);
             }
-            var params = (__nccwpck_require__(837).inspect)(censoredParams, true, null);
+            var params = require("util").inspect(censoredParams, true, null);
             var message = "";
             if (ansi)
               message += "\x1B[33m";
@@ -9589,7 +9767,9 @@ var require_jmespath = __commonJS({
           var ast = this.expression(0);
           if (this._lookahead(0) !== TOK_EOF) {
             var t = this._lookaheadToken(0);
-            var error = new Error("Unexpected token type: " + t.type + ", value: " + t.value);
+            var error = new Error(
+              "Unexpected token type: " + t.type + ", value: " + t.value
+            );
             error.name = "ParserError";
             throw error;
           }
@@ -10294,7 +10474,11 @@ var require_jmespath = __commonJS({
                 subtype = TYPE_STRING;
               }
               for (var i = 0; i < argValue.length; i++) {
-                if (!this._typeMatches(this._getTypeName(argValue[i]), subtype, argValue[i])) {
+                if (!this._typeMatches(
+                  this._getTypeName(argValue[i]),
+                  subtype,
+                  argValue[i]
+                )) {
                   return false;
                 }
               }
@@ -10522,7 +10706,9 @@ var require_jmespath = __commonJS({
           }
           var interpreter = this._interpreter;
           var exprefNode = resolvedArgs[1];
-          var requiredType = this._getTypeName(interpreter.visit(exprefNode, sortedArray[0]));
+          var requiredType = this._getTypeName(
+            interpreter.visit(exprefNode, sortedArray[0])
+          );
           if ([TYPE_NUMBER, TYPE_STRING].indexOf(requiredType) < 0) {
             throw new Error("TypeError");
           }
@@ -10535,9 +10721,13 @@ var require_jmespath = __commonJS({
             var exprA = interpreter.visit(exprefNode, a[1]);
             var exprB = interpreter.visit(exprefNode, b[1]);
             if (that._getTypeName(exprA) !== requiredType) {
-              throw new Error("TypeError: expected " + requiredType + ", received " + that._getTypeName(exprA));
+              throw new Error(
+                "TypeError: expected " + requiredType + ", received " + that._getTypeName(exprA)
+              );
             } else if (that._getTypeName(exprB) !== requiredType) {
-              throw new Error("TypeError: expected " + requiredType + ", received " + that._getTypeName(exprB));
+              throw new Error(
+                "TypeError: expected " + requiredType + ", received " + that._getTypeName(exprB)
+              );
             }
             if (exprA > exprB) {
               return 1;
@@ -10820,7 +11010,10 @@ var require_request = __commonJS({
             }
             var checkContentLengthAndEmit = function checkContentLengthAndEmit2() {
               if (shouldCheckContentLength && receivedLen !== expectedLen) {
-                stream.emit("error", AWS2.util.error(new Error("Stream content length mismatch. Received " + receivedLen + " of " + expectedLen + " bytes."), { code: "StreamContentLengthMismatch" }));
+                stream.emit("error", AWS2.util.error(
+                  new Error("Stream content length mismatch. Received " + receivedLen + " of " + expectedLen + " bytes."),
+                  { code: "StreamContentLengthMismatch" }
+                ));
               } else if (AWS2.HttpClient.streamsApiVersion === 2) {
                 stream.end();
               } else {
@@ -10944,7 +11137,11 @@ var require_request = __commonJS({
             if (resp.error) {
               reject(resp.error);
             } else {
-              resolve(Object.defineProperty(resp.data || {}, "$response", { value: resp }));
+              resolve(Object.defineProperty(
+                resp.data || {},
+                "$response",
+                { value: resp }
+              ));
             }
           });
           self.runTo();
@@ -11333,7 +11530,11 @@ var require_v4_credentials = __commonJS({
         if (shouldCache && cacheKey in cachedSecret) {
           return cachedSecret[cacheKey];
         }
-        var kDate = AWS2.util.crypto.hmac("AWS4" + credentials.secretAccessKey, date, "buffer");
+        var kDate = AWS2.util.crypto.hmac(
+          "AWS4" + credentials.secretAccessKey,
+          date,
+          "buffer"
+        );
         var kRegion = AWS2.util.crypto.hmac(kDate, region2, "buffer");
         var kService = AWS2.util.crypto.hmac(kRegion, service, "buffer");
         var signingKey = AWS2.util.crypto.hmac(kService, v4Identifier, "buffer");
@@ -11431,7 +11632,13 @@ var require_v4 = __commonJS({
         return parts.join(", ");
       },
       signature: function signature(credentials, datetime) {
-        var signingKey = v4Credentials.getSigningKey(credentials, datetime.substr(0, 8), this.request.region, this.serviceName, this.signatureCache);
+        var signingKey = v4Credentials.getSigningKey(
+          credentials,
+          datetime.substr(0, 8),
+          this.request.region,
+          this.serviceName,
+          this.signatureCache
+        );
         return AWS2.util.crypto.hmac(signingKey, this.stringToSign(datetime), "hex");
       },
       stringToSign: function stringToSign(datetime) {
@@ -11490,7 +11697,11 @@ var require_v4 = __commonJS({
         return keys.sort().join(";");
       },
       credentialString: function credentialString(datetime) {
-        return v4Credentials.createScope(datetime.substr(0, 8), this.request.region, this.serviceName);
+        return v4Credentials.createScope(
+          datetime.substr(0, 8),
+          this.request.region,
+          this.serviceName
+        );
       },
       hexEncodedHash: function hash(string) {
         return AWS2.util.crypto.sha256(string, "hex");
@@ -11680,7 +11891,10 @@ var require_presign = __commonJS({
         request.httpRequest.headers[expiresHeader] = expires;
       } else if (signerClass === AWS2.Signers.S3) {
         var now = request.service ? request.service.getSkewCorrectedDate() : AWS2.util.date.getDate();
-        request.httpRequest.headers[expiresHeader] = parseInt(AWS2.util.date.unixTimestamp(now) + expires, 10).toString();
+        request.httpRequest.headers[expiresHeader] = parseInt(
+          AWS2.util.date.unixTimestamp(now) + expires,
+          10
+        ).toString();
       } else {
         throw AWS2.util.error(new Error(), {
           message: "Presigning only supports S3 or SigV4 signing.",
@@ -11728,8 +11942,14 @@ var require_presign = __commonJS({
         request.httpRequest.headers[expiresHeader] = expireTime || 3600;
         request.on("build", signedUrlBuilder);
         request.on("sign", signedUrlSigner);
-        request.removeListener("afterBuild", AWS2.EventListeners.Core.SET_CONTENT_LENGTH);
-        request.removeListener("afterBuild", AWS2.EventListeners.Core.COMPUTE_SHA256);
+        request.removeListener(
+          "afterBuild",
+          AWS2.EventListeners.Core.SET_CONTENT_LENGTH
+        );
+        request.removeListener(
+          "afterBuild",
+          AWS2.EventListeners.Core.COMPUTE_SHA256
+        );
         request.emit("beforePresign", [request]);
         if (callback) {
           request.build(function() {
@@ -11748,6 +11968,21 @@ var require_presign = __commonJS({
       }
     });
     module2.exports = AWS2.Signers.Presign;
+  }
+});
+
+// node_modules/aws-sdk/lib/signers/bearer.js
+var require_bearer = __commonJS({
+  "node_modules/aws-sdk/lib/signers/bearer.js"() {
+    var AWS2 = require_core();
+    AWS2.Signers.Bearer = AWS2.util.inherit(AWS2.Signers.RequestSigner, {
+      constructor: function Bearer(request) {
+        AWS2.Signers.RequestSigner.call(this, request);
+      },
+      addAuthorization: function addAuthorization(token) {
+        this.request.httpRequest.headers["Authorization"] = "Bearer " + token.token;
+      }
+    });
   }
 });
 
@@ -11781,6 +12016,8 @@ var require_request_signer = __commonJS({
           return AWS2.Signers.S3;
         case "v3https":
           return AWS2.Signers.V3Https;
+        case "bearer":
+          return AWS2.Signers.Bearer;
       }
       throw new Error("Unknown signing version " + version);
     };
@@ -11790,6 +12027,7 @@ var require_request_signer = __commonJS({
     require_v4();
     require_s3();
     require_presign();
+    require_bearer();
   }
 });
 
@@ -11810,7 +12048,10 @@ var require_param_validator = __commonJS({
         if (this.errors.length > 1) {
           var msg = this.errors.join("\n* ");
           msg = "There were " + this.errors.length + " validation errors:\n* " + msg;
-          throw AWS2.util.error(new Error(msg), { code: "MultipleValidationErrors", errors: this.errors });
+          throw AWS2.util.error(
+            new Error(msg),
+            { code: "MultipleValidationErrors", errors: this.errors }
+          );
         } else if (this.errors.length === 1) {
           throw this.errors[0];
         } else {
@@ -11829,7 +12070,10 @@ var require_param_validator = __commonJS({
           paramName = shape.required[i];
           var value = params[paramName];
           if (value === void 0 || value === null) {
-            this.fail("MissingRequiredParameter", "Missing required key '" + paramName + "' in " + context);
+            this.fail(
+              "MissingRequiredParameter",
+              "Missing required key '" + paramName + "' in " + context
+            );
           }
         }
         for (paramName in params) {
@@ -11840,7 +12084,10 @@ var require_param_validator = __commonJS({
             var memberContext = [context, paramName].join(".");
             this.validateMember(memberShape, paramValue, memberContext);
           } else if (paramValue !== void 0 && paramValue !== null) {
-            this.fail("UnexpectedParameter", "Unexpected key '" + paramName + "' found in " + context);
+            this.fail(
+              "UnexpectedParameter",
+              "Unexpected key '" + paramName + "' found in " + context
+            );
           }
         }
         return true;
@@ -11871,8 +12118,16 @@ var require_param_validator = __commonJS({
           for (var param in params) {
             if (!Object.prototype.hasOwnProperty.call(params, param))
               continue;
-            this.validateMember(shape.key, param, context + "[key='" + param + "']");
-            this.validateMember(shape.value, params[param], context + "['" + param + "']");
+            this.validateMember(
+              shape.key,
+              param,
+              context + "[key='" + param + "']"
+            );
+            this.validateMember(
+              shape.value,
+              params[param],
+              context + "['" + param + "']"
+            );
             mapCount++;
           }
           this.validateRange(shape, mapCount, context, "map member count");
@@ -11893,11 +12148,16 @@ var require_param_validator = __commonJS({
           case "boolean":
             return this.validateType(value, context, ["boolean"]);
           case "timestamp":
-            return this.validateType(value, context, [
-              Date,
-              /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/,
-              "number"
-            ], "Date object, ISO-8601 string, or a UNIX timestamp");
+            return this.validateType(
+              value,
+              context,
+              [
+                Date,
+                /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/,
+                "number"
+              ],
+              "Date object, ISO-8601 string, or a UNIX timestamp"
+            );
           default:
             return this.fail("UnkownType", "Unhandled type " + shape.type + " for " + context);
         }
@@ -12027,7 +12287,7 @@ var require_core = __commonJS({
     _hidden.toString();
     module2.exports = AWS2;
     AWS2.util.update(AWS2, {
-      VERSION: "2.1150.0",
+      VERSION: "2.1223.0",
       Signers: {},
       Protocol: {
         Json: require_json(),
@@ -12071,15 +12331,15 @@ var require_core = __commonJS({
   }
 });
 
-// node_modules/uuid/dist/rng.js
+// node_modules/aws-sdk/node_modules/uuid/dist/rng.js
 var require_rng = __commonJS({
-  "node_modules/uuid/dist/rng.js"(exports) {
+  "node_modules/aws-sdk/node_modules/uuid/dist/rng.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true
     });
     exports.default = rng;
-    var _crypto = _interopRequireDefault(__nccwpck_require__(113));
+    var _crypto = _interopRequireDefault(require("crypto"));
     function _interopRequireDefault(obj) {
       return obj && obj.__esModule ? obj : { default: obj };
     }
@@ -12089,9 +12349,9 @@ var require_rng = __commonJS({
   }
 });
 
-// node_modules/uuid/dist/bytesToUuid.js
+// node_modules/aws-sdk/node_modules/uuid/dist/bytesToUuid.js
 var require_bytesToUuid = __commonJS({
-  "node_modules/uuid/dist/bytesToUuid.js"(exports) {
+  "node_modules/aws-sdk/node_modules/uuid/dist/bytesToUuid.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true
@@ -12112,9 +12372,9 @@ var require_bytesToUuid = __commonJS({
   }
 });
 
-// node_modules/uuid/dist/v1.js
+// node_modules/aws-sdk/node_modules/uuid/dist/v1.js
 var require_v1 = __commonJS({
-  "node_modules/uuid/dist/v1.js"(exports) {
+  "node_modules/aws-sdk/node_modules/uuid/dist/v1.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true
@@ -12182,9 +12442,9 @@ var require_v1 = __commonJS({
   }
 });
 
-// node_modules/uuid/dist/v35.js
+// node_modules/aws-sdk/node_modules/uuid/dist/v35.js
 var require_v35 = __commonJS({
-  "node_modules/uuid/dist/v35.js"(exports) {
+  "node_modules/aws-sdk/node_modules/uuid/dist/v35.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true
@@ -12246,15 +12506,15 @@ var require_v35 = __commonJS({
   }
 });
 
-// node_modules/uuid/dist/md5.js
+// node_modules/aws-sdk/node_modules/uuid/dist/md5.js
 var require_md5 = __commonJS({
-  "node_modules/uuid/dist/md5.js"(exports) {
+  "node_modules/aws-sdk/node_modules/uuid/dist/md5.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true
     });
     exports.default = void 0;
-    var _crypto = _interopRequireDefault(__nccwpck_require__(113));
+    var _crypto = _interopRequireDefault(require("crypto"));
     function _interopRequireDefault(obj) {
       return obj && obj.__esModule ? obj : { default: obj };
     }
@@ -12271,9 +12531,9 @@ var require_md5 = __commonJS({
   }
 });
 
-// node_modules/uuid/dist/v3.js
+// node_modules/aws-sdk/node_modules/uuid/dist/v3.js
 var require_v32 = __commonJS({
-  "node_modules/uuid/dist/v3.js"(exports) {
+  "node_modules/aws-sdk/node_modules/uuid/dist/v3.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true
@@ -12290,9 +12550,9 @@ var require_v32 = __commonJS({
   }
 });
 
-// node_modules/uuid/dist/v4.js
+// node_modules/aws-sdk/node_modules/uuid/dist/v4.js
 var require_v42 = __commonJS({
-  "node_modules/uuid/dist/v4.js"(exports) {
+  "node_modules/aws-sdk/node_modules/uuid/dist/v4.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true
@@ -12325,15 +12585,15 @@ var require_v42 = __commonJS({
   }
 });
 
-// node_modules/uuid/dist/sha1.js
+// node_modules/aws-sdk/node_modules/uuid/dist/sha1.js
 var require_sha1 = __commonJS({
-  "node_modules/uuid/dist/sha1.js"(exports) {
+  "node_modules/aws-sdk/node_modules/uuid/dist/sha1.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true
     });
     exports.default = void 0;
-    var _crypto = _interopRequireDefault(__nccwpck_require__(113));
+    var _crypto = _interopRequireDefault(require("crypto"));
     function _interopRequireDefault(obj) {
       return obj && obj.__esModule ? obj : { default: obj };
     }
@@ -12350,9 +12610,9 @@ var require_sha1 = __commonJS({
   }
 });
 
-// node_modules/uuid/dist/v5.js
+// node_modules/aws-sdk/node_modules/uuid/dist/v5.js
 var require_v5 = __commonJS({
-  "node_modules/uuid/dist/v5.js"(exports) {
+  "node_modules/aws-sdk/node_modules/uuid/dist/v5.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true
@@ -12369,9 +12629,9 @@ var require_v5 = __commonJS({
   }
 });
 
-// node_modules/uuid/dist/index.js
+// node_modules/aws-sdk/node_modules/uuid/dist/index.js
 var require_dist = __commonJS({
-  "node_modules/uuid/dist/index.js"(exports) {
+  "node_modules/aws-sdk/node_modules/uuid/dist/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true
@@ -12482,7 +12742,7 @@ var require_util = __commonJS({
       readFileSync: function readFileSync(path) {
         if (util.isBrowser())
           return null;
-        return (__nccwpck_require__(147).readFileSync)(path, "utf-8");
+        return require("fs").readFileSync(path, "utf-8");
       },
       base64: {
         encode: function encode64(string) {
@@ -12565,9 +12825,12 @@ var require_util = __commonJS({
           } else if (typeof string.size === "number") {
             return string.size;
           } else if (typeof string.path === "string") {
-            return (__nccwpck_require__(147).lstatSync)(string.path).size;
+            return require("fs").lstatSync(string.path).size;
           } else {
-            throw util.error(new Error("Cannot determine length of " + string), { object: string });
+            throw util.error(
+              new Error("Cannot determine length of " + string),
+              { object: string }
+            );
           }
         },
         upperFirst: function upperFirst(string) {
@@ -12581,18 +12844,25 @@ var require_util = __commonJS({
         parse: function string(ini) {
           var currentSection, map = {};
           util.arrayEach(ini.split(/\r?\n/), function(line) {
-            line = line.split(/(^|\s)[;#]/)[0];
-            var section = line.match(/^\s*\[([^\[\]]+)\]\s*$/);
-            if (section) {
-              currentSection = section[1];
+            line = line.split(/(^|\s)[;#]/)[0].trim();
+            var isSection = line[0] === "[" && line[line.length - 1] === "]";
+            if (isSection) {
+              currentSection = line.substring(1, line.length - 1);
               if (currentSection === "__proto__" || currentSection.split(/\s/)[1] === "__proto__") {
-                throw util.error(new Error("Cannot load profile name '" + currentSection + "' from shared ini file."));
+                throw util.error(
+                  new Error("Cannot load profile name '" + currentSection + "' from shared ini file.")
+                );
               }
             } else if (currentSection) {
-              var item = line.match(/^\s*(.+?)\s*=\s*(.+?)\s*$/);
-              if (item) {
+              var indexOfEqualsSign = line.indexOf("=");
+              var start = 0;
+              var end = line.length - 1;
+              var isAssignment = indexOfEqualsSign !== -1 && indexOfEqualsSign !== start && indexOfEqualsSign !== end;
+              if (isAssignment) {
+                var name = line.substring(0, indexOfEqualsSign).trim();
+                var value = line.substring(indexOfEqualsSign + 1).trim();
                 map[currentSection] = map[currentSection] || {};
-                map[currentSection][item[1]] = item[2];
+                map[currentSection][name] = value;
               }
             }
           });
@@ -12668,7 +12938,10 @@ var require_util = __commonJS({
           } else if (value.match(/^\w{3},/)) {
             return new Date(value);
           } else {
-            throw util.error(new Error("unhandled timestamp format: " + value), { code: "TimestampParserError" });
+            throw util.error(
+              new Error("unhandled timestamp format: " + value),
+              { code: "TimestampParserError" }
+            );
           }
         }
       },
@@ -13207,7 +13480,7 @@ var require_util = __commonJS({
       computeSha256: function computeSha256(body, done) {
         if (util.isNode()) {
           var Stream = util.stream.Stream;
-          var fs2 = __nccwpck_require__(147);
+          var fs2 = require("fs");
           if (typeof Stream === "function" && body instanceof Stream) {
             if (typeof body.path === "string") {
               var settings = {};
@@ -13232,7 +13505,12 @@ var require_util = __commonJS({
       },
       isClockSkewed: function isClockSkewed(serverTime) {
         if (serverTime) {
-          util.property(AWS2.config, "isClockSkewed", Math.abs(new Date().getTime() - serverTime) >= 3e5, false);
+          util.property(
+            AWS2.config,
+            "isClockSkewed",
+            Math.abs(new Date().getTime() - serverTime) >= 3e5,
+            false
+          );
           return AWS2.config.isClockSkewed;
         }
       },
@@ -13344,10 +13622,13 @@ var require_util = __commonJS({
                 cb(null, data);
               } else {
                 var retryAfter = parseInt(httpResponse.headers["retry-after"], 10) * 1e3 || 0;
-                var err = util.error(new Error(), {
-                  statusCode,
-                  retryable: statusCode >= 500 || statusCode === 429
-                });
+                var err = util.error(
+                  new Error(),
+                  {
+                    statusCode,
+                    retryable: statusCode >= 500 || statusCode === 429
+                  }
+                );
                 if (retryAfter && err.retryable)
                   err.retryAfter = retryAfter;
                 errCallback(err);
@@ -13454,7 +13735,7 @@ var require_util = __commonJS({
 var require_event_message_chunker_stream = __commonJS({
   "node_modules/aws-sdk/lib/event-stream/event-message-chunker-stream.js"(exports, module2) {
     var util = require_core().util;
-    var Transform = (__nccwpck_require__(781).Transform);
+    var Transform = require("stream").Transform;
     var allocBuffer = util.buffer.alloc;
     function EventMessageChunkerStream(options) {
       Transform.call(this, options);
@@ -13473,8 +13754,16 @@ var require_event_message_chunker_stream = __commonJS({
           if (!this.messageLengthBuffer) {
             this.messageLengthBuffer = allocBuffer(4);
           }
-          var numBytesForTotal = Math.min(4 - this.currentMessagePendingLength, bytesRemaining);
-          chunk.copy(this.messageLengthBuffer, this.currentMessagePendingLength, currentOffset, currentOffset + numBytesForTotal);
+          var numBytesForTotal = Math.min(
+            4 - this.currentMessagePendingLength,
+            bytesRemaining
+          );
+          chunk.copy(
+            this.messageLengthBuffer,
+            this.currentMessagePendingLength,
+            currentOffset,
+            currentOffset + numBytesForTotal
+          );
           this.currentMessagePendingLength += numBytesForTotal;
           currentOffset += numBytesForTotal;
           if (this.currentMessagePendingLength < 4) {
@@ -13483,8 +13772,16 @@ var require_event_message_chunker_stream = __commonJS({
           this.allocateMessage(this.messageLengthBuffer.readUInt32BE(0));
           this.messageLengthBuffer = null;
         }
-        var numBytesToWrite = Math.min(this.currentMessageTotalLength - this.currentMessagePendingLength, chunkLength - currentOffset);
-        chunk.copy(this.currentMessage, this.currentMessagePendingLength, currentOffset, currentOffset + numBytesToWrite);
+        var numBytesToWrite = Math.min(
+          this.currentMessageTotalLength - this.currentMessagePendingLength,
+          chunkLength - currentOffset
+        );
+        chunk.copy(
+          this.currentMessage,
+          this.currentMessagePendingLength,
+          currentOffset,
+          currentOffset + numBytesToWrite
+        );
         this.currentMessagePendingLength += numBytesToWrite;
         currentOffset += numBytesToWrite;
         if (this.currentMessageTotalLength && this.currentMessageTotalLength === this.currentMessagePendingLength) {
@@ -13537,7 +13834,9 @@ var require_int64 = __commonJS({
     }
     Int64.fromNumber = function(number) {
       if (number > 9223372036854776e3 || number < -9223372036854776e3) {
-        throw new Error(number + " is too large (or, if negative, too small) to represent as an Int64");
+        throw new Error(
+          number + " is too large (or, if negative, too small) to represent as an Int64"
+        );
       }
       var bytes = new Uint8Array(8);
       for (var i = 7, remaining = Math.abs(Math.round(number)); i > -1 && remaining > 0; i--, remaining /= 256) {
@@ -13595,12 +13894,20 @@ var require_split_message = __commonJS({
         throw new Error("Reported message length does not match received message length");
       }
       var expectedPreludeChecksum = message.readUInt32BE(PRELUDE_LENGTH);
-      if (expectedPreludeChecksum !== util.crypto.crc32(message.slice(0, PRELUDE_LENGTH))) {
-        throw new Error("The prelude checksum specified in the message (" + expectedPreludeChecksum + ") does not match the calculated CRC32 checksum.");
+      if (expectedPreludeChecksum !== util.crypto.crc32(
+        message.slice(0, PRELUDE_LENGTH)
+      )) {
+        throw new Error(
+          "The prelude checksum specified in the message (" + expectedPreludeChecksum + ") does not match the calculated CRC32 checksum."
+        );
       }
       var expectedMessageChecksum = message.readUInt32BE(message.length - CHECKSUM_LENGTH);
-      if (expectedMessageChecksum !== util.crypto.crc32(message.slice(0, message.length - CHECKSUM_LENGTH))) {
-        throw new Error("The message checksum did not match the expected value of " + expectedMessageChecksum);
+      if (expectedMessageChecksum !== util.crypto.crc32(
+        message.slice(0, message.length - CHECKSUM_LENGTH)
+      )) {
+        throw new Error(
+          "The message checksum did not match the expected value of " + expectedMessageChecksum
+        );
       }
       var headersStart = PRELUDE_LENGTH + CHECKSUM_LENGTH;
       var headersEnd = headersStart + message.readUInt32BE(PRELUDE_MEMBER_LENGTH);
@@ -13690,14 +13997,19 @@ var require_parse_message = __commonJS({
             position += 2;
             out[name] = {
               type: STRING_TAG,
-              value: headers.slice(position, position + stringLength).toString()
+              value: headers.slice(
+                position,
+                position + stringLength
+              ).toString()
             };
             position += stringLength;
             break;
           case 8:
             out[name] = {
               type: TIMESTAMP_TAG,
-              value: new Date(new Int64(headers.slice(position, position + 8)).valueOf())
+              value: new Date(
+                new Int64(headers.slice(position, position + 8)).valueOf()
+              )
             };
             position += 8;
             break;
@@ -13781,7 +14093,7 @@ var require_parse_event = __commonJS({
 // node_modules/aws-sdk/lib/event-stream/event-message-unmarshaller-stream.js
 var require_event_message_unmarshaller_stream = __commonJS({
   "node_modules/aws-sdk/lib/event-stream/event-message-unmarshaller-stream.js"(exports, module2) {
-    var Transform = (__nccwpck_require__(781).Transform);
+    var Transform = require("stream").Transform;
     var parseEvent = require_parse_event().parseEvent;
     function EventUnmarshallerStream(options) {
       options = options || {};
@@ -13818,7 +14130,9 @@ var require_streaming_create_event_stream = __commonJS({
         eventStreamModel: model
       });
       var eventMessageChunker = new EventMessageChunkerStream();
-      stream.pipe(eventMessageChunker).pipe(eventStream);
+      stream.pipe(
+        eventMessageChunker
+      ).pipe(eventStream);
       stream.on("error", function(err) {
         eventMessageChunker.emit("error", err);
       });
@@ -13888,7 +14202,7 @@ var require_nodeClock = __commonJS({
 var require_publisher = __commonJS({
   "node_modules/aws-sdk/lib/publisher/index.js"(exports, module2) {
     var util = require_core().util;
-    var dgram = __nccwpck_require__(891);
+    var dgram = require("dgram");
     var stringToBuffer = util.buffer.toBuffer;
     var MAX_MESSAGE_SIZE = 1024 * 8;
     function Publisher(options) {
@@ -14023,16 +14337,30 @@ var require_configuration = __commonJS({
 var require_ini_loader = __commonJS({
   "node_modules/aws-sdk/lib/shared-ini/ini-loader.js"(exports, module2) {
     var AWS2 = require_core();
-    var os = __nccwpck_require__(37);
-    var path = __nccwpck_require__(17);
-    function parseFile(filename, isConfig) {
-      var content = AWS2.util.ini.parse(AWS2.util.readFileSync(filename));
+    var os = require("os");
+    var path = require("path");
+    function parseFile(filename) {
+      return AWS2.util.ini.parse(AWS2.util.readFileSync(filename));
+    }
+    function getProfiles(fileContent) {
       var tmpContent = {};
-      Object.keys(content).forEach(function(profileName) {
-        var profileContent = content[profileName];
-        profileName = isConfig ? profileName.replace(/^profile\s/, "") : profileName;
-        Object.defineProperty(tmpContent, profileName, {
-          value: profileContent,
+      Object.keys(fileContent).forEach(function(sectionName) {
+        if (/^sso-session\s/.test(sectionName))
+          return;
+        Object.defineProperty(tmpContent, sectionName.replace(/^profile\s/, ""), {
+          value: fileContent[sectionName],
+          enumerable: true
+        });
+      });
+      return tmpContent;
+    }
+    function getSsoSessions(fileContent) {
+      var tmpContent = {};
+      Object.keys(fileContent).forEach(function(sectionName) {
+        if (!/^sso-session\s/.test(sectionName))
+          return;
+        Object.defineProperty(tmpContent, sectionName.replace(/^sso-session\s/, ""), {
+          value: fileContent[sectionName],
           enumerable: true
         });
       });
@@ -14041,23 +14369,45 @@ var require_ini_loader = __commonJS({
     AWS2.IniLoader = AWS2.util.inherit({
       constructor: function IniLoader2() {
         this.resolvedProfiles = {};
+        this.resolvedSsoSessions = {};
       },
       clearCachedFiles: function clearCachedFiles() {
         this.resolvedProfiles = {};
+        this.resolvedSsoSessions = {};
       },
       loadFrom: function loadFrom(options) {
         options = options || {};
         var isConfig = options.isConfig === true;
         var filename = options.filename || this.getDefaultFilePath(isConfig);
         if (!this.resolvedProfiles[filename]) {
-          var fileContent = this.parseFile(filename, isConfig);
-          Object.defineProperty(this.resolvedProfiles, filename, { value: fileContent });
+          var fileContent = parseFile(filename);
+          if (isConfig) {
+            Object.defineProperty(this.resolvedProfiles, filename, {
+              value: getProfiles(fileContent)
+            });
+          } else {
+            Object.defineProperty(this.resolvedProfiles, filename, { value: fileContent });
+          }
         }
         return this.resolvedProfiles[filename];
       },
-      parseFile,
+      loadSsoSessionsFrom: function loadSsoSessionsFrom(options) {
+        options = options || {};
+        var filename = options.filename || this.getDefaultFilePath(true);
+        if (!this.resolvedSsoSessions[filename]) {
+          var fileContent = parseFile(filename);
+          Object.defineProperty(this.resolvedSsoSessions, filename, {
+            value: getSsoSessions(fileContent)
+          });
+        }
+        return this.resolvedSsoSessions[filename];
+      },
       getDefaultFilePath: function getDefaultFilePath(isConfig) {
-        return path.join(this.getHomeDir(), ".aws", isConfig ? "config" : "credentials");
+        return path.join(
+          this.getHomeDir(),
+          ".aws",
+          isConfig ? "config" : "credentials"
+        );
       },
       getHomeDir: function getHomeDir() {
         var env = process.env;
@@ -14068,13 +14418,14 @@ var require_ini_loader = __commonJS({
         if (typeof os.homedir === "function") {
           return os.homedir();
         }
-        throw AWS2.util.error(new Error("Cannot load credentials, HOME path not set"));
+        throw AWS2.util.error(
+          new Error("Cannot load credentials, HOME path not set")
+        );
       }
     });
     var IniLoader = AWS2.IniLoader;
     module2.exports = {
-      IniLoader,
-      parseFile
+      IniLoader
     };
   }
 });
@@ -14183,7 +14534,10 @@ var require_sts = __commonJS({
         });
         if (config.stsRegionalEndpoints === "regional" && service.isGlobalEndpoint) {
           if (!config.region) {
-            throw AWS2.util.error(new Error(), { code: "ConfigError", message: "Missing region in config" });
+            throw AWS2.util.error(
+              new Error(),
+              { code: "ConfigError", message: "Missing region in config" }
+            );
           }
           var insertPoint = config.endpoint.indexOf(".amazonaws.com");
           var regionalEndpoint2 = config.endpoint.substring(0, insertPoint) + "." + config.region + config.endpoint.substring(insertPoint);
@@ -14617,15 +14971,21 @@ var require_chainable_temporary_credentials = __commonJS({
         }
         if (params.SerialNumber) {
           if (!options.tokenCodeFn || typeof options.tokenCodeFn !== "function") {
-            throw new AWS2.util.error(new Error("tokenCodeFn must be a function when params.SerialNumber is given"), { code: this.errorCode });
+            throw new AWS2.util.error(
+              new Error("tokenCodeFn must be a function when params.SerialNumber is given"),
+              { code: this.errorCode }
+            );
           } else {
             this.tokenCodeFn = options.tokenCodeFn;
           }
         }
-        var config = AWS2.util.merge({
-          params,
-          credentials: options.masterCredentials || AWS2.config.credentials
-        }, options.stsConfig || {});
+        var config = AWS2.util.merge(
+          {
+            params,
+            credentials: options.masterCredentials || AWS2.config.credentials
+          },
+          options.stsConfig || {}
+        );
         this.service = new STS(config);
       },
       refresh: function refresh(callback) {
@@ -14660,7 +15020,12 @@ var require_chainable_temporary_credentials = __commonJS({
               if (err instanceof Error) {
                 message = err.message;
               }
-              callback(AWS2.util.error(new Error("Error fetching MFA token: " + message), { code: self.errorCode }));
+              callback(
+                AWS2.util.error(
+                  new Error("Error fetching MFA token: " + message),
+                  { code: self.errorCode }
+                )
+              );
               return;
             }
             callback(null, token);
@@ -15656,7 +16021,7 @@ var require_saml_credentials = __commonJS({
 var require_process_credentials = __commonJS({
   "node_modules/aws-sdk/lib/credentials/process_credentials.js"() {
     var AWS2 = require_core();
-    var proc = __nccwpck_require__(81);
+    var proc = require("child_process");
     var iniLoader = AWS2.util.iniLoader;
     AWS2.ProcessCredentials = AWS2.util.inherit(AWS2.Credentials, {
       constructor: function ProcessCredentials(options) {
@@ -15672,7 +16037,10 @@ var require_process_credentials = __commonJS({
           var profiles = AWS2.util.getProfilesFromSharedConfig(iniLoader, this.filename);
           var profile = profiles[this.profile] || {};
           if (Object.keys(profile).length === 0) {
-            throw AWS2.util.error(new Error("Profile " + this.profile + " not found"), { code: "ProcessCredentialsProviderFailure" });
+            throw AWS2.util.error(
+              new Error("Profile " + this.profile + " not found"),
+              { code: "ProcessCredentialsProviderFailure" }
+            );
           }
           if (profile["credential_process"]) {
             this.loadViaCredentialProcess(profile, function(err, data) {
@@ -15690,7 +16058,10 @@ var require_process_credentials = __commonJS({
               }
             });
           } else {
-            throw AWS2.util.error(new Error("Profile " + this.profile + " did not include credential process"), { code: "ProcessCredentialsProviderFailure" });
+            throw AWS2.util.error(
+              new Error("Profile " + this.profile + " did not include credential process"),
+              { code: "ProcessCredentialsProviderFailure" }
+            );
           }
         } catch (err) {
           callback(err);
@@ -15699,7 +16070,10 @@ var require_process_credentials = __commonJS({
       loadViaCredentialProcess: function loadViaCredentialProcess(profile, callback) {
         proc.exec(profile["credential_process"], { env: process.env }, function(err, stdOut, stdErr) {
           if (err) {
-            callback(AWS2.util.error(new Error("credential_process returned error"), { code: "ProcessCredentialsProviderFailure" }), null);
+            callback(AWS2.util.error(
+              new Error("credential_process returned error"),
+              { code: "ProcessCredentialsProviderFailure" }
+            ), null);
           } else {
             try {
               var credData = JSON.parse(stdOut);
@@ -15715,7 +16089,10 @@ var require_process_credentials = __commonJS({
               }
               callback(null, credData);
             } catch (err2) {
-              callback(AWS2.util.error(new Error(err2.message), { code: "ProcessCredentialsProviderFailure" }), null);
+              callback(AWS2.util.error(
+                new Error(err2.message),
+                { code: "ProcessCredentialsProviderFailure" }
+              ), null);
             }
           }
         });
@@ -18485,7 +18862,7 @@ var require_sax = __commonJS({
       };
       var Stream;
       try {
-        Stream = (__nccwpck_require__(781).Stream);
+        Stream = require("stream").Stream;
       } catch (ex) {
         Stream = function() {
         };
@@ -18539,7 +18916,7 @@ var require_sax = __commonJS({
       SAXStream.prototype.write = function(data) {
         if (typeof Buffer === "function" && typeof Buffer.isBuffer === "function" && Buffer.isBuffer(data)) {
           if (!this._decoder) {
-            var SD = (__nccwpck_require__(576).StringDecoder);
+            var SD = require("string_decoder").StringDecoder;
             this._decoder = new SD("utf8");
           }
           data = this._decoder.write(data);
@@ -18998,9 +19375,15 @@ var require_sax = __commonJS({
           var local = qn.local;
           if (prefix === "xmlns") {
             if (local === "xml" && parser.attribValue !== XML_NAMESPACE) {
-              strictFail(parser, "xml: prefix must be bound to " + XML_NAMESPACE + "\nActual: " + parser.attribValue);
+              strictFail(
+                parser,
+                "xml: prefix must be bound to " + XML_NAMESPACE + "\nActual: " + parser.attribValue
+              );
             } else if (local === "xmlns" && parser.attribValue !== XMLNS_NAMESPACE) {
-              strictFail(parser, "xmlns: prefix must be bound to " + XMLNS_NAMESPACE + "\nActual: " + parser.attribValue);
+              strictFail(
+                parser,
+                "xmlns: prefix must be bound to " + XMLNS_NAMESPACE + "\nActual: " + parser.attribValue
+              );
             } else {
               var tag = parser.tag;
               var parent = parser.tags[parser.tags.length - 1] || parser;
@@ -19194,7 +19577,10 @@ var require_sax = __commonJS({
           throw this.error;
         }
         if (parser.closed) {
-          return error(parser, "Cannot write after close. Assign an onready handler.");
+          return error(
+            parser,
+            "Cannot write after close. Assign an onready handler."
+          );
         }
         if (chunk === null) {
           return end(parser);
@@ -19313,7 +19699,10 @@ var require_sax = __commonJS({
               } else if ((parser.sgmlDecl + c).toUpperCase() === DOCTYPE) {
                 parser.state = S.DOCTYPE;
                 if (parser.doctype || parser.sawRoot) {
-                  strictFail(parser, "Inappropriately located doctype declaration");
+                  strictFail(
+                    parser,
+                    "Inappropriately located doctype declaration"
+                  );
                 }
                 parser.doctype = "";
                 parser.sgmlDecl = "";
@@ -19803,10 +20192,10 @@ var require_parser2 = __commonJS({
         return child;
       }, hasProp = {}.hasOwnProperty;
       sax = require_sax();
-      events = __nccwpck_require__(361);
+      events = require("events");
       bom = require_bom();
       processors = require_processors();
-      setImmediate2 = (__nccwpck_require__(512).setImmediate);
+      setImmediate2 = require("timers").setImmediate;
       defaults = require_defaults().defaults;
       isEmpty = function(thing) {
         return typeof thing === "object" && thing != null && Object.keys(thing).length === 0;
@@ -20351,7 +20740,7 @@ var require_node = __commonJS({
           endpoint = new AWS2.Endpoint(httpOptions.proxy);
         }
         var useSSL = endpoint.protocol === "https:";
-        var http = useSSL ? __nccwpck_require__(687) : __nccwpck_require__(685);
+        var http = useSSL ? require("https") : require("http");
         var options = {
           host: endpoint.hostname,
           port: endpoint.port,
@@ -20371,7 +20760,12 @@ var require_node = __commonJS({
           if (stream.didCallback)
             return;
           callback(httpResp);
-          httpResp.emit("headers", httpResp.statusCode, httpResp.headers, httpResp.statusMessage);
+          httpResp.emit(
+            "headers",
+            httpResp.statusCode,
+            httpResp.headers,
+            httpResp.statusMessage
+          );
         });
         httpRequest.stream = stream;
         stream.didCallback = false;
@@ -20384,7 +20778,10 @@ var require_node = __commonJS({
                   return;
                 stream.didCallback = true;
                 stream.abort();
-                errCallback(AWS2.util.error(new Error("Socket timed out without establishing a connection"), { code: "TimeoutError" }));
+                errCallback(AWS2.util.error(
+                  new Error("Socket timed out without establishing a connection"),
+                  { code: "TimeoutError" }
+                ));
               }, httpOptions.connectTimeout);
               socket.on("connect", function() {
                 clearTimeout(connectTimeoutId);
@@ -20409,7 +20806,7 @@ var require_node = __commonJS({
           if (stream.didCallback)
             return;
           stream.didCallback = true;
-          if (err.code === "ECONNRESET" || err.code === "EPIPE" || err.code === "ETIMEDOUT") {
+          if ("ECONNRESET" === err.code || "EPIPE" === err.code || "ETIMEDOUT" === err.code) {
             errCallback(AWS2.util.error(err, { code: "TimeoutError" }));
           } else {
             errCallback(err);
@@ -20448,7 +20845,7 @@ var require_node = __commonJS({
         }
       },
       getAgent: function getAgent(useSSL, agentOptions) {
-        var http = useSSL ? __nccwpck_require__(687) : __nccwpck_require__(685);
+        var http = useSSL ? require("https") : require("http");
         if (useSSL) {
           if (!AWS2.NodeHttpClient.sslAgent) {
             AWS2.NodeHttpClient.sslAgent = new http.Agent(AWS2.util.merge({
@@ -20504,7 +20901,7 @@ var require_node = __commonJS({
 var require_token_file_web_identity_credentials = __commonJS({
   "node_modules/aws-sdk/lib/credentials/token_file_web_identity_credentials.js"() {
     var AWS2 = require_core();
-    var fs2 = __nccwpck_require__(147);
+    var fs2 = require("fs");
     var STS = require_sts2();
     var iniLoader = AWS2.util.iniLoader;
     AWS2.TokenFileWebIdentityCredentials = AWS2.util.inherit(AWS2.Credentials, {
@@ -20525,10 +20922,13 @@ var require_token_file_web_identity_credentials = __commonJS({
       },
       getParamsFromSharedConfig: function getParamsFromSharedConfig() {
         var profiles = AWS2.util.getProfilesFromSharedConfig(iniLoader);
-        var profileName = process.env.AWS_PROFILE || AWS2.util.defaultProfile;
-        var profile = profiles[profileName] || {};
+        var profileName2 = process.env.AWS_PROFILE || AWS2.util.defaultProfile;
+        var profile = profiles[profileName2] || {};
         if (Object.keys(profile).length === 0) {
-          throw AWS2.util.error(new Error("Profile " + profileName + " not found"), { code: "TokenFileWebIdentityCredentialsProviderFailure" });
+          throw AWS2.util.error(
+            new Error("Profile " + profileName2 + " not found"),
+            { code: "TokenFileWebIdentityCredentialsProviderFailure" }
+          );
         }
         var paramsArray = [];
         while (!profile["web_identity_token_file"] && profile["source_profile"]) {
@@ -20557,18 +20957,21 @@ var require_token_file_web_identity_credentials = __commonJS({
         } else {
           var params = paramsArray.shift();
           self.service.config.credentials = self.service.credentialsFrom(self.data, self);
-          self.service.assumeRole({
-            RoleArn: params.roleArn,
-            RoleSessionName: params.roleSessionName || "token-file-web-identity"
-          }, function(err, data) {
-            self.data = null;
-            if (err) {
-              callback(err);
-            } else {
-              self.data = data;
-              self.assumeRoleChaining(paramsArray, callback);
+          self.service.assumeRole(
+            {
+              RoleArn: params.roleArn,
+              RoleSessionName: params.roleSessionName || "token-file-web-identity"
+            },
+            function(err, data) {
+              self.data = null;
+              if (err) {
+                callback(err);
+              } else {
+                self.data = data;
+                self.assumeRoleChaining(paramsArray, callback);
+              }
             }
-          });
+          );
         }
       },
       load: function load(callback) {
@@ -20584,19 +20987,22 @@ var require_token_file_web_identity_credentials = __commonJS({
             if (!self.service) {
               self.createClients();
             }
-            self.service.assumeRoleWithWebIdentity({
-              WebIdentityToken: oidcToken,
-              RoleArn: params.roleArn,
-              RoleSessionName: params.roleSessionName || "token-file-web-identity"
-            }, function(err, data) {
-              self.data = null;
-              if (err) {
-                callback(err);
-              } else {
-                self.data = data;
-                self.assumeRoleChaining(paramsArray, callback);
+            self.service.assumeRoleWithWebIdentity(
+              {
+                WebIdentityToken: oidcToken,
+                RoleArn: params.roleArn,
+                RoleSessionName: params.roleSessionName || "token-file-web-identity"
+              },
+              function(err, data) {
+                self.data = null;
+                if (err) {
+                  callback(err);
+                } else {
+                  self.data = data;
+                  self.assumeRoleChaining(paramsArray, callback);
+                }
               }
-            });
+            );
           }
         } catch (err) {
           callback(err);
@@ -20719,7 +21125,7 @@ var require_metadata_service = __commonJS({
     require_http();
     var inherit = AWS2.util.inherit;
     var getMetadataServiceEndpoint = require_get_metadata_service_endpoint();
-    var URL = (__nccwpck_require__(310).URL);
+    var URL = require("url").URL;
     AWS2.MetadataService = inherit({
       endpoint: getMetadataServiceEndpoint(),
       httpOptions: { timeout: 0 },
@@ -20755,12 +21161,16 @@ var require_metadata_service = __commonJS({
       fetchMetadataToken: function fetchMetadataToken(callback) {
         var self = this;
         var tokenFetchPath = "/latest/api/token";
-        self.request(tokenFetchPath, {
-          "method": "PUT",
-          "headers": {
-            "x-aws-ec2-metadata-token-ttl-seconds": "21600"
-          }
-        }, callback);
+        self.request(
+          tokenFetchPath,
+          {
+            "method": "PUT",
+            "headers": {
+              "x-aws-ec2-metadata-token-ttl-seconds": "21600"
+            }
+          },
+          callback
+        );
       },
       fetchCredentials: function fetchCredentials(options, cb) {
         var self = this;
@@ -20768,18 +21178,24 @@ var require_metadata_service = __commonJS({
         self.request(basePath, options, function(err, roleName) {
           if (err) {
             self.disableFetchToken = !(err.statusCode === 401);
-            cb(AWS2.util.error(err, {
-              message: "EC2 Metadata roleName request returned error"
-            }));
+            cb(AWS2.util.error(
+              err,
+              {
+                message: "EC2 Metadata roleName request returned error"
+              }
+            ));
             return;
           }
           roleName = roleName.split("\n")[0];
           self.request(basePath + roleName, options, function(credErr, credData) {
             if (credErr) {
               self.disableFetchToken = !(credErr.statusCode === 401);
-              cb(AWS2.util.error(credErr, {
-                message: "EC2 Metadata creds request returned error"
-              }));
+              cb(AWS2.util.error(
+                credErr,
+                {
+                  message: "EC2 Metadata creds request returned error"
+                }
+              ));
               return;
             }
             try {
@@ -20811,14 +21227,20 @@ var require_metadata_service = __commonJS({
               if (tokenError.code === "TimeoutError") {
                 self.disableFetchToken = true;
               } else if (tokenError.retryable === true) {
-                callbacks(AWS2.util.error(tokenError, {
-                  message: "EC2 Metadata token request returned error"
-                }));
+                callbacks(AWS2.util.error(
+                  tokenError,
+                  {
+                    message: "EC2 Metadata token request returned error"
+                  }
+                ));
                 return;
               } else if (tokenError.statusCode === 400) {
-                callbacks(AWS2.util.error(tokenError, {
-                  message: "EC2 Metadata token request returned 400"
-                }));
+                callbacks(AWS2.util.error(
+                  tokenError,
+                  {
+                    message: "EC2 Metadata token request returned 400"
+                  }
+                ));
                 return;
               }
             }
@@ -20846,13 +21268,19 @@ var require_ec2_metadata_credentials = __commonJS({
       constructor: function EC2MetadataCredentials(options) {
         AWS2.Credentials.call(this);
         options = options ? AWS2.util.copy(options) : {};
-        options = AWS2.util.merge({ maxRetries: this.defaultMaxRetries }, options);
+        options = AWS2.util.merge(
+          { maxRetries: this.defaultMaxRetries },
+          options
+        );
         if (!options.httpOptions)
           options.httpOptions = {};
-        options.httpOptions = AWS2.util.merge({
-          timeout: this.defaultTimeout,
-          connectTimeout: this.defaultConnectTimeout
-        }, options.httpOptions);
+        options.httpOptions = AWS2.util.merge(
+          {
+            timeout: this.defaultTimeout,
+            connectTimeout: this.defaultConnectTimeout
+          },
+          options.httpOptions
+        );
         this.metadataService = new AWS2.MetadataService(options);
         this.logger = options.logger || AWS2.config && AWS2.config.logger;
       },
@@ -20924,13 +21352,18 @@ var require_remote_credentials = __commonJS({
         options = options ? AWS2.util.copy(options) : {};
         if (!options.httpOptions)
           options.httpOptions = {};
-        options.httpOptions = AWS2.util.merge(this.httpOptions, options.httpOptions);
+        options.httpOptions = AWS2.util.merge(
+          this.httpOptions,
+          options.httpOptions
+        );
         AWS2.util.update(this, options);
       },
       httpOptions: { timeout: 1e3 },
       maxRetries: 3,
       isConfiguredForEcsCredentials: function isConfiguredForEcsCredentials() {
-        return Boolean(process && process.env && (process.env[ENV_RELATIVE_URI] || process.env[ENV_FULL_URI]));
+        return Boolean(
+          process && process.env && (process.env[ENV_RELATIVE_URI] || process.env[ENV_FULL_URI])
+        );
       },
       getECSFullUri: function getECSFullUri() {
         if (process && process.env) {
@@ -20940,17 +21373,29 @@ var require_remote_credentials = __commonJS({
           } else if (full) {
             var parsed = AWS2.util.urlParse(full);
             if (FULL_URI_ALLOWED_PROTOCOLS.indexOf(parsed.protocol) < 0) {
-              throw AWS2.util.error(new Error("Unsupported protocol:  AWS.RemoteCredentials supports " + FULL_URI_ALLOWED_PROTOCOLS.join(",") + " only; " + parsed.protocol + " requested."), { code: "ECSCredentialsProviderFailure" });
+              throw AWS2.util.error(
+                new Error("Unsupported protocol:  AWS.RemoteCredentials supports " + FULL_URI_ALLOWED_PROTOCOLS.join(",") + " only; " + parsed.protocol + " requested."),
+                { code: "ECSCredentialsProviderFailure" }
+              );
             }
             if (FULL_URI_UNRESTRICTED_PROTOCOLS.indexOf(parsed.protocol) < 0 && FULL_URI_ALLOWED_HOSTNAMES.indexOf(parsed.hostname) < 0) {
-              throw AWS2.util.error(new Error("Unsupported hostname: AWS.RemoteCredentials only supports " + FULL_URI_ALLOWED_HOSTNAMES.join(",") + " for " + parsed.protocol + "; " + parsed.protocol + "//" + parsed.hostname + " requested."), { code: "ECSCredentialsProviderFailure" });
+              throw AWS2.util.error(
+                new Error("Unsupported hostname: AWS.RemoteCredentials only supports " + FULL_URI_ALLOWED_HOSTNAMES.join(",") + " for " + parsed.protocol + "; " + parsed.protocol + "//" + parsed.hostname + " requested."),
+                { code: "ECSCredentialsProviderFailure" }
+              );
             }
             return full;
           } else {
-            throw AWS2.util.error(new Error("Variable " + ENV_RELATIVE_URI + " or " + ENV_FULL_URI + " must be set to use AWS.RemoteCredentials."), { code: "ECSCredentialsProviderFailure" });
+            throw AWS2.util.error(
+              new Error("Variable " + ENV_RELATIVE_URI + " or " + ENV_FULL_URI + " must be set to use AWS.RemoteCredentials."),
+              { code: "ECSCredentialsProviderFailure" }
+            );
           }
         } else {
-          throw AWS2.util.error(new Error("No process info available"), { code: "ECSCredentialsProviderFailure" });
+          throw AWS2.util.error(
+            new Error("No process info available"),
+            { code: "ECSCredentialsProviderFailure" }
+          );
         }
       },
       getECSAuthToken: function getECSAuthToken() {
@@ -21001,7 +21446,10 @@ var require_remote_credentials = __commonJS({
               data = JSON.parse(data);
               var creds = self.formatCreds(data);
               if (!self.credsFormatIsValid(creds)) {
-                throw AWS2.util.error(new Error("Response data is not in valid format"), { code: "ECSCredentialsProviderFailure" });
+                throw AWS2.util.error(
+                  new Error("Response data is not in valid format"),
+                  { code: "ECSCredentialsProviderFailure" }
+                );
               }
               AWS2.util.update(self, creds);
             } catch (dataError) {
@@ -21038,7 +21486,10 @@ var require_environment_credentials = __commonJS({
         if (!callback)
           callback = AWS2.util.fn.callback;
         if (!process || !process.env) {
-          callback(AWS2.util.error(new Error("No process info or environment variables available"), { code: "EnvironmentCredentialsProviderFailure" }));
+          callback(AWS2.util.error(
+            new Error("No process info or environment variables available"),
+            { code: "EnvironmentCredentialsProviderFailure" }
+          ));
           return;
         }
         var keys = ["ACCESS_KEY_ID", "SECRET_ACCESS_KEY", "SESSION_TOKEN"];
@@ -21049,7 +21500,10 @@ var require_environment_credentials = __commonJS({
             prefix = this.envPrefix + "_";
           values[i] = process.env[prefix + keys[i]];
           if (!values[i] && keys[i] !== "SESSION_TOKEN") {
-            callback(AWS2.util.error(new Error("Variable " + prefix + keys[i] + " not set."), { code: "EnvironmentCredentialsProviderFailure" }));
+            callback(AWS2.util.error(
+              new Error("Variable " + prefix + keys[i] + " not set."),
+              { code: "EnvironmentCredentialsProviderFailure" }
+            ));
             return;
           }
         }
@@ -21079,7 +21533,10 @@ var require_file_system_credentials = __commonJS({
           var creds = JSON.parse(AWS2.util.readFileSync(this.filename));
           AWS2.Credentials.call(this, creds);
           if (!this.accessKeyId || !this.secretAccessKey) {
-            throw AWS2.util.error(new Error("Credentials not set in " + this.filename), { code: "FileSystemCredentialsProviderFailure" });
+            throw AWS2.util.error(
+              new Error("Credentials not set in " + this.filename),
+              { code: "FileSystemCredentialsProviderFailure" }
+            );
           }
           this.expired = false;
           callback();
@@ -21116,9 +21573,14 @@ var require_shared_ini_file_credentials = __commonJS({
           var profiles = AWS2.util.getProfilesFromSharedConfig(iniLoader, this.filename);
           var profile = profiles[this.profile] || {};
           if (Object.keys(profile).length === 0) {
-            throw AWS2.util.error(new Error("Profile " + this.profile + " not found"), { code: "SharedIniFileCredentialsProviderFailure" });
+            throw AWS2.util.error(
+              new Error("Profile " + this.profile + " not found"),
+              { code: "SharedIniFileCredentialsProviderFailure" }
+            );
           }
-          var preferStaticCredentialsToRoleArn = Boolean(this.preferStaticCredentials && profile["aws_access_key_id"] && profile["aws_secret_access_key"]);
+          var preferStaticCredentialsToRoleArn = Boolean(
+            this.preferStaticCredentials && profile["aws_access_key_id"] && profile["aws_secret_access_key"]
+          );
           if (profile["role_arn"] && !preferStaticCredentialsToRoleArn) {
             this.loadRoleProfile(profiles, profile, function(err, data) {
               if (err) {
@@ -21138,7 +21600,10 @@ var require_shared_ini_file_credentials = __commonJS({
           this.secretAccessKey = profile["aws_secret_access_key"];
           this.sessionToken = profile["aws_session_token"];
           if (!this.accessKeyId || !this.secretAccessKey) {
-            throw AWS2.util.error(new Error("Credentials not set for profile " + this.profile), { code: "SharedIniFileCredentialsProviderFailure" });
+            throw AWS2.util.error(
+              new Error("Credentials not set for profile " + this.profile),
+              { code: "SharedIniFileCredentialsProviderFailure" }
+            );
           }
           this.expired = false;
           callback(null);
@@ -21148,11 +21613,17 @@ var require_shared_ini_file_credentials = __commonJS({
       },
       refresh: function refresh(callback) {
         iniLoader.clearCachedFiles();
-        this.coalesceRefresh(callback || AWS2.util.fn.callback, this.disableAssumeRole);
+        this.coalesceRefresh(
+          callback || AWS2.util.fn.callback,
+          this.disableAssumeRole
+        );
       },
       loadRoleProfile: function loadRoleProfile(creds, roleProfile, callback) {
         if (this.disableAssumeRole) {
-          throw AWS2.util.error(new Error("Role assumption profiles are disabled. Failed to load profile " + this.profile + " from " + creds.filename), { code: "SharedIniFileCredentialsProviderFailure" });
+          throw AWS2.util.error(
+            new Error("Role assumption profiles are disabled. Failed to load profile " + this.profile + " from " + creds.filename),
+            { code: "SharedIniFileCredentialsProviderFailure" }
+          );
         }
         var self = this;
         var roleArn = roleProfile["role_arn"];
@@ -21162,16 +21633,24 @@ var require_shared_ini_file_credentials = __commonJS({
         var sourceProfileName = roleProfile["source_profile"];
         var profileRegion = roleProfile["region"] || ASSUME_ROLE_DEFAULT_REGION;
         if (!sourceProfileName) {
-          throw AWS2.util.error(new Error("source_profile is not set using profile " + this.profile), { code: "SharedIniFileCredentialsProviderFailure" });
+          throw AWS2.util.error(
+            new Error("source_profile is not set using profile " + this.profile),
+            { code: "SharedIniFileCredentialsProviderFailure" }
+          );
         }
         var sourceProfileExistanceTest = creds[sourceProfileName];
         if (typeof sourceProfileExistanceTest !== "object") {
-          throw AWS2.util.error(new Error("source_profile " + sourceProfileName + " using profile " + this.profile + " does not exist"), { code: "SharedIniFileCredentialsProviderFailure" });
+          throw AWS2.util.error(
+            new Error("source_profile " + sourceProfileName + " using profile " + this.profile + " does not exist"),
+            { code: "SharedIniFileCredentialsProviderFailure" }
+          );
         }
-        var sourceCredentials = new AWS2.SharedIniFileCredentials(AWS2.util.merge(this.options || {}, {
-          profile: sourceProfileName,
-          preferStaticCredentials: true
-        }));
+        var sourceCredentials = new AWS2.SharedIniFileCredentials(
+          AWS2.util.merge(this.options || {}, {
+            profile: sourceProfileName,
+            preferStaticCredentials: true
+          })
+        );
         this.roleArn = roleArn;
         var sts = new STS({
           credentials: sourceCredentials,
@@ -21195,7 +21674,12 @@ var require_shared_ini_file_credentials = __commonJS({
               } else {
                 message = err;
               }
-              callback(AWS2.util.error(new Error("Error fetching MFA token: " + message), { code: "SharedIniFileCredentialsProviderFailure" }));
+              callback(
+                AWS2.util.error(
+                  new Error("Error fetching MFA token: " + message),
+                  { code: "SharedIniFileCredentialsProviderFailure" }
+                )
+              );
               return;
             }
             roleParams.TokenCode = token;
@@ -21213,8 +21697,8 @@ var require_shared_ini_file_credentials = __commonJS({
 var require_sso_credentials = __commonJS({
   "node_modules/aws-sdk/lib/credentials/sso_credentials.js"() {
     var AWS2 = require_core();
-    var path = __nccwpck_require__(17);
-    var crypto = __nccwpck_require__(113);
+    var path = require("path");
+    var crypto = require("crypto");
     var iniLoader = AWS2.util.iniLoader;
     AWS2.SsoCredentials = AWS2.util.inherit(AWS2.Credentials, {
       constructor: function SsoCredentials(options) {
@@ -21225,6 +21709,7 @@ var require_sso_credentials = __commonJS({
         this.filename = options.filename;
         this.profile = options.profile || process.env.AWS_PROFILE || AWS2.util.defaultProfile;
         this.service = options.ssoClient;
+        this.httpOptions = options.httpOptions || null;
         this.get(options.callback || AWS2.util.fn.noop);
       },
       load: function load(callback) {
@@ -21234,30 +21719,52 @@ var require_sso_credentials = __commonJS({
           var profiles = AWS2.util.getProfilesFromSharedConfig(iniLoader, this.filename);
           var profile = profiles[this.profile] || {};
           if (Object.keys(profile).length === 0) {
-            throw AWS2.util.error(new Error("Profile " + this.profile + " not found"), { code: self.errorCode });
+            throw AWS2.util.error(
+              new Error("Profile " + this.profile + " not found"),
+              { code: self.errorCode }
+            );
           }
           if (!profile.sso_start_url || !profile.sso_account_id || !profile.sso_region || !profile.sso_role_name) {
-            throw AWS2.util.error(new Error("Profile " + this.profile + ' does not have valid SSO credentials. Required parameters "sso_account_id", "sso_region", "sso_role_name", "sso_start_url". Reference: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html'), { code: self.errorCode });
+            throw AWS2.util.error(
+              new Error("Profile " + this.profile + ' does not have valid SSO credentials. Required parameters "sso_account_id", "sso_region", "sso_role_name", "sso_start_url". Reference: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html'),
+              { code: self.errorCode }
+            );
           }
           var hasher = crypto.createHash("sha1");
           var fileName = hasher.update(profile.sso_start_url).digest("hex") + ".json";
-          var cachePath = path.join(iniLoader.getHomeDir(), ".aws", "sso", "cache", fileName);
+          var cachePath = path.join(
+            iniLoader.getHomeDir(),
+            ".aws",
+            "sso",
+            "cache",
+            fileName
+          );
           var cacheFile = AWS2.util.readFileSync(cachePath);
           var cacheContent = null;
           if (cacheFile) {
             cacheContent = JSON.parse(cacheFile);
           }
           if (!cacheContent) {
-            throw AWS2.util.error(new Error("Cached credentials not found under " + this.profile + " profile. Please make sure you log in with aws sso login first"), { code: self.errorCode });
+            throw AWS2.util.error(
+              new Error("Cached credentials not found under " + this.profile + " profile. Please make sure you log in with aws sso login first"),
+              { code: self.errorCode }
+            );
           }
           if (!cacheContent.startUrl || !cacheContent.region || !cacheContent.accessToken || !cacheContent.expiresAt) {
-            throw AWS2.util.error(new Error("Cached credentials are missing required properties. Try running aws sso login."));
+            throw AWS2.util.error(
+              new Error("Cached credentials are missing required properties. Try running aws sso login.")
+            );
           }
           if (new Date(cacheContent.expiresAt).getTime() - Date.now() <= EXPIRE_WINDOW_MS) {
-            throw AWS2.util.error(new Error("The SSO session associated with this profile has expired. To refresh this SSO session run aws sso login with the corresponding profile."));
+            throw AWS2.util.error(new Error(
+              "The SSO session associated with this profile has expired. To refresh this SSO session run aws sso login with the corresponding profile."
+            ));
           }
           if (!self.service || self.service.config.region !== profile.sso_region) {
-            self.service = new AWS2.SSO({ region: profile.sso_region });
+            self.service = new AWS2.SSO({
+              region: profile.sso_region,
+              httpOptions: this.httpOptions
+            });
           }
           var request = {
             accessToken: cacheContent.accessToken,
@@ -21266,9 +21773,14 @@ var require_sso_credentials = __commonJS({
           };
           self.service.getRoleCredentials(request, function(err, data) {
             if (err || !data || !data.roleCredentials) {
-              callback(AWS2.util.error(err || new Error('Please log in using "aws sso login"'), { code: self.errorCode }), null);
+              callback(AWS2.util.error(
+                err || new Error('Please log in using "aws sso login"'),
+                { code: self.errorCode }
+              ), null);
             } else if (!data.roleCredentials.accessKeyId || !data.roleCredentials.secretAccessKey || !data.roleCredentials.sessionToken || !data.roleCredentials.expiration) {
-              throw AWS2.util.error(new Error("SSO returns an invalid temporary credential."));
+              throw AWS2.util.error(new Error(
+                "SSO returns an invalid temporary credential."
+              ));
             } else {
               self.expired = false;
               self.accessKeyId = data.roleCredentials.accessKeyId;
@@ -21281,6 +21793,282 @@ var require_sso_credentials = __commonJS({
         } catch (err) {
           callback(err);
         }
+      },
+      refresh: function refresh(callback) {
+        iniLoader.clearCachedFiles();
+        this.coalesceRefresh(callback || AWS2.util.fn.callback);
+      }
+    });
+  }
+});
+
+// node_modules/aws-sdk/lib/token.js
+var require_token = __commonJS({
+  "node_modules/aws-sdk/lib/token.js"() {
+    var AWS2 = require_core();
+    AWS2.Token = AWS2.util.inherit({
+      constructor: function Token(options) {
+        AWS2.util.hideProperties(this, ["token"]);
+        this.expired = false;
+        this.expireTime = null;
+        this.refreshCallbacks = [];
+        if (arguments.length === 1) {
+          var options = arguments[0];
+          this.token = options.token;
+          this.expireTime = options.expireTime;
+        }
+      },
+      expiryWindow: 15,
+      needsRefresh: function needsRefresh() {
+        var currentTime = AWS2.util.date.getDate().getTime();
+        var adjustedTime = new Date(currentTime + this.expiryWindow * 1e3);
+        if (this.expireTime && adjustedTime > this.expireTime)
+          return true;
+        return this.expired || !this.token;
+      },
+      get: function get2(callback) {
+        var self = this;
+        if (this.needsRefresh()) {
+          this.refresh(function(err) {
+            if (!err)
+              self.expired = false;
+            if (callback)
+              callback(err);
+          });
+        } else if (callback) {
+          callback();
+        }
+      },
+      refresh: function refresh(callback) {
+        this.expired = false;
+        callback();
+      },
+      coalesceRefresh: function coalesceRefresh(callback, sync) {
+        var self = this;
+        if (self.refreshCallbacks.push(callback) === 1) {
+          self.load(function onLoad(err) {
+            AWS2.util.arrayEach(self.refreshCallbacks, function(callback2) {
+              if (sync) {
+                callback2(err);
+              } else {
+                AWS2.util.defer(function() {
+                  callback2(err);
+                });
+              }
+            });
+            self.refreshCallbacks.length = 0;
+          });
+        }
+      },
+      load: function load(callback) {
+        callback();
+      }
+    });
+    AWS2.Token.addPromisesToClass = function addPromisesToClass(PromiseDependency) {
+      this.prototype.getPromise = AWS2.util.promisifyMethod("get", PromiseDependency);
+      this.prototype.refreshPromise = AWS2.util.promisifyMethod("refresh", PromiseDependency);
+    };
+    AWS2.Token.deletePromisesFromClass = function deletePromisesFromClass() {
+      delete this.prototype.getPromise;
+      delete this.prototype.refreshPromise;
+    };
+    AWS2.util.addPromises(AWS2.Token);
+  }
+});
+
+// node_modules/aws-sdk/lib/token/token_provider_chain.js
+var require_token_provider_chain = __commonJS({
+  "node_modules/aws-sdk/lib/token/token_provider_chain.js"() {
+    var AWS2 = require_core();
+    AWS2.TokenProviderChain = AWS2.util.inherit(AWS2.Token, {
+      constructor: function TokenProviderChain(providers) {
+        if (providers) {
+          this.providers = providers;
+        } else {
+          this.providers = AWS2.TokenProviderChain.defaultProviders.slice(0);
+        }
+        this.resolveCallbacks = [];
+      },
+      resolve: function resolve(callback) {
+        var self = this;
+        if (self.providers.length === 0) {
+          callback(new Error("No providers"));
+          return self;
+        }
+        if (self.resolveCallbacks.push(callback) === 1) {
+          let resolveNext2 = function(err, token) {
+            if (!err && token || index === providers.length) {
+              AWS2.util.arrayEach(self.resolveCallbacks, function(callback2) {
+                callback2(err, token);
+              });
+              self.resolveCallbacks.length = 0;
+              return;
+            }
+            var provider = providers[index++];
+            if (typeof provider === "function") {
+              token = provider.call();
+            } else {
+              token = provider;
+            }
+            if (token.get) {
+              token.get(function(getErr) {
+                resolveNext2(getErr, getErr ? null : token);
+              });
+            } else {
+              resolveNext2(null, token);
+            }
+          };
+          var resolveNext = resolveNext2;
+          var index = 0;
+          var providers = self.providers.slice(0);
+          resolveNext2();
+        }
+        return self;
+      }
+    });
+    AWS2.TokenProviderChain.defaultProviders = [];
+    AWS2.TokenProviderChain.addPromisesToClass = function addPromisesToClass(PromiseDependency) {
+      this.prototype.resolvePromise = AWS2.util.promisifyMethod("resolve", PromiseDependency);
+    };
+    AWS2.TokenProviderChain.deletePromisesFromClass = function deletePromisesFromClass() {
+      delete this.prototype.resolvePromise;
+    };
+    AWS2.util.addPromises(AWS2.TokenProviderChain);
+  }
+});
+
+// node_modules/aws-sdk/lib/token/sso_token_provider.js
+var require_sso_token_provider = __commonJS({
+  "node_modules/aws-sdk/lib/token/sso_token_provider.js"() {
+    var AWS2 = require_core();
+    var crypto = require("crypto");
+    var fs2 = require("fs");
+    var path = require("path");
+    var iniLoader = AWS2.util.iniLoader;
+    var lastRefreshAttemptTime = 0;
+    var validateTokenKey = function validateTokenKey2(token, key) {
+      if (!token[key]) {
+        throw AWS2.util.error(
+          new Error('Key "' + key + '" not present in SSO Token'),
+          { code: "SSOTokenProviderFailure" }
+        );
+      }
+    };
+    var refreshUnsuccessful = function refreshUnsuccessful2(currentTime, tokenExpireTime, callback) {
+      if (tokenExpireTime > currentTime) {
+        callback(null);
+      } else {
+        throw AWS2.util.error(
+          new Error('SSO Token refresh failed. Please log in using "aws sso login"'),
+          { code: "SSOTokenProviderFailure" }
+        );
+      }
+    };
+    AWS2.SSOTokenProvider = AWS2.util.inherit(AWS2.Token, {
+      expiryWindow: 5 * 60,
+      constructor: function SSOTokenProvider(options) {
+        AWS2.Token.call(this);
+        options = options || {};
+        this.expired = true;
+        this.profile = options.profile || process.env.AWS_PROFILE || AWS2.util.defaultProfile;
+        this.get(options.callback || AWS2.util.fn.noop);
+      },
+      load: function load(callback) {
+        var self = this;
+        var profiles = iniLoader.loadFrom({ isConfig: true });
+        var profile = profiles[this.profile] || {};
+        if (Object.keys(profile).length === 0) {
+          throw AWS2.util.error(
+            new Error('Profile "' + this.profile + '" not found'),
+            { code: "SSOTokenProviderFailure" }
+          );
+        } else if (!profile["sso_session"]) {
+          throw AWS2.util.error(
+            new Error('Profile "' + profileName + '" is missing required property "sso_session".'),
+            { code: "SSOTokenProviderFailure" }
+          );
+        }
+        var ssoSessionName = profile["sso_session"];
+        var ssoSessions = iniLoader.loadSsoSessionsFrom();
+        var ssoSession = ssoSessions[ssoSessionName];
+        if (!ssoSession) {
+          throw AWS2.util.error(
+            new Error('Sso session "' + ssoSessionName + '" not found'),
+            { code: "SSOTokenProviderFailure" }
+          );
+        } else if (!ssoSession["sso_start_url"]) {
+          throw AWS2.util.error(
+            new Error('Sso session "' + profileName + '" is missing required property "sso_start_url".'),
+            { code: "SSOTokenProviderFailure" }
+          );
+        } else if (!ssoSession["sso_region"]) {
+          throw AWS2.util.error(
+            new Error('Sso session "' + profileName + '" is missing required property "sso_region".'),
+            { code: "SSOTokenProviderFailure" }
+          );
+        }
+        var hasher = crypto.createHash("sha1");
+        var fileName = hasher.update(ssoSessionName).digest("hex") + ".json";
+        var cachePath = path.join(iniLoader.getHomeDir(), ".aws", "sso", "cache", fileName);
+        var tokenFromCache = JSON.parse(fs2.readFileSync(cachePath));
+        if (!tokenFromCache) {
+          throw AWS2.util.error(
+            new Error('Cached token not found. Please log in using "aws sso login" for profile "' + this.profile + '".'),
+            { code: "SSOTokenProviderFailure" }
+          );
+        }
+        validateTokenKey(tokenFromCache, "accessToken");
+        validateTokenKey(tokenFromCache, "expiresAt");
+        var currentTime = AWS2.util.date.getDate().getTime();
+        var adjustedTime = new Date(currentTime + this.expiryWindow * 1e3);
+        var tokenExpireTime = new Date(tokenFromCache["expiresAt"]);
+        if (tokenExpireTime > adjustedTime) {
+          self.token = tokenFromCache.accessToken;
+          self.expireTime = tokenExpireTime;
+          self.expired = false;
+          callback(null);
+          return;
+        }
+        if (currentTime - lastRefreshAttemptTime < 30 * 1e3) {
+          refreshUnsuccessful(currentTime, tokenExpireTime, callback);
+          return;
+        }
+        validateTokenKey(tokenFromCache, "clientId");
+        validateTokenKey(tokenFromCache, "clientSecret");
+        validateTokenKey(tokenFromCache, "refreshToken");
+        if (!self.service || self.service.config.region !== ssoSession.sso_region) {
+          self.service = new AWS2.SSOOIDC({ region: ssoSession.sso_region });
+        }
+        var params = {
+          clientId: tokenFromCache.clientId,
+          clientSecret: tokenFromCache.clientSecret,
+          refreshToken: tokenFromCache.refreshToken,
+          grantType: "refresh_token"
+        };
+        lastRefreshAttemptTime = AWS2.util.date.getDate().getTime();
+        self.service.createToken(params, function(err, data) {
+          if (err || !data) {
+            refreshUnsuccessful(currentTime, tokenExpireTime, callback);
+          } else {
+            try {
+              validateTokenKey(data, "accessToken");
+              validateTokenKey(data, "expiresIn");
+              self.expired = false;
+              self.token = data.accessToken;
+              self.expireTime = new Date(Date.now() + data.expiresIn * 1e3);
+              callback(null);
+              try {
+                tokenFromCache.accessToken = data.accessToken;
+                tokenFromCache.expiresAt = self.expireTime.toISOString();
+                tokenFromCache.refreshToken = data.refreshToken;
+                fs2.writeFileSync(cachePath, JSON.stringify(tokenFromCache, null, 2));
+              } catch (error) {
+              }
+            } catch (error) {
+              refreshUnsuccessful(currentTime, tokenExpireTime, callback);
+            }
+          }
+        });
       },
       refresh: function refresh(callback) {
         iniLoader.clearCachedFiles();
@@ -21303,12 +22091,12 @@ var require_node_loader = __commonJS({
     util.isNode = function() {
       return true;
     };
-    util.crypto.lib = __nccwpck_require__(113);
-    util.Buffer = (__nccwpck_require__(300).Buffer);
-    util.domain = __nccwpck_require__(639);
-    util.stream = __nccwpck_require__(781);
-    util.url = __nccwpck_require__(310);
-    util.querystring = __nccwpck_require__(788);
+    util.crypto.lib = require("crypto");
+    util.Buffer = require("buffer").Buffer;
+    util.domain = require("domain");
+    util.stream = require("stream");
+    util.url = require("url");
+    util.querystring = require("querystring");
     util.environment = "nodejs";
     util.createEventStream = util.stream.Readable ? require_streaming_create_event_stream().createEventStream : require_buffered_create_event_stream().createEventStream;
     util.realClock = require_nodeClock();
@@ -21317,7 +22105,7 @@ var require_node_loader = __commonJS({
       configProvider: require_configuration()
     };
     util.iniLoader = require_shared_ini().iniLoader;
-    util.getSystemErrorName = (__nccwpck_require__(837).getSystemErrorName);
+    util.getSystemErrorName = require("util").getSystemErrorName;
     util.loadConfig = function(options) {
       var envValue = options.environmentVariableSelector(process.env);
       if (envValue !== void 0) {
@@ -21387,6 +22175,14 @@ var require_node_loader = __commonJS({
       },
       function() {
         return new AWS2.EC2MetadataCredentials();
+      }
+    ];
+    require_token();
+    require_token_provider_chain();
+    require_sso_token_provider();
+    AWS2.TokenProviderChain.defaultProviders = [
+      function() {
+        return new AWS2.SSOTokenProvider();
       }
     ];
     var getRegion = function() {
@@ -21462,6 +22258,9 @@ var require_node_loader = __commonJS({
       region: function() {
         var region2 = getRegion();
         return region2 ? getRealRegion(region2) : void 0;
+      },
+      tokenProvider: function() {
+        return new AWS2.TokenProviderChain();
       },
       useFipsEndpoint: function() {
         var region2 = getRegion();
@@ -21979,7 +22778,7 @@ var require_managed_upload = __commonJS({
             return null;
           partInfo.ETag = data.ETag;
           self.doneParts++;
-          if (self.isDoneChunking && self.doneParts === self.numParts) {
+          if (self.isDoneChunking && self.doneParts === self.totalPartNumbers) {
             self.finishMultiPart();
           } else {
             self.fillQueue.call(self);
@@ -22038,13 +22837,16 @@ var require_managed_upload = __commonJS({
             for (var i = 0; i < self.tags.length; i++) {
               self.tags[i].Value = String(self.tags[i].Value);
             }
-            self.service.putObjectTagging({ Tagging: { TagSet: self.tags } }, function(e, d) {
-              if (e) {
-                self.callback(e);
-              } else {
-                self.callback(e, data);
+            self.service.putObjectTagging(
+              { Tagging: { TagSet: self.tags } },
+              function(e, d) {
+                if (e) {
+                  self.callback(e);
+                } else {
+                  self.callback(e, data);
+                }
               }
-            });
+            );
           } else {
             self.callback(err, data);
           }
@@ -22155,7 +22957,10 @@ var require_s32 = __commonJS({
           msg = "Multiple configuration errors:\n" + messages.join("\n");
         }
         if (msg) {
-          throw AWS2.util.error(new Error(), { name: "InvalidEndpoint", message: msg });
+          throw AWS2.util.error(
+            new Error(),
+            { name: "InvalidEndpoint", message: msg }
+          );
         }
       },
       shouldDisableBodySigning: function shouldDisableBodySigning(request) {
@@ -22170,7 +22975,10 @@ var require_s32 = __commonJS({
         request.addListener("validate", this.validateScheme);
         request.addListener("validate", this.validateBucketName, prependListener);
         request.addListener("validate", this.optInUsEast1RegionalEndpoint, prependListener);
-        request.removeListener("validate", AWS2.EventListeners.Core.VALIDATE_REGION);
+        request.removeListener(
+          "validate",
+          AWS2.EventListeners.Core.VALIDATE_REGION
+        );
         request.addListener("build", this.addContentType);
         request.addListener("build", this.computeContentMd5);
         request.addListener("build", this.computeSseCustomerKeyMd5);
@@ -22215,13 +23023,19 @@ var require_s32 = __commonJS({
         var params = req.params, scheme = req.httpRequest.endpoint.protocol, sensitive = params.SSECustomerKey || params.CopySourceSSECustomerKey;
         if (sensitive && scheme !== "https:") {
           var msg = "Cannot send SSE keys over HTTP. Set 'sslEnabled'to 'true' in your configuration";
-          throw AWS2.util.error(new Error(), { code: "ConfigError", message: msg });
+          throw AWS2.util.error(
+            new Error(),
+            { code: "ConfigError", message: msg }
+          );
         }
       },
       validateBucketEndpoint: function(req) {
         if (!req.params.Bucket && req.service.config.s3BucketEndpoint) {
           var msg = "Cannot send requests to root API with `s3BucketEndpoint` set.";
-          throw AWS2.util.error(new Error(), { code: "ConfigError", message: msg });
+          throw AWS2.util.error(
+            new Error(),
+            { code: "ConfigError", message: msg }
+          );
         }
       },
       validateArnRegion: function validateArnRegion(req) {
@@ -22250,7 +23064,10 @@ var require_s32 = __commonJS({
             req.params.Bucket = bucket.substr(0, slashIndex);
           } else if (signatureVersion === "v4") {
             var msg = "Bucket names cannot contain forward slashes. Bucket: " + bucket;
-            throw AWS2.util.error(new Error(), { code: "InvalidBucket", message: msg });
+            throw AWS2.util.error(
+              new Error(),
+              { code: "InvalidBucket", message: msg }
+            );
           }
         }
       },
@@ -22667,7 +23484,10 @@ var require_s32 = __commonJS({
         params = AWS2.util.copy(params || {});
         var expires = params.Expires || 900;
         if (typeof expires !== "number") {
-          throw AWS2.util.error(new Error(), { code: "InvalidParameterException", message: "The expiration must be a number, received " + typeof expires });
+          throw AWS2.util.error(
+            new Error(),
+            { code: "InvalidParameterException", message: "The expiration must be a number, received " + typeof expires }
+          );
         }
         delete params.Expires;
         var request = this.makeRequest(operation, params);
@@ -22693,7 +23513,14 @@ var require_s32 = __commonJS({
         function finalizePost() {
           return {
             url: AWS2.util.urlFormat(endpoint),
-            fields: self.preparePostFields(config.credentials, config.region, bucket, params.Fields, params.Conditions, params.Expires)
+            fields: self.preparePostFields(
+              config.credentials,
+              config.region,
+              bucket,
+              params.Fields,
+              params.Conditions,
+              params.Expires
+            )
           };
         }
         if (callback) {
@@ -22738,8 +23565,15 @@ var require_s32 = __commonJS({
             conditions.push(condition);
           }
         }
-        fields.Policy = this.preparePostPolicy(new Date(now.valueOf() + expiresInSeconds * 1e3), conditions);
-        fields["X-Amz-Signature"] = AWS2.util.crypto.hmac(v4Credentials.getSigningKey(credentials, shortDate, region2, "s3", true), fields.Policy, "hex");
+        fields.Policy = this.preparePostPolicy(
+          new Date(now.valueOf() + expiresInSeconds * 1e3),
+          conditions
+        );
+        fields["X-Amz-Signature"] = AWS2.util.crypto.hmac(
+          v4Credentials.getSigningKey(credentials, shortDate, region2, "s3", true),
+          fields.Policy,
+          "hex"
+        );
         return fields;
       },
       preparePostPolicy: function preparePostPolicy(expiration, conditions) {
@@ -30065,9 +30899,9 @@ var require_s33 = __commonJS({
 // node_modules/dotenv/lib/main.js
 var require_main = __commonJS({
   "node_modules/dotenv/lib/main.js"(exports, module2) {
-    var fs2 = __nccwpck_require__(147);
-    var path = __nccwpck_require__(17);
-    var os = __nccwpck_require__(37);
+    var fs2 = require("fs");
+    var path = require("path");
+    var os = require("os");
     var LINE = /(?:^|^)\s*(?:export\s+)?([\w.-]+)(?:\s*=\s*?|:\s+?)(\s*'(?:\\'|[^'])*'|\s*"(?:\\"|[^"])*"|\s*`(?:\\`|[^`])*`|[^#\r\n]+)?\s*(?:#.*)?(?:$|$)/mg;
     function parse(src) {
       const obj = {};
@@ -30095,7 +30929,7 @@ var require_main = __commonJS({
       return envPath[0] === "~" ? path.join(os.homedir(), envPath.slice(1)) : envPath;
     }
     function config(options) {
-      let dotenvPath = __nccwpck_require__.ab + ".env";
+      let dotenvPath = path.resolve(process.cwd(), ".env");
       let encoding = "utf8";
       const debug = Boolean(options && options.debug);
       const override = Boolean(options && options.override);
@@ -30108,7 +30942,7 @@ var require_main = __commonJS({
         }
       }
       try {
-        const parsed = DotenvModule.parse(fs2.readFileSync(__nccwpck_require__.ab + ".env", { encoding }));
+        const parsed = DotenvModule.parse(fs2.readFileSync(dotenvPath, { encoding }));
         Object.keys(parsed).forEach(function(key) {
           if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
             process.env[key] = parsed[key];
@@ -30187,12 +31021,18 @@ __export(main_exports, {
 module.exports = __toCommonJS(main_exports);
 var import_core = __toESM(require_dist_node8());
 var import_s3 = __toESM(require_s33());
-var fs = __toESM(__nccwpck_require__(147));
-var https = __toESM(__nccwpck_require__(687));
+var fs = __toESM(require("fs"));
+var https = __toESM(require("https"));
 
 // node_modules/dotenv/config.js
 (function() {
-  require_main().config(Object.assign({}, require_env_options(), require_cli_options()(process.argv)));
+  require_main().config(
+    Object.assign(
+      {},
+      require_env_options(),
+      require_cli_options()(process.argv)
+    )
+  );
 })();
 
 // src/main.ts
@@ -30230,32 +31070,50 @@ async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 async function run(organization, repository) {
+  console.log("Get list of repositories...");
+  const list = await octokit.request("GET /orgs/{org}/repos", {
+    org: organization,
+    type: "all",
+    per_page: 100
+  });
+  const repositories = list.data.map((item) => item.full_name);
+  console.log(repositories);
   console.log("Starting migration...");
   const migration = await octokit.request("POST /orgs/{org}/migrations", {
     org: organization,
-    repositories: [repository],
+    repositories,
     lock_repositories: false
   });
-  console.log(`Migration started successfully! 
-The current migration id is ${migration.data.id} and the state is currently on ${migration.data.state}`);
+  console.log(
+    `Migration started successfully! 
+The current migration id is ${migration.data.id} and the state is currently on ${migration.data.state}`
+  );
   let state = migration.data.state;
   while (state !== "exported") {
-    const check2 = await octokit.request("GET /orgs/{org}/migrations/{migration_id}", {
-      org: organization,
-      migration_id: migration.data.id
-    });
+    const check2 = await octokit.request(
+      "GET /orgs/{org}/migrations/{migration_id}",
+      {
+        org: organization,
+        migration_id: migration.data.id
+      }
+    );
     console.log(`State is ${check2.data.state}... 
 `);
     state = check2.data.state;
     await sleep(5e3);
   }
-  console.log(`State changed to ${state}! 
+  console.log(
+    `State changed to ${state}! 
 Requesting download url of archive...
-`);
-  const archive = await octokit.request("GET /orgs/{org}/migrations/{migration_id}/archive", {
-    org: organization,
-    migration_id: migration.data.id
-  });
+`
+  );
+  const archive = await octokit.request(
+    "GET /orgs/{org}/migrations/{migration_id}/archive",
+    {
+      org: organization,
+      migration_id: migration.data.id
+    }
+  );
   console.log(archive.url);
   async function uploadArchive(filename2) {
     console.log("Uploading archive to our own S3 bucket");
@@ -30269,10 +31127,13 @@ Requesting download url of archive...
   }
   async function deleteArchive(organization2, migrationId) {
     console.log("Deleting organization migration archive from GitHub");
-    await octokit.request("DELETE /orgs/{org}/migrations/{migration_id}/archive", {
-      org: organization2,
-      migration_id: migrationId
-    });
+    await octokit.request(
+      "DELETE /orgs/{org}/migrations/{migration_id}/archive",
+      {
+        org: organization2,
+        migration_id: migrationId
+      }
+    );
   }
   function downloadArchive(url, filename2) {
     https.get(url, (res) => {
@@ -30293,10 +31154,19 @@ Requesting download url of archive...
   const filename = `gh_org_archive_${githubOrganization}_${new Date().toJSON().slice(0, 10)}.tar.gz`;
   downloadArchive(archive.url, filename);
 }
-check(githubOrganization, githubRepository, bucketName, region, accessKeyId, secretAccessKey);
+check(
+  githubOrganization,
+  githubRepository,
+  bucketName,
+  region,
+  accessKeyId,
+  secretAccessKey
+);
 run(githubOrganization, githubRepository);
 // Annotate the CommonJS export names for ESM import in node:
-0 && (0);
+0 && (module.exports = {
+  check
+});
 /*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
  *
@@ -30304,215 +31174,3 @@ run(githubOrganization, githubRepository);
  * Released under the MIT License.
  */
 /*! http://mths.be/fromcodepoint v0.1.0 by @mathias */
-
-
-/***/ }),
-
-/***/ 756:
-/***/ ((module) => {
-
-module.exports = eval("require")("encoding");
-
-
-/***/ }),
-
-/***/ 300:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("buffer");
-
-/***/ }),
-
-/***/ 81:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("child_process");
-
-/***/ }),
-
-/***/ 113:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("crypto");
-
-/***/ }),
-
-/***/ 891:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("dgram");
-
-/***/ }),
-
-/***/ 639:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("domain");
-
-/***/ }),
-
-/***/ 361:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("events");
-
-/***/ }),
-
-/***/ 147:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("fs");
-
-/***/ }),
-
-/***/ 685:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("http");
-
-/***/ }),
-
-/***/ 687:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("https");
-
-/***/ }),
-
-/***/ 37:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("os");
-
-/***/ }),
-
-/***/ 17:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("path");
-
-/***/ }),
-
-/***/ 477:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("punycode");
-
-/***/ }),
-
-/***/ 788:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("querystring");
-
-/***/ }),
-
-/***/ 781:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("stream");
-
-/***/ }),
-
-/***/ 576:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("string_decoder");
-
-/***/ }),
-
-/***/ 512:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("timers");
-
-/***/ }),
-
-/***/ 310:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("url");
-
-/***/ }),
-
-/***/ 837:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("util");
-
-/***/ }),
-
-/***/ 796:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("zlib");
-
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __nccwpck_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		var threw = true;
-/******/ 		try {
-/******/ 			__webpack_modules__[moduleId](module, module.exports, __nccwpck_require__);
-/******/ 			threw = false;
-/******/ 		} finally {
-/******/ 			if(threw) delete __webpack_module_cache__[moduleId];
-/******/ 		}
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/compat */
-/******/ 	
-/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
-/******/ 	
-/************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(34);
-/******/ 	module.exports = __webpack_exports__;
-/******/ 	
-/******/ })()
-;
-//# sourceMappingURL=index.js.map
