@@ -1,0 +1,21 @@
+name: Backup repository
+
+on:
+  schedule:
+    - cron: '0 1 * * 0'  # At 01:00 on Sunday
+
+jobs:
+  backup:
+    name: Backup repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+    - name: Github Migrations Backup
+      uses: skrepr/github-backup-action@1.0.0
+      env:
+        AWS_BUCKET_NAME: "your-bucket-here"
+        AWS_BUCKET_REGION: "eu-west-1"
+        AWS_ARN: "arn:aws:s3:::your-bucket-here"
+        AWS_ACCESS_KEY: ${AWS_ACCESS_KEY} # Github Secret is advised
+        AWS_SECRET_KEY: ${AWS_SECRET_KEY} # Github Secret is advised
