@@ -139,7 +139,10 @@ var require_before_after_hook = __commonJS({
     var bind = Function.bind;
     var bindable = bind.bind(bind);
     function bindApi(hook, state, name) {
-      var removeHookRef = bindable(removeHook, null).apply(null, name ? [state, name] : [state]);
+      var removeHookRef = bindable(removeHook, null).apply(
+        null,
+        name ? [state, name] : [state]
+      );
       hook.api = { remove: removeHookRef };
       hook.remove = removeHookRef;
       ["before", "error", "after", "wrap"].forEach(function(kind) {
@@ -167,7 +170,9 @@ var require_before_after_hook = __commonJS({
     var collectionHookDeprecationMessageDisplayed = false;
     function Hook() {
       if (!collectionHookDeprecationMessageDisplayed) {
-        console.warn('[before-after-hook]: "Hook()" repurposing warning, use "Hook.Collection()". Read more: https://git.io/upgrade-before-after-hook-to-1.4');
+        console.warn(
+          '[before-after-hook]: "Hook()" repurposing warning, use "Hook.Collection()". Read more: https://git.io/upgrade-before-after-hook-to-1.4'
+        );
         collectionHookDeprecationMessageDisplayed = true;
       }
       return HookCollection();
@@ -210,11 +215,30 @@ var require_is_plain_object = __commonJS({
 
 // node_modules/@octokit/endpoint/dist-node/index.js
 var require_dist_node2 = __commonJS({
-  "node_modules/@octokit/endpoint/dist-node/index.js"(exports) {
+  "node_modules/@octokit/endpoint/dist-node/index.js"(exports, module2) {
     "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var isPlainObject = require_is_plain_object();
-    var universalUserAgent = require_dist_node();
+    var __defProp2 = Object.defineProperty;
+    var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
+    var __getOwnPropNames2 = Object.getOwnPropertyNames;
+    var __hasOwnProp2 = Object.prototype.hasOwnProperty;
+    var __export2 = (target, all) => {
+      for (var name in all)
+        __defProp2(target, name, { get: all[name], enumerable: true });
+    };
+    var __copyProps2 = (to, from, except, desc) => {
+      if (from && typeof from === "object" || typeof from === "function") {
+        for (let key of __getOwnPropNames2(from))
+          if (!__hasOwnProp2.call(to, key) && key !== except)
+            __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
+      }
+      return to;
+    };
+    var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
+    var dist_src_exports = {};
+    __export2(dist_src_exports, {
+      endpoint: () => endpoint
+    });
+    module2.exports = __toCommonJS2(dist_src_exports);
     function lowercaseKeys(object) {
       if (!object) {
         return {};
@@ -224,20 +248,17 @@ var require_dist_node2 = __commonJS({
         return newObj;
       }, {});
     }
+    var import_is_plain_object = require_is_plain_object();
     function mergeDeep(defaults, options) {
       const result = Object.assign({}, defaults);
       Object.keys(options).forEach((key) => {
-        if (isPlainObject.isPlainObject(options[key])) {
+        if ((0, import_is_plain_object.isPlainObject)(options[key])) {
           if (!(key in defaults))
-            Object.assign(result, {
-              [key]: options[key]
-            });
+            Object.assign(result, { [key]: options[key] });
           else
             result[key] = mergeDeep(defaults[key], options[key]);
         } else {
-          Object.assign(result, {
-            [key]: options[key]
-          });
+          Object.assign(result, { [key]: options[key] });
         }
       });
       return result;
@@ -253,12 +274,7 @@ var require_dist_node2 = __commonJS({
     function merge(defaults, route, options) {
       if (typeof route === "string") {
         let [method, url] = route.split(" ");
-        options = Object.assign(url ? {
-          method,
-          url
-        } : {
-          url: method
-        }, options);
+        options = Object.assign(url ? { method, url } : { url: method }, options);
       } else {
         options = Object.assign({}, route);
       }
@@ -269,7 +285,9 @@ var require_dist_node2 = __commonJS({
       if (defaults && defaults.mediaType.previews.length) {
         mergedOptions.mediaType.previews = defaults.mediaType.previews.filter((preview) => !mergedOptions.mediaType.previews.includes(preview)).concat(mergedOptions.mediaType.previews);
       }
-      mergedOptions.mediaType.previews = mergedOptions.mediaType.previews.map((preview) => preview.replace(/-preview/, ""));
+      mergedOptions.mediaType.previews = mergedOptions.mediaType.previews.map(
+        (preview) => preview.replace(/-preview/, "")
+      );
       return mergedOptions;
     }
     function addQueryParameters(url, parameters) {
@@ -337,12 +355,16 @@ var require_dist_node2 = __commonJS({
           if (modifier && modifier !== "*") {
             value = value.substring(0, parseInt(modifier, 10));
           }
-          result.push(encodeValue(operator, value, isKeyOperator(operator) ? key : ""));
+          result.push(
+            encodeValue(operator, value, isKeyOperator(operator) ? key : "")
+          );
         } else {
           if (modifier === "*") {
             if (Array.isArray(value)) {
               value.filter(isDefined).forEach(function(value2) {
-                result.push(encodeValue(operator, value2, isKeyOperator(operator) ? key : ""));
+                result.push(
+                  encodeValue(operator, value2, isKeyOperator(operator) ? key : "")
+                );
               });
             } else {
               Object.keys(value).forEach(function(k) {
@@ -392,40 +414,50 @@ var require_dist_node2 = __commonJS({
     }
     function expand(template, context) {
       var operators = ["+", "#", ".", "/", ";", "?", "&"];
-      return template.replace(/\{([^\{\}]+)\}|([^\{\}]+)/g, function(_, expression, literal) {
-        if (expression) {
-          let operator = "";
-          const values = [];
-          if (operators.indexOf(expression.charAt(0)) !== -1) {
-            operator = expression.charAt(0);
-            expression = expression.substr(1);
-          }
-          expression.split(/,/g).forEach(function(variable) {
-            var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
-            values.push(getValues(context, operator, tmp[1], tmp[2] || tmp[3]));
-          });
-          if (operator && operator !== "+") {
-            var separator = ",";
-            if (operator === "?") {
-              separator = "&";
-            } else if (operator !== "#") {
-              separator = operator;
+      return template.replace(
+        /\{([^\{\}]+)\}|([^\{\}]+)/g,
+        function(_, expression, literal) {
+          if (expression) {
+            let operator = "";
+            const values = [];
+            if (operators.indexOf(expression.charAt(0)) !== -1) {
+              operator = expression.charAt(0);
+              expression = expression.substr(1);
             }
-            return (values.length !== 0 ? operator : "") + values.join(separator);
+            expression.split(/,/g).forEach(function(variable) {
+              var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
+              values.push(getValues(context, operator, tmp[1], tmp[2] || tmp[3]));
+            });
+            if (operator && operator !== "+") {
+              var separator = ",";
+              if (operator === "?") {
+                separator = "&";
+              } else if (operator !== "#") {
+                separator = operator;
+              }
+              return (values.length !== 0 ? operator : "") + values.join(separator);
+            } else {
+              return values.join(",");
+            }
           } else {
-            return values.join(",");
+            return encodeReserved(literal);
           }
-        } else {
-          return encodeReserved(literal);
         }
-      });
+      );
     }
     function parse(options) {
       let method = options.method.toUpperCase();
       let url = (options.url || "/").replace(/:([a-z]\w+)/g, "{$1}");
       let headers = Object.assign({}, options.headers);
       let body;
-      let parameters = omit(options, ["method", "baseUrl", "url", "headers", "request", "mediaType"]);
+      let parameters = omit(options, [
+        "method",
+        "baseUrl",
+        "url",
+        "headers",
+        "request",
+        "mediaType"
+      ]);
       const urlVariableNames = extractUrlVariableNames(url);
       url = parseUrl(url).expand(parameters);
       if (!/^http/.test(url)) {
@@ -436,7 +468,12 @@ var require_dist_node2 = __commonJS({
       const isBinaryRequest = /application\/octet-stream/i.test(headers.accept);
       if (!isBinaryRequest) {
         if (options.mediaType.format) {
-          headers.accept = headers.accept.split(/,/).map((preview) => preview.replace(/application\/vnd(\.\w+)(\.v3)?(\.\w+)?(\+json)?$/, `application/vnd$1$2.${options.mediaType.format}`)).join(",");
+          headers.accept = headers.accept.split(/,/).map(
+            (preview) => preview.replace(
+              /application\/vnd(\.\w+)(\.v3)?(\.\w+)?(\+json)?$/,
+              `application/vnd$1$2.${options.mediaType.format}`
+            )
+          ).join(",");
         }
         if (options.mediaType.previews.length) {
           const previewsFromAcceptHeader = headers.accept.match(/[\w-]+(?=-preview)/g) || [];
@@ -454,8 +491,6 @@ var require_dist_node2 = __commonJS({
         } else {
           if (Object.keys(remainingParameters).length) {
             body = remainingParameters;
-          } else {
-            headers["content-length"] = 0;
           }
         }
       }
@@ -465,15 +500,11 @@ var require_dist_node2 = __commonJS({
       if (["PATCH", "PUT"].includes(method) && typeof body === "undefined") {
         body = "";
       }
-      return Object.assign({
-        method,
-        url,
-        headers
-      }, typeof body !== "undefined" ? {
-        body
-      } : null, options.request ? {
-        request: options.request
-      } : null);
+      return Object.assign(
+        { method, url, headers },
+        typeof body !== "undefined" ? { body } : null,
+        options.request ? { request: options.request } : null
+      );
     }
     function endpointWithDefaults(defaults, route, options) {
       return parse(merge(defaults, route, options));
@@ -488,8 +519,9 @@ var require_dist_node2 = __commonJS({
         parse
       });
     }
-    var VERSION = "6.0.12";
-    var userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`;
+    var import_universal_user_agent = require_dist_node();
+    var VERSION = "7.0.6";
+    var userAgent = `octokit-endpoint.js/${VERSION} ${(0, import_universal_user_agent.getUserAgent)()}`;
     var DEFAULTS = {
       method: "GET",
       baseUrl: "https://api.github.com",
@@ -503,7 +535,6 @@ var require_dist_node2 = __commonJS({
       }
     };
     var endpoint = withDefaults(null, DEFAULTS);
-    exports.endpoint = endpoint;
   }
 });
 
@@ -2089,8 +2120,8 @@ var require_URL = __commonJS({
     var utils = require_utils();
     var Impl = require_URL_impl();
     var impl = utils.implSymbol;
-    function URL(url) {
-      if (!this || this[impl] || !(this instanceof URL)) {
+    function URL2(url) {
+      if (!this || this[impl] || !(this instanceof URL2)) {
         throw new TypeError("Failed to construct 'URL': Please use the 'new' operator, this DOM object constructor cannot be called as a function.");
       }
       if (arguments.length < 1) {
@@ -2106,7 +2137,7 @@ var require_URL = __commonJS({
       }
       module2.exports.setup(this, args);
     }
-    URL.prototype.toJSON = function toJSON() {
+    URL2.prototype.toJSON = function toJSON() {
       if (!this || !module2.exports.is(this)) {
         throw new TypeError("Illegal invocation");
       }
@@ -2116,7 +2147,7 @@ var require_URL = __commonJS({
       }
       return this[impl].toJSON.apply(this[impl], args);
     };
-    Object.defineProperty(URL.prototype, "href", {
+    Object.defineProperty(URL2.prototype, "href", {
       get() {
         return this[impl].href;
       },
@@ -2127,20 +2158,20 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    URL.prototype.toString = function() {
+    URL2.prototype.toString = function() {
       if (!this || !module2.exports.is(this)) {
         throw new TypeError("Illegal invocation");
       }
       return this.href;
     };
-    Object.defineProperty(URL.prototype, "origin", {
+    Object.defineProperty(URL2.prototype, "origin", {
       get() {
         return this[impl].origin;
       },
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL.prototype, "protocol", {
+    Object.defineProperty(URL2.prototype, "protocol", {
       get() {
         return this[impl].protocol;
       },
@@ -2151,7 +2182,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL.prototype, "username", {
+    Object.defineProperty(URL2.prototype, "username", {
       get() {
         return this[impl].username;
       },
@@ -2162,7 +2193,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL.prototype, "password", {
+    Object.defineProperty(URL2.prototype, "password", {
       get() {
         return this[impl].password;
       },
@@ -2173,7 +2204,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL.prototype, "host", {
+    Object.defineProperty(URL2.prototype, "host", {
       get() {
         return this[impl].host;
       },
@@ -2184,7 +2215,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL.prototype, "hostname", {
+    Object.defineProperty(URL2.prototype, "hostname", {
       get() {
         return this[impl].hostname;
       },
@@ -2195,7 +2226,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL.prototype, "port", {
+    Object.defineProperty(URL2.prototype, "port", {
       get() {
         return this[impl].port;
       },
@@ -2206,7 +2237,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL.prototype, "pathname", {
+    Object.defineProperty(URL2.prototype, "pathname", {
       get() {
         return this[impl].pathname;
       },
@@ -2217,7 +2248,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL.prototype, "search", {
+    Object.defineProperty(URL2.prototype, "search", {
       get() {
         return this[impl].search;
       },
@@ -2228,7 +2259,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL.prototype, "hash", {
+    Object.defineProperty(URL2.prototype, "hash", {
       get() {
         return this[impl].hash;
       },
@@ -2244,7 +2275,7 @@ var require_URL = __commonJS({
         return !!obj && obj[impl] instanceof Impl.implementation;
       },
       create(constructorArgs, privateData) {
-        let obj = Object.create(URL.prototype);
+        let obj = Object.create(URL2.prototype);
         this.setup(obj, constructorArgs, privateData);
         return obj;
       },
@@ -2255,10 +2286,10 @@ var require_URL = __commonJS({
         obj[impl] = new Impl.implementation(constructorArgs, privateData);
         obj[impl][utils.wrapperSymbol] = obj;
       },
-      interface: URL,
+      interface: URL2,
       expose: {
-        Window: { URL },
-        Worker: { URL }
+        Window: { URL: URL2 },
+        Worker: { URL: URL2 }
       }
     };
   }
@@ -3001,12 +3032,12 @@ var require_lib2 = __commonJS({
       configurable: true
     });
     var INTERNALS$2 = Symbol("Request internals");
-    var URL = Url.URL || whatwgUrl.URL;
+    var URL2 = Url.URL || whatwgUrl.URL;
     var parse_url = Url.parse;
     var format_url = Url.format;
     function parseURL(urlStr) {
       if (/^[a-zA-Z][a-zA-Z\d+\-.]*:/.exec(urlStr)) {
-        urlStr = new URL(urlStr).toString();
+        urlStr = new URL2(urlStr).toString();
       }
       return parse_url(urlStr);
     }
@@ -3164,6 +3195,11 @@ var require_lib2 = __commonJS({
       const dest = new URL$1(destination).hostname;
       return orig === dest || orig[orig.length - dest.length - 1] === "." && orig.endsWith(dest);
     };
+    var isSameProtocol = function isSameProtocol2(destination, original) {
+      const orig = new URL$1(original).protocol;
+      const dest = new URL$1(destination).protocol;
+      return orig === dest;
+    };
     function fetch(url, opts) {
       if (!fetch.Promise) {
         throw new Error("native promise missing, set fetch.Promise to your favorite alternative");
@@ -3179,7 +3215,7 @@ var require_lib2 = __commonJS({
           let error = new AbortError("The user aborted a request.");
           reject(error);
           if (request.body && request.body instanceof Stream.Readable) {
-            request.body.destroy(error);
+            destroyStream(request.body, error);
           }
           if (!response || !response.body)
             return;
@@ -3214,8 +3250,31 @@ var require_lib2 = __commonJS({
         }
         req.on("error", function(err) {
           reject(new FetchError(`request to ${request.url} failed, reason: ${err.message}`, "system", err));
+          if (response && response.body) {
+            destroyStream(response.body, err);
+          }
           finalize();
         });
+        fixResponseChunkedTransferBadEnding(req, function(err) {
+          if (signal && signal.aborted) {
+            return;
+          }
+          if (response && response.body) {
+            destroyStream(response.body, err);
+          }
+        });
+        if (parseInt(process.version.substring(1)) < 14) {
+          req.on("socket", function(s) {
+            s.addListener("close", function(hadError) {
+              const hasDataListener = s.listenerCount("data") > 0;
+              if (response && hasDataListener && !hadError && !(signal && signal.aborted)) {
+                const err = new Error("Premature close");
+                err.code = "ERR_STREAM_PREMATURE_CLOSE";
+                response.body.emit("error", err);
+              }
+            });
+          });
+        }
         req.on("response", function(res) {
           clearTimeout(reqTimeout);
           const headers = createHeadersLenient(res.headers);
@@ -3266,7 +3325,7 @@ var require_lib2 = __commonJS({
                   timeout: request.timeout,
                   size: request.size
                 };
-                if (!isDomainOrSubdomain(request.url, locationURL)) {
+                if (!isDomainOrSubdomain(request.url, locationURL) || !isSameProtocol(request.url, locationURL)) {
                   for (const name of ["authorization", "www-authenticate", "cookie", "cookie2"]) {
                     requestOpts.headers.delete(name);
                   }
@@ -3327,6 +3386,12 @@ var require_lib2 = __commonJS({
               response = new Response(body, response_options);
               resolve(response);
             });
+            raw.on("end", function() {
+              if (!response) {
+                response = new Response(body, response_options);
+                resolve(response);
+              }
+            });
             return;
           }
           if (codings == "br" && typeof zlib.createBrotliDecompress === "function") {
@@ -3340,6 +3405,33 @@ var require_lib2 = __commonJS({
         });
         writeToStream(req, request);
       });
+    }
+    function fixResponseChunkedTransferBadEnding(request, errorCallback) {
+      let socket;
+      request.on("socket", function(s) {
+        socket = s;
+      });
+      request.on("response", function(response) {
+        const headers = response.headers;
+        if (headers["transfer-encoding"] === "chunked" && !headers["content-length"]) {
+          response.once("close", function(hadError) {
+            const hasDataListener = socket && socket.listenerCount("data") > 0;
+            if (hasDataListener && !hadError) {
+              const err = new Error("Premature close");
+              err.code = "ERR_STREAM_PREMATURE_CLOSE";
+              errorCallback(err);
+            }
+          });
+        }
+      });
+    }
+    function destroyStream(stream, err) {
+      if (stream.destroy) {
+        stream.destroy(err);
+      } else {
+        stream.emit("error", err);
+        stream.end();
+      }
     }
     fetch.isRedirect = function(code) {
       return code === 301 || code === 302 || code === 303 || code === 307 || code === 308;
@@ -3505,39 +3597,67 @@ var require_dist_node4 = __commonJS({
 
 // node_modules/@octokit/request/dist-node/index.js
 var require_dist_node5 = __commonJS({
-  "node_modules/@octokit/request/dist-node/index.js"(exports) {
+  "node_modules/@octokit/request/dist-node/index.js"(exports, module2) {
     "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    function _interopDefault(ex) {
-      return ex && typeof ex === "object" && "default" in ex ? ex["default"] : ex;
-    }
-    var endpoint = require_dist_node2();
-    var universalUserAgent = require_dist_node();
-    var isPlainObject = require_is_plain_object();
-    var nodeFetch = _interopDefault(require_lib2());
-    var requestError = require_dist_node4();
-    var VERSION = "5.6.3";
+    var __create2 = Object.create;
+    var __defProp2 = Object.defineProperty;
+    var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
+    var __getOwnPropNames2 = Object.getOwnPropertyNames;
+    var __getProtoOf2 = Object.getPrototypeOf;
+    var __hasOwnProp2 = Object.prototype.hasOwnProperty;
+    var __export2 = (target, all) => {
+      for (var name in all)
+        __defProp2(target, name, { get: all[name], enumerable: true });
+    };
+    var __copyProps2 = (to, from, except, desc) => {
+      if (from && typeof from === "object" || typeof from === "function") {
+        for (let key of __getOwnPropNames2(from))
+          if (!__hasOwnProp2.call(to, key) && key !== except)
+            __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
+      }
+      return to;
+    };
+    var __toESM2 = (mod, isNodeMode, target) => (target = mod != null ? __create2(__getProtoOf2(mod)) : {}, __copyProps2(
+      isNodeMode || !mod || !mod.__esModule ? __defProp2(target, "default", { value: mod, enumerable: true }) : target,
+      mod
+    ));
+    var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
+    var dist_src_exports = {};
+    __export2(dist_src_exports, {
+      request: () => request
+    });
+    module2.exports = __toCommonJS2(dist_src_exports);
+    var import_endpoint = require_dist_node2();
+    var import_universal_user_agent = require_dist_node();
+    var VERSION = "6.2.8";
+    var import_is_plain_object = require_is_plain_object();
+    var import_node_fetch = __toESM2(require_lib2());
+    var import_request_error = require_dist_node4();
     function getBufferResponse(response) {
       return response.arrayBuffer();
     }
     function fetchWrapper(requestOptions) {
       const log = requestOptions.request && requestOptions.request.log ? requestOptions.request.log : console;
-      if (isPlainObject.isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body)) {
+      if ((0, import_is_plain_object.isPlainObject)(requestOptions.body) || Array.isArray(requestOptions.body)) {
         requestOptions.body = JSON.stringify(requestOptions.body);
       }
       let headers = {};
       let status;
       let url;
-      const fetch = requestOptions.request && requestOptions.request.fetch || nodeFetch;
-      return fetch(requestOptions.url, Object.assign(
-        {
-          method: requestOptions.method,
-          body: requestOptions.body,
-          headers: requestOptions.headers,
-          redirect: requestOptions.redirect
-        },
-        requestOptions.request
-      )).then(async (response) => {
+      const fetch = requestOptions.request && requestOptions.request.fetch || globalThis.fetch || import_node_fetch.default;
+      return fetch(
+        requestOptions.url,
+        Object.assign(
+          {
+            method: requestOptions.method,
+            body: requestOptions.body,
+            headers: requestOptions.headers,
+            redirect: requestOptions.redirect,
+            ...requestOptions.body && { duplex: "half" }
+          },
+          requestOptions.request
+        )
+      ).then(async (response) => {
         url = response.url;
         status = response.status;
         for (const keyAndValue of response.headers) {
@@ -3546,7 +3666,9 @@ var require_dist_node5 = __commonJS({
         if ("deprecation" in headers) {
           const matches = headers.link && headers.link.match(/<([^>]+)>; rel="deprecation"/);
           const deprecationLink = matches && matches.pop();
-          log.warn(`[@octokit/request] "${requestOptions.method} ${requestOptions.url}" is deprecated. It is scheduled to be removed on ${headers.sunset}${deprecationLink ? `. See ${deprecationLink}` : ""}`);
+          log.warn(
+            `[@octokit/request] "${requestOptions.method} ${requestOptions.url}" is deprecated. It is scheduled to be removed on ${headers.sunset}${deprecationLink ? `. See ${deprecationLink}` : ""}`
+          );
         }
         if (status === 204 || status === 205) {
           return;
@@ -3555,7 +3677,7 @@ var require_dist_node5 = __commonJS({
           if (status < 400) {
             return;
           }
-          throw new requestError.RequestError(response.statusText, status, {
+          throw new import_request_error.RequestError(response.statusText, status, {
             response: {
               url,
               status,
@@ -3566,7 +3688,7 @@ var require_dist_node5 = __commonJS({
           });
         }
         if (status === 304) {
-          throw new requestError.RequestError("Not modified", status, {
+          throw new import_request_error.RequestError("Not modified", status, {
             response: {
               url,
               status,
@@ -3578,7 +3700,7 @@ var require_dist_node5 = __commonJS({
         }
         if (status >= 400) {
           const data = await getResponseData(response);
-          const error = new requestError.RequestError(toErrorMessage(data), status, {
+          const error = new import_request_error.RequestError(toErrorMessage(data), status, {
             response: {
               url,
               status,
@@ -3598,9 +3720,11 @@ var require_dist_node5 = __commonJS({
           data
         };
       }).catch((error) => {
-        if (error instanceof requestError.RequestError)
+        if (error instanceof import_request_error.RequestError)
           throw error;
-        throw new requestError.RequestError(error.message, 500, {
+        else if (error.name === "AbortError")
+          throw error;
+        throw new import_request_error.RequestError(error.message, 500, {
           request: requestOptions
         });
       });
@@ -3634,7 +3758,9 @@ var require_dist_node5 = __commonJS({
           return fetchWrapper(endpoint2.parse(endpointOptions));
         }
         const request2 = (route2, parameters2) => {
-          return fetchWrapper(endpoint2.parse(endpoint2.merge(route2, parameters2)));
+          return fetchWrapper(
+            endpoint2.parse(endpoint2.merge(route2, parameters2))
+          );
         };
         Object.assign(request2, {
           endpoint: endpoint2,
@@ -3647,23 +3773,45 @@ var require_dist_node5 = __commonJS({
         defaults: withDefaults.bind(null, endpoint2)
       });
     }
-    var request = withDefaults(endpoint.endpoint, {
+    var request = withDefaults(import_endpoint.endpoint, {
       headers: {
-        "user-agent": `octokit-request.js/${VERSION} ${universalUserAgent.getUserAgent()}`
+        "user-agent": `octokit-request.js/${VERSION} ${(0, import_universal_user_agent.getUserAgent)()}`
       }
     });
-    exports.request = request;
   }
 });
 
 // node_modules/@octokit/graphql/dist-node/index.js
 var require_dist_node6 = __commonJS({
-  "node_modules/@octokit/graphql/dist-node/index.js"(exports) {
+  "node_modules/@octokit/graphql/dist-node/index.js"(exports, module2) {
     "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var request = require_dist_node5();
-    var universalUserAgent = require_dist_node();
-    var VERSION = "4.8.0";
+    var __defProp2 = Object.defineProperty;
+    var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
+    var __getOwnPropNames2 = Object.getOwnPropertyNames;
+    var __hasOwnProp2 = Object.prototype.hasOwnProperty;
+    var __export2 = (target, all) => {
+      for (var name in all)
+        __defProp2(target, name, { get: all[name], enumerable: true });
+    };
+    var __copyProps2 = (to, from, except, desc) => {
+      if (from && typeof from === "object" || typeof from === "function") {
+        for (let key of __getOwnPropNames2(from))
+          if (!__hasOwnProp2.call(to, key) && key !== except)
+            __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
+      }
+      return to;
+    };
+    var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
+    var dist_src_exports = {};
+    __export2(dist_src_exports, {
+      GraphqlResponseError: () => GraphqlResponseError,
+      graphql: () => graphql2,
+      withCustomRequest: () => withCustomRequest
+    });
+    module2.exports = __toCommonJS2(dist_src_exports);
+    var import_request = require_dist_node5();
+    var import_universal_user_agent = require_dist_node();
+    var VERSION = "5.0.6";
     function _buildMessageForResponseErrors(data) {
       return `Request failed due to following response errors:
 ` + data.errors.map((e) => ` - ${e.message}`).join("\n");
@@ -3682,24 +3830,36 @@ var require_dist_node6 = __commonJS({
         }
       }
     };
-    var NON_VARIABLE_OPTIONS = ["method", "baseUrl", "url", "headers", "request", "query", "mediaType"];
+    var NON_VARIABLE_OPTIONS = [
+      "method",
+      "baseUrl",
+      "url",
+      "headers",
+      "request",
+      "query",
+      "mediaType"
+    ];
     var FORBIDDEN_VARIABLE_OPTIONS = ["query", "method", "url"];
     var GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
     function graphql(request2, query, options) {
       if (options) {
         if (typeof query === "string" && "query" in options) {
-          return Promise.reject(new Error(`[@octokit/graphql] "query" cannot be used as variable name`));
+          return Promise.reject(
+            new Error(`[@octokit/graphql] "query" cannot be used as variable name`)
+          );
         }
         for (const key in options) {
           if (!FORBIDDEN_VARIABLE_OPTIONS.includes(key))
             continue;
-          return Promise.reject(new Error(`[@octokit/graphql] "${key}" cannot be used as variable name`));
+          return Promise.reject(
+            new Error(`[@octokit/graphql] "${key}" cannot be used as variable name`)
+          );
         }
       }
-      const parsedOptions = typeof query === "string" ? Object.assign({
-        query
-      }, options) : query;
-      const requestOptions = Object.keys(parsedOptions).reduce((result, key) => {
+      const parsedOptions = typeof query === "string" ? Object.assign({ query }, options) : query;
+      const requestOptions = Object.keys(
+        parsedOptions
+      ).reduce((result, key) => {
         if (NON_VARIABLE_OPTIONS.includes(key)) {
           result[key] = parsedOptions[key];
           return result;
@@ -3720,24 +3880,28 @@ var require_dist_node6 = __commonJS({
           for (const key of Object.keys(response.headers)) {
             headers[key] = response.headers[key];
           }
-          throw new GraphqlResponseError(requestOptions, headers, response.data);
+          throw new GraphqlResponseError(
+            requestOptions,
+            headers,
+            response.data
+          );
         }
         return response.data.data;
       });
     }
-    function withDefaults(request$1, newDefaults) {
-      const newRequest = request$1.defaults(newDefaults);
+    function withDefaults(request2, newDefaults) {
+      const newRequest = request2.defaults(newDefaults);
       const newApi = (query, options) => {
         return graphql(newRequest, query, options);
       };
       return Object.assign(newApi, {
         defaults: withDefaults.bind(null, newRequest),
-        endpoint: request.request.endpoint
+        endpoint: newRequest.endpoint
       });
     }
-    var graphql$1 = withDefaults(request.request, {
+    var graphql2 = withDefaults(import_request.request, {
       headers: {
-        "user-agent": `octokit-graphql.js/${VERSION} ${universalUserAgent.getUserAgent()}`
+        "user-agent": `octokit-graphql.js/${VERSION} ${(0, import_universal_user_agent.getUserAgent)()}`
       },
       method: "POST",
       url: "/graphql"
@@ -3748,17 +3912,35 @@ var require_dist_node6 = __commonJS({
         url: "/graphql"
       });
     }
-    exports.GraphqlResponseError = GraphqlResponseError;
-    exports.graphql = graphql$1;
-    exports.withCustomRequest = withCustomRequest;
   }
 });
 
 // node_modules/@octokit/auth-token/dist-node/index.js
 var require_dist_node7 = __commonJS({
-  "node_modules/@octokit/auth-token/dist-node/index.js"(exports) {
+  "node_modules/@octokit/auth-token/dist-node/index.js"(exports, module2) {
     "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    var __defProp2 = Object.defineProperty;
+    var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
+    var __getOwnPropNames2 = Object.getOwnPropertyNames;
+    var __hasOwnProp2 = Object.prototype.hasOwnProperty;
+    var __export2 = (target, all) => {
+      for (var name in all)
+        __defProp2(target, name, { get: all[name], enumerable: true });
+    };
+    var __copyProps2 = (to, from, except, desc) => {
+      if (from && typeof from === "object" || typeof from === "function") {
+        for (let key of __getOwnPropNames2(from))
+          if (!__hasOwnProp2.call(to, key) && key !== except)
+            __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
+      }
+      return to;
+    };
+    var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
+    var dist_src_exports = {};
+    __export2(dist_src_exports, {
+      createTokenAuth: () => createTokenAuth
+    });
+    module2.exports = __toCommonJS2(dist_src_exports);
     var REGEX_IS_INSTALLATION_LEGACY = /^v1\./;
     var REGEX_IS_INSTALLATION = /^ghs_/;
     var REGEX_IS_USER_TO_SERVER = /^ghu_/;
@@ -3780,7 +3962,10 @@ var require_dist_node7 = __commonJS({
       return `token ${token}`;
     }
     async function hook(token, request, route, parameters) {
-      const endpoint = request.endpoint.merge(route, parameters);
+      const endpoint = request.endpoint.merge(
+        route,
+        parameters
+      );
       endpoint.headers.authorization = withAuthorizationPrefix(token);
       return request(endpoint);
     }
@@ -3789,66 +3974,86 @@ var require_dist_node7 = __commonJS({
         throw new Error("[@octokit/auth-token] No token passed to createTokenAuth");
       }
       if (typeof token !== "string") {
-        throw new Error("[@octokit/auth-token] Token passed to createTokenAuth is not a string");
+        throw new Error(
+          "[@octokit/auth-token] Token passed to createTokenAuth is not a string"
+        );
       }
       token = token.replace(/^(token|bearer) +/i, "");
       return Object.assign(auth.bind(null, token), {
         hook: hook.bind(null, token)
       });
     };
-    exports.createTokenAuth = createTokenAuth;
   }
 });
 
 // node_modules/@octokit/core/dist-node/index.js
 var require_dist_node8 = __commonJS({
-  "node_modules/@octokit/core/dist-node/index.js"(exports) {
+  "node_modules/@octokit/core/dist-node/index.js"(exports, module2) {
     "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var universalUserAgent = require_dist_node();
-    var beforeAfterHook = require_before_after_hook();
-    var request = require_dist_node5();
-    var graphql = require_dist_node6();
-    var authToken = require_dist_node7();
-    function _objectWithoutPropertiesLoose(source, excluded) {
-      if (source == null)
-        return {};
-      var target = {};
-      var sourceKeys = Object.keys(source);
-      var key, i;
-      for (i = 0; i < sourceKeys.length; i++) {
-        key = sourceKeys[i];
-        if (excluded.indexOf(key) >= 0)
-          continue;
-        target[key] = source[key];
+    var __defProp2 = Object.defineProperty;
+    var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
+    var __getOwnPropNames2 = Object.getOwnPropertyNames;
+    var __hasOwnProp2 = Object.prototype.hasOwnProperty;
+    var __export2 = (target, all) => {
+      for (var name in all)
+        __defProp2(target, name, { get: all[name], enumerable: true });
+    };
+    var __copyProps2 = (to, from, except, desc) => {
+      if (from && typeof from === "object" || typeof from === "function") {
+        for (let key of __getOwnPropNames2(from))
+          if (!__hasOwnProp2.call(to, key) && key !== except)
+            __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
       }
-      return target;
-    }
-    function _objectWithoutProperties(source, excluded) {
-      if (source == null)
-        return {};
-      var target = _objectWithoutPropertiesLoose(source, excluded);
-      var key, i;
-      if (Object.getOwnPropertySymbols) {
-        var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-        for (i = 0; i < sourceSymbolKeys.length; i++) {
-          key = sourceSymbolKeys[i];
-          if (excluded.indexOf(key) >= 0)
-            continue;
-          if (!Object.prototype.propertyIsEnumerable.call(source, key))
-            continue;
-          target[key] = source[key];
-        }
-      }
-      return target;
-    }
-    var VERSION = "3.6.0";
-    var _excluded = ["authStrategy"];
+      return to;
+    };
+    var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
+    var dist_src_exports = {};
+    __export2(dist_src_exports, {
+      Octokit: () => Octokit2
+    });
+    module2.exports = __toCommonJS2(dist_src_exports);
+    var import_universal_user_agent = require_dist_node();
+    var import_before_after_hook = require_before_after_hook();
+    var import_request = require_dist_node5();
+    var import_graphql = require_dist_node6();
+    var import_auth_token = require_dist_node7();
+    var VERSION = "4.2.4";
     var Octokit2 = class {
+      static defaults(defaults) {
+        const OctokitWithDefaults = class extends this {
+          constructor(...args) {
+            const options = args[0] || {};
+            if (typeof defaults === "function") {
+              super(defaults(options));
+              return;
+            }
+            super(
+              Object.assign(
+                {},
+                defaults,
+                options,
+                options.userAgent && defaults.userAgent ? {
+                  userAgent: `${options.userAgent} ${defaults.userAgent}`
+                } : null
+              )
+            );
+          }
+        };
+        return OctokitWithDefaults;
+      }
+      static plugin(...newPlugins) {
+        var _a;
+        const currentPlugins = this.plugins;
+        const NewOctokit = (_a = class extends this {
+        }, _a.plugins = currentPlugins.concat(
+          newPlugins.filter((plugin) => !currentPlugins.includes(plugin))
+        ), _a);
+        return NewOctokit;
+      }
       constructor(options = {}) {
-        const hook = new beforeAfterHook.Collection();
+        const hook = new import_before_after_hook.Collection();
         const requestDefaults = {
-          baseUrl: request.request.endpoint.DEFAULTS.baseUrl,
+          baseUrl: import_request.request.endpoint.DEFAULTS.baseUrl,
           headers: {},
           request: Object.assign({}, options.request, {
             hook: hook.bind(null, "request")
@@ -3858,7 +4063,10 @@ var require_dist_node8 = __commonJS({
             format: ""
           }
         };
-        requestDefaults.headers["user-agent"] = [options.userAgent, `octokit-core.js/${VERSION} ${universalUserAgent.getUserAgent()}`].filter(Boolean).join(" ");
+        requestDefaults.headers["user-agent"] = [
+          options.userAgent,
+          `octokit-core.js/${VERSION} ${(0, import_universal_user_agent.getUserAgent)()}`
+        ].filter(Boolean).join(" ");
         if (options.baseUrl) {
           requestDefaults.baseUrl = options.baseUrl;
         }
@@ -3868,16 +4076,19 @@ var require_dist_node8 = __commonJS({
         if (options.timeZone) {
           requestDefaults.headers["time-zone"] = options.timeZone;
         }
-        this.request = request.request.defaults(requestDefaults);
-        this.graphql = graphql.withCustomRequest(this.request).defaults(requestDefaults);
-        this.log = Object.assign({
-          debug: () => {
+        this.request = import_request.request.defaults(requestDefaults);
+        this.graphql = (0, import_graphql.withCustomRequest)(this.request).defaults(requestDefaults);
+        this.log = Object.assign(
+          {
+            debug: () => {
+            },
+            info: () => {
+            },
+            warn: console.warn.bind(console),
+            error: console.error.bind(console)
           },
-          info: () => {
-          },
-          warn: console.warn.bind(console),
-          error: console.error.bind(console)
-        }, options.log);
+          options.log
+        );
         this.hook = hook;
         if (!options.authStrategy) {
           if (!options.auth) {
@@ -3885,20 +4096,23 @@ var require_dist_node8 = __commonJS({
               type: "unauthenticated"
             });
           } else {
-            const auth = authToken.createTokenAuth(options.auth);
+            const auth = (0, import_auth_token.createTokenAuth)(options.auth);
             hook.wrap("request", auth.hook);
             this.auth = auth;
           }
         } else {
-          const {
-            authStrategy
-          } = options, otherOptions = _objectWithoutProperties(options, _excluded);
-          const auth = authStrategy(Object.assign({
-            request: this.request,
-            log: this.log,
-            octokit: this,
-            octokitOptions: otherOptions
-          }, options.auth));
+          const { authStrategy, ...otherOptions } = options;
+          const auth = authStrategy(
+            Object.assign(
+              {
+                request: this.request,
+                log: this.log,
+                octokit: this,
+                octokitOptions: otherOptions
+              },
+              options.auth
+            )
+          );
           hook.wrap("request", auth.hook);
           this.auth = auth;
         }
@@ -3907,32 +4121,9 @@ var require_dist_node8 = __commonJS({
           Object.assign(this, plugin(this, options));
         });
       }
-      static defaults(defaults) {
-        const OctokitWithDefaults = class extends this {
-          constructor(...args) {
-            const options = args[0] || {};
-            if (typeof defaults === "function") {
-              super(defaults(options));
-              return;
-            }
-            super(Object.assign({}, defaults, options, options.userAgent && defaults.userAgent ? {
-              userAgent: `${options.userAgent} ${defaults.userAgent}`
-            } : null));
-          }
-        };
-        return OctokitWithDefaults;
-      }
-      static plugin(...newPlugins) {
-        var _a;
-        const currentPlugins = this.plugins;
-        const NewOctokit = (_a = class extends this {
-        }, _a.plugins = currentPlugins.concat(newPlugins.filter((plugin) => !currentPlugins.includes(plugin))), _a);
-        return NewOctokit;
-      }
     };
     Octokit2.VERSION = VERSION;
     Octokit2.plugins = [];
-    exports.Octokit = Octokit2;
   }
 });
 
@@ -4165,6 +4356,12 @@ var require_json = __commonJS({
       var builder = new JsonBuilder();
       if (version === 1)
         version = "1.0";
+      if (api.awsQueryCompatible) {
+        if (!httpRequest.params) {
+          httpRequest.params = {};
+        }
+        Object.assign(httpRequest.params, req.params);
+      }
       httpRequest.body = builder.build(req.params || {}, input);
       httpRequest.headers["Content-Type"] = "application/x-amz-json-" + version;
       httpRequest.headers["X-Amz-Target"] = target;
@@ -4188,6 +4385,17 @@ var require_json = __commonJS({
             error.message = "Request body must be less than 1 MB";
           } else {
             error.message = e.message || e.Message || null;
+          }
+          for (var key in e || {}) {
+            if (key === "code" || key === "message") {
+              continue;
+            }
+            error["[" + key + "]"] = "See error." + key + " for details.";
+            Object.defineProperty(error, key, {
+              value: e[key],
+              enumerable: false,
+              writable: true
+            });
           }
         } catch (e2) {
           error.statusCode = httpResponse.statusCode;
@@ -4910,6 +5118,13 @@ var require_rest_json = __commonJS({
     var Json = require_json();
     var JsonBuilder = require_builder();
     var JsonParser = require_parser();
+    var METHODS_WITHOUT_BODY = ["GET", "HEAD", "DELETE"];
+    function unsetContentLength(req) {
+      var payloadMember = util.getRequestPayloadShape(req);
+      if (payloadMember === void 0 && METHODS_WITHOUT_BODY.indexOf(req.httpRequest.method) >= 0) {
+        delete req.httpRequest.headers["Content-Length"];
+      }
+    }
     function populateBody(req) {
       var builder = new JsonBuilder();
       var input = req.service.api.operations[req.operation].input;
@@ -4939,7 +5154,7 @@ var require_rest_json = __commonJS({
     }
     function buildRequest(req) {
       Rest.buildRequest(req);
-      if (["GET", "HEAD", "DELETE"].indexOf(req.httpRequest.method) < 0) {
+      if (METHODS_WITHOUT_BODY.indexOf(req.httpRequest.method) < 0) {
         populateBody(req);
       }
     }
@@ -4980,7 +5195,8 @@ var require_rest_json = __commonJS({
     module2.exports = {
       buildRequest,
       extractError,
-      extractData
+      extractData,
+      unsetContentLength
     };
   }
 });
@@ -5100,12 +5316,12 @@ var require_escape_attribute = __commonJS({
 var require_xml_node = __commonJS({
   "node_modules/aws-sdk/lib/xml/xml-node.js"(exports, module2) {
     var escapeAttribute = require_escape_attribute().escapeAttribute;
-    function XmlNode(name, children) {
-      if (children === void 0) {
-        children = [];
+    function XmlNode(name, children2) {
+      if (children2 === void 0) {
+        children2 = [];
       }
       this.name = name;
-      this.children = children;
+      this.children = children2;
       this.attributes = {};
     }
     XmlNode.prototype.addAttribute = function(name, value) {
@@ -6206,7 +6422,8 @@ var require_metadata = __commonJS({
       },
       marketplacecatalog: {
         prefix: "marketplace-catalog",
-        name: "MarketplaceCatalog"
+        name: "MarketplaceCatalog",
+        cors: true
       },
       dataexchange: {
         name: "DataExchange"
@@ -6389,7 +6606,8 @@ var require_metadata = __commonJS({
         name: "SagemakerEdge"
       },
       amp: {
-        name: "Amp"
+        name: "Amp",
+        cors: true
       },
       greengrassv2: {
         name: "GreengrassV2"
@@ -6609,6 +6827,139 @@ var require_metadata = __commonJS({
       },
       controltower: {
         name: "ControlTower"
+      },
+      iotfleetwise: {
+        name: "IoTFleetWise"
+      },
+      migrationhuborchestrator: {
+        name: "MigrationHubOrchestrator"
+      },
+      connectcases: {
+        name: "ConnectCases"
+      },
+      resourceexplorer2: {
+        prefix: "resource-explorer-2",
+        name: "ResourceExplorer2"
+      },
+      scheduler: {
+        name: "Scheduler"
+      },
+      chimesdkvoice: {
+        prefix: "chime-sdk-voice",
+        name: "ChimeSDKVoice"
+      },
+      iotroborunner: {
+        prefix: "iot-roborunner",
+        name: "IoTRoboRunner"
+      },
+      ssmsap: {
+        prefix: "ssm-sap",
+        name: "SsmSap"
+      },
+      oam: {
+        name: "OAM"
+      },
+      arczonalshift: {
+        prefix: "arc-zonal-shift",
+        name: "ARCZonalShift"
+      },
+      omics: {
+        name: "Omics"
+      },
+      opensearchserverless: {
+        name: "OpenSearchServerless"
+      },
+      securitylake: {
+        name: "SecurityLake"
+      },
+      simspaceweaver: {
+        name: "SimSpaceWeaver"
+      },
+      docdbelastic: {
+        prefix: "docdb-elastic",
+        name: "DocDBElastic"
+      },
+      sagemakergeospatial: {
+        prefix: "sagemaker-geospatial",
+        name: "SageMakerGeospatial"
+      },
+      codecatalyst: {
+        name: "CodeCatalyst"
+      },
+      pipes: {
+        name: "Pipes"
+      },
+      sagemakermetrics: {
+        prefix: "sagemaker-metrics",
+        name: "SageMakerMetrics"
+      },
+      kinesisvideowebrtcstorage: {
+        prefix: "kinesis-video-webrtc-storage",
+        name: "KinesisVideoWebRTCStorage"
+      },
+      licensemanagerlinuxsubscriptions: {
+        prefix: "license-manager-linux-subscriptions",
+        name: "LicenseManagerLinuxSubscriptions"
+      },
+      kendraranking: {
+        prefix: "kendra-ranking",
+        name: "KendraRanking"
+      },
+      cleanrooms: {
+        name: "CleanRooms"
+      },
+      cloudtraildata: {
+        prefix: "cloudtrail-data",
+        name: "CloudTrailData"
+      },
+      tnb: {
+        name: "Tnb"
+      },
+      internetmonitor: {
+        name: "InternetMonitor"
+      },
+      ivsrealtime: {
+        prefix: "ivs-realtime",
+        name: "IVSRealTime"
+      },
+      vpclattice: {
+        prefix: "vpc-lattice",
+        name: "VPCLattice"
+      },
+      osis: {
+        name: "OSIS"
+      },
+      mediapackagev2: {
+        name: "MediaPackageV2"
+      },
+      paymentcryptography: {
+        prefix: "payment-cryptography",
+        name: "PaymentCryptography"
+      },
+      paymentcryptographydata: {
+        prefix: "payment-cryptography-data",
+        name: "PaymentCryptographyData"
+      },
+      codegurusecurity: {
+        prefix: "codeguru-security",
+        name: "CodeGuruSecurity"
+      },
+      verifiedpermissions: {
+        name: "VerifiedPermissions"
+      },
+      appfabric: {
+        name: "AppFabric"
+      },
+      medicalimaging: {
+        prefix: "medical-imaging",
+        name: "MedicalImaging"
+      },
+      entityresolution: {
+        name: "EntityResolution"
+      },
+      managedblockchainquery: {
+        prefix: "managedblockchain-query",
+        name: "ManagedBlockchainQuery"
       }
     };
   }
@@ -6688,7 +7039,7 @@ var require_api = __commonJS({
         property(this, "documentation", api.documentation);
         property(this, "documentationUrl", api.documentationUrl);
       }
-      property(this, "errorCodeMapping", api.awsQueryCompatible);
+      property(this, "awsQueryCompatible", api.metadata.awsQueryCompatible);
     }
     module2.exports = Api;
   }
@@ -7070,7 +7421,22 @@ var require_region_config_data = __commonJS({
           globalEndpoint: true,
           signingRegion: "cn-north-1"
         },
+        "us-iso-*/iam": {
+          endpoint: "{service}.us-iso-east-1.c2s.ic.gov",
+          globalEndpoint: true,
+          signingRegion: "us-iso-east-1"
+        },
         "us-gov-*/iam": "globalGovCloud",
+        "*/ce": {
+          endpoint: "{service}.us-east-1.amazonaws.com",
+          globalEndpoint: true,
+          signingRegion: "us-east-1"
+        },
+        "cn-*/ce": {
+          endpoint: "{service}.cn-northwest-1.amazonaws.com.cn",
+          globalEndpoint: true,
+          signingRegion: "cn-northwest-1"
+        },
         "us-gov-*/sts": {
           endpoint: "{service}.{region}.amazonaws.com"
         },
@@ -7093,7 +7459,11 @@ var require_region_config_data = __commonJS({
         "*/sdb": {
           endpoint: "{service}.{region}.amazonaws.com",
           signatureVersion: "v2"
-        }
+        },
+        "*/resource-explorer-2": "dualstackByDefault",
+        "*/kendra-ranking": "dualstackByDefault",
+        "*/internetmonitor": "dualstackByDefault",
+        "*/codecatalyst": "globalDualstackByDefault"
       },
       fipsRules: {
         "*/*": "fipsStandard",
@@ -7129,6 +7499,7 @@ var require_region_config_data = __commonJS({
         "us-gov-*/runtime.lex": "fips.runtime.lex",
         "us-gov-*/acm-pca": "fipsWithServiceOnly",
         "us-gov-*/batch": "fipsWithServiceOnly",
+        "us-gov-*/cloudformation": "fipsWithServiceOnly",
         "us-gov-*/config": "fipsWithServiceOnly",
         "us-gov-*/eks": "fipsWithServiceOnly",
         "us-gov-*/elasticmapreduce": "fipsWithServiceOnly",
@@ -7151,7 +7522,11 @@ var require_region_config_data = __commonJS({
         "us-gov-west-1/organizations": "fipsWithServiceOnly",
         "us-gov-west-1/route53": {
           endpoint: "route53.us-gov.amazonaws.com"
-        }
+        },
+        "*/resource-explorer-2": "fipsDualstackByDefault",
+        "*/kendra-ranking": "dualstackByDefault",
+        "*/internetmonitor": "dualstackByDefault",
+        "*/codecatalyst": "fipsGlobalDualstackByDefault"
       },
       dualstackRules: {
         "*/*": {
@@ -7242,6 +7617,18 @@ var require_region_config_data = __commonJS({
         },
         dualstackLegacyEc2: {
           endpoint: "api.ec2.{region}.aws"
+        },
+        dualstackByDefault: {
+          endpoint: "{service}.{region}.api.aws"
+        },
+        fipsDualstackByDefault: {
+          endpoint: "{service}-fips.{region}.api.aws"
+        },
+        globalDualstackByDefault: {
+          endpoint: "{service}.global.api.aws"
+        },
+        fipsGlobalDualstackByDefault: {
+          endpoint: "{service}-fips.global.api.aws"
         }
       }
     };
@@ -7271,6 +7658,7 @@ var require_region_config = __commonJS({
         [region2, "*"],
         [regionPrefix, "*"],
         ["*", endpointPrefix],
+        [region2, "internal-*"],
         ["*", "*"]
       ].map(function(item) {
         return item[0] && item[1] ? item.join("/") : null;
@@ -7303,9 +7691,15 @@ var require_region_config = __commonJS({
           if (config.signingRegion) {
             service.signingRegion = config.signingRegion;
           }
-          if (!config.signatureVersion)
+          if (!config.signatureVersion) {
             config.signatureVersion = "v4";
-          applyConfig(service, config);
+          }
+          var useBearer = (service.api && service.api.signatureVersion) === "bearer";
+          applyConfig(service, Object.assign(
+            {},
+            config,
+            { signatureVersion: useBearer ? "bearer" : config.signatureVersion }
+          ));
           return;
         }
       }
@@ -8699,6 +9093,16 @@ var require_event_listeners = __commonJS({
       var operation = req.service.api.operations[req.operation];
       return operation ? operation.authtype : "";
     }
+    function getIdentityType(req) {
+      var service = req.service;
+      if (service.config.signatureVersion) {
+        return service.config.signatureVersion;
+      }
+      if (service.api.signatureVersion) {
+        return service.api.signatureVersion;
+      }
+      return getOperationAuthtype(req);
+    }
     AWS2.EventListeners = {
       Core: new SequentialExecutor().addNamedListeners(function(add, addAsync) {
         addAsync(
@@ -8707,11 +9111,24 @@ var require_event_listeners = __commonJS({
           function VALIDATE_CREDENTIALS(req, done) {
             if (!req.service.api.signatureVersion && !req.service.config.signatureVersion)
               return done();
+            var identityType = getIdentityType(req);
+            if (identityType === "bearer") {
+              req.service.config.getToken(function(err) {
+                if (err) {
+                  req.response.error = AWS2.util.error(err, { code: "TokenError" });
+                }
+                done();
+              });
+              return;
+            }
             req.service.config.getCredentials(function(err) {
               if (err) {
                 req.response.error = AWS2.util.error(
                   err,
-                  { code: "CredentialsError", message: "Missing credentials in config, if using AWS_CONFIG_FILE, set AWS_SDK_LOAD_CONFIG=1" }
+                  {
+                    code: "CredentialsError",
+                    message: "Missing credentials in config, if using AWS_CONFIG_FILE, set AWS_SDK_LOAD_CONFIG=1"
+                  }
                 );
               }
               done();
@@ -8860,12 +9277,10 @@ var require_event_listeners = __commonJS({
         addAsync("DISCOVER_ENDPOINT", "sign", DISCOVER_ENDPOINT, addToHead);
         addAsync("SIGN", "sign", function SIGN(req, done) {
           var service = req.service;
-          var operations = req.service.api.operations || {};
-          var operation = operations[req.operation];
-          var authtype = operation ? operation.authtype : "";
-          if (!service.api.signatureVersion && !authtype && !service.config.signatureVersion)
+          var identityType = getIdentityType(req);
+          if (!identityType || identityType.length === 0)
             return done();
-          if (authtype === "bearer" || service.config.signatureVersion === "bearer") {
+          if (identityType === "bearer") {
             service.config.getToken(function(err, token) {
               if (err) {
                 req.response.error = err;
@@ -8889,6 +9304,8 @@ var require_event_listeners = __commonJS({
               try {
                 var date = service.getSkewCorrectedDate();
                 var SignerClass = service.getSignerClass(req);
+                var operations = req.service.api.operations || {};
+                var operation = operations[req.operation];
                 var signer = new SignerClass(
                   req.httpRequest,
                   service.getSigningName(req),
@@ -8924,11 +9341,12 @@ var require_event_listeners = __commonJS({
           }
         });
         add("ERROR", "error", function ERROR(err, resp) {
-          var errorCodeMapping = resp.request.service.api.errorCodeMapping;
-          if (errorCodeMapping && err && err.code) {
-            var mapping = errorCodeMapping[err.code];
-            if (mapping) {
-              resp.error.code = mapping.code;
+          var awsQueryCompatible = resp.request.service.api.awsQueryCompatible;
+          if (awsQueryCompatible) {
+            var headers = resp.httpResponse.headers;
+            var queryErrorCode = headers ? headers["x-amzn-query-error"] : void 0;
+            if (queryErrorCode && queryErrorCode.includes(";")) {
+              resp.error.code = queryErrorCode.split(";")[0];
             }
           }
         }, true);
@@ -9248,6 +9666,7 @@ var require_event_listeners = __commonJS({
         add("BUILD", "build", svc.buildRequest);
         add("EXTRACT_DATA", "extractData", svc.extractData);
         add("EXTRACT_ERROR", "extractError", svc.extractError);
+        add("UNSET_CONTENT_LENGTH", "afterBuild", svc.unsetContentLength);
       }),
       RestXml: new SequentialExecutor().addNamedListeners(function(add) {
         var svc = require_rest_xml();
@@ -11980,7 +12399,7 @@ var require_bearer = __commonJS({
         AWS2.Signers.RequestSigner.call(this, request);
       },
       addAuthorization: function addAuthorization(token) {
-        this.request.httpRequest.headers["Authorization"] = "Bearer " + token.token;
+        this.request.headers["Authorization"] = "Bearer " + token.token;
       }
     });
   }
@@ -12279,6 +12698,40 @@ var require_param_validator = __commonJS({
   }
 });
 
+// node_modules/aws-sdk/lib/maintenance_mode_message.js
+var require_maintenance_mode_message = __commonJS({
+  "node_modules/aws-sdk/lib/maintenance_mode_message.js"(exports, module2) {
+    var warning = [
+      "We are formalizing our plans to enter AWS SDK for JavaScript (v2) into maintenance mode in 2023.\n",
+      "Please migrate your code to use AWS SDK for JavaScript (v3).",
+      "For more information, check the migration guide at https://a.co/7PzMCcy"
+    ].join("\n");
+    module2.exports = {
+      suppress: false
+    };
+    function emitWarning() {
+      if (typeof process === "undefined")
+        return;
+      if (typeof process.env === "object" && typeof process.env.AWS_EXECUTION_ENV !== "undefined" && process.env.AWS_EXECUTION_ENV.indexOf("AWS_Lambda_") === 0) {
+        return;
+      }
+      if (typeof process.env === "object" && typeof process.env.AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE !== "undefined") {
+        return;
+      }
+      if (typeof process.emitWarning === "function") {
+        process.emitWarning(warning, {
+          type: "NOTE"
+        });
+      }
+    }
+    setTimeout(function() {
+      if (!module2.exports.suppress) {
+        emitWarning();
+      }
+    }, 0);
+  }
+});
+
 // node_modules/aws-sdk/lib/core.js
 var require_core = __commonJS({
   "node_modules/aws-sdk/lib/core.js"(exports, module2) {
@@ -12287,7 +12740,7 @@ var require_core = __commonJS({
     _hidden.toString();
     module2.exports = AWS2;
     AWS2.util.update(AWS2, {
-      VERSION: "2.1223.0",
+      VERSION: "2.1429.0",
       Signers: {},
       Protocol: {
         Json: require_json(),
@@ -12324,6 +12777,7 @@ var require_core = __commonJS({
     require_resource_waiter2();
     require_request_signer();
     require_param_validator();
+    require_maintenance_mode_message();
     AWS2.events = new AWS2.SequentialExecutor();
     AWS2.util.memoizedProperty(AWS2, "endpointCache", function() {
       return new AWS2.EndpointCache(AWS2.config.endpointCacheSize);
@@ -12472,8 +12926,8 @@ var require_v35 = __commonJS({
     }
     var DNS = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
     exports.DNS = DNS;
-    var URL = "6ba7b811-9dad-11d1-80b4-00c04fd430c8";
-    exports.URL = URL;
+    var URL2 = "6ba7b811-9dad-11d1-80b4-00c04fd430c8";
+    exports.URL = URL2;
     function _default(name, version, hashfunc) {
       var generateUUID = function(value, namespace, buf, offset) {
         var off = buf && offset || 0;
@@ -12500,7 +12954,7 @@ var require_v35 = __commonJS({
       } catch (err) {
       }
       generateUUID.DNS = DNS;
-      generateUUID.URL = URL;
+      generateUUID.URL = URL2;
       return generateUUID;
     }
   }
@@ -13389,8 +13843,23 @@ var require_util = __commonJS({
         }
         err.name = String(options && options.name || err.name || err.code || "Error");
         err.time = new Date();
-        if (originalError)
+        if (originalError) {
           err.originalError = originalError;
+        }
+        for (var key in options || {}) {
+          if (key[0] === "[" && key[key.length - 1] === "]") {
+            key = key.slice(1, -1);
+            if (key === "code" || key === "message") {
+              continue;
+            }
+            err["[" + key + "]"] = "See error." + key + " for details.";
+            Object.defineProperty(err, key, {
+              value: err[key] || options && options[key] || originalError && originalError[key],
+              enumerable: false,
+              writable: true
+            });
+          }
+        }
         return err;
       },
       inherit: function inherit(klass, features) {
@@ -14594,7 +15063,17 @@ var require_sts_2011_06_15_min = __commonJS({
               ExternalId: {},
               SerialNumber: {},
               TokenCode: {},
-              SourceIdentity: {}
+              SourceIdentity: {},
+              ProvidedContexts: {
+                type: "list",
+                member: {
+                  type: "structure",
+                  members: {
+                    ProviderArn: {},
+                    ContextAssertion: {}
+                  }
+                }
+              }
             }
           },
           output: {
@@ -14602,10 +15081,10 @@ var require_sts_2011_06_15_min = __commonJS({
             type: "structure",
             members: {
               Credentials: {
-                shape: "Si"
+                shape: "Sl"
               },
               AssumedRoleUser: {
-                shape: "Sn"
+                shape: "Sq"
               },
               PackedPolicySize: {
                 type: "integer"
@@ -14625,7 +15104,10 @@ var require_sts_2011_06_15_min = __commonJS({
             members: {
               RoleArn: {},
               PrincipalArn: {},
-              SAMLAssertion: {},
+              SAMLAssertion: {
+                type: "string",
+                sensitive: true
+              },
               PolicyArns: {
                 shape: "S4"
               },
@@ -14640,10 +15122,10 @@ var require_sts_2011_06_15_min = __commonJS({
             type: "structure",
             members: {
               Credentials: {
-                shape: "Si"
+                shape: "Sl"
               },
               AssumedRoleUser: {
-                shape: "Sn"
+                shape: "Sq"
               },
               PackedPolicySize: {
                 type: "integer"
@@ -14668,7 +15150,10 @@ var require_sts_2011_06_15_min = __commonJS({
             members: {
               RoleArn: {},
               RoleSessionName: {},
-              WebIdentityToken: {},
+              WebIdentityToken: {
+                type: "string",
+                sensitive: true
+              },
               ProviderId: {},
               PolicyArns: {
                 shape: "S4"
@@ -14684,11 +15169,11 @@ var require_sts_2011_06_15_min = __commonJS({
             type: "structure",
             members: {
               Credentials: {
-                shape: "Si"
+                shape: "Sl"
               },
               SubjectFromWebIdentityToken: {},
               AssumedRoleUser: {
-                shape: "Sn"
+                shape: "Sq"
               },
               PackedPolicySize: {
                 type: "integer"
@@ -14775,7 +15260,7 @@ var require_sts_2011_06_15_min = __commonJS({
             type: "structure",
             members: {
               Credentials: {
-                shape: "Si"
+                shape: "Sl"
               },
               FederatedUser: {
                 type: "structure",
@@ -14810,7 +15295,7 @@ var require_sts_2011_06_15_min = __commonJS({
             type: "structure",
             members: {
               Credentials: {
-                shape: "Si"
+                shape: "Sl"
               }
             }
           }
@@ -14840,7 +15325,7 @@ var require_sts_2011_06_15_min = __commonJS({
             }
           }
         },
-        Si: {
+        Sl: {
           type: "structure",
           required: [
             "AccessKeyId",
@@ -14850,14 +15335,17 @@ var require_sts_2011_06_15_min = __commonJS({
           ],
           members: {
             AccessKeyId: {},
-            SecretAccessKey: {},
+            SecretAccessKey: {
+              type: "string",
+              sensitive: true
+            },
             SessionToken: {},
             Expiration: {
               type: "timestamp"
             }
           }
         },
-        Sn: {
+        Sq: {
           type: "structure",
           required: [
             "AssumedRoleId",
@@ -16185,7 +16673,7 @@ var require_defaults = __commonJS({
 var require_Utility = __commonJS({
   "node_modules/xmlbuilder/lib/Utility.js"(exports, module2) {
     (function() {
-      var assign, isArray, isEmpty, isFunction, isObject, isPlainObject, slice = [].slice, hasProp = {}.hasOwnProperty;
+      var assign, getValue, isArray, isEmpty, isFunction, isObject, isPlainObject, slice = [].slice, hasProp = {}.hasOwnProperty;
       assign = function() {
         var i, key, len, source, sources, target;
         target = arguments[0], sources = 2 <= arguments.length ? slice.call(arguments, 1) : [];
@@ -16236,12 +16724,178 @@ var require_Utility = __commonJS({
         var ctor, proto;
         return isObject(val) && (proto = Object.getPrototypeOf(val)) && (ctor = proto.constructor) && typeof ctor === "function" && ctor instanceof ctor && Function.prototype.toString.call(ctor) === Function.prototype.toString.call(Object);
       };
+      getValue = function(obj) {
+        if (isFunction(obj.valueOf)) {
+          return obj.valueOf();
+        } else {
+          return obj;
+        }
+      };
       module2.exports.assign = assign;
       module2.exports.isFunction = isFunction;
       module2.exports.isObject = isObject;
       module2.exports.isArray = isArray;
       module2.exports.isEmpty = isEmpty;
       module2.exports.isPlainObject = isPlainObject;
+      module2.exports.getValue = getValue;
+    }).call(exports);
+  }
+});
+
+// node_modules/xmlbuilder/lib/XMLDOMImplementation.js
+var require_XMLDOMImplementation = __commonJS({
+  "node_modules/xmlbuilder/lib/XMLDOMImplementation.js"(exports, module2) {
+    (function() {
+      var XMLDOMImplementation;
+      module2.exports = XMLDOMImplementation = function() {
+        function XMLDOMImplementation2() {
+        }
+        XMLDOMImplementation2.prototype.hasFeature = function(feature, version) {
+          return true;
+        };
+        XMLDOMImplementation2.prototype.createDocumentType = function(qualifiedName, publicId, systemId) {
+          throw new Error("This DOM method is not implemented.");
+        };
+        XMLDOMImplementation2.prototype.createDocument = function(namespaceURI, qualifiedName, doctype) {
+          throw new Error("This DOM method is not implemented.");
+        };
+        XMLDOMImplementation2.prototype.createHTMLDocument = function(title) {
+          throw new Error("This DOM method is not implemented.");
+        };
+        XMLDOMImplementation2.prototype.getFeature = function(feature, version) {
+          throw new Error("This DOM method is not implemented.");
+        };
+        return XMLDOMImplementation2;
+      }();
+    }).call(exports);
+  }
+});
+
+// node_modules/xmlbuilder/lib/XMLDOMErrorHandler.js
+var require_XMLDOMErrorHandler = __commonJS({
+  "node_modules/xmlbuilder/lib/XMLDOMErrorHandler.js"(exports, module2) {
+    (function() {
+      var XMLDOMErrorHandler;
+      module2.exports = XMLDOMErrorHandler = function() {
+        function XMLDOMErrorHandler2() {
+        }
+        XMLDOMErrorHandler2.prototype.handleError = function(error) {
+          throw new Error(error);
+        };
+        return XMLDOMErrorHandler2;
+      }();
+    }).call(exports);
+  }
+});
+
+// node_modules/xmlbuilder/lib/XMLDOMStringList.js
+var require_XMLDOMStringList = __commonJS({
+  "node_modules/xmlbuilder/lib/XMLDOMStringList.js"(exports, module2) {
+    (function() {
+      var XMLDOMStringList;
+      module2.exports = XMLDOMStringList = function() {
+        function XMLDOMStringList2(arr) {
+          this.arr = arr || [];
+        }
+        Object.defineProperty(XMLDOMStringList2.prototype, "length", {
+          get: function() {
+            return this.arr.length;
+          }
+        });
+        XMLDOMStringList2.prototype.item = function(index) {
+          return this.arr[index] || null;
+        };
+        XMLDOMStringList2.prototype.contains = function(str) {
+          return this.arr.indexOf(str) !== -1;
+        };
+        return XMLDOMStringList2;
+      }();
+    }).call(exports);
+  }
+});
+
+// node_modules/xmlbuilder/lib/XMLDOMConfiguration.js
+var require_XMLDOMConfiguration = __commonJS({
+  "node_modules/xmlbuilder/lib/XMLDOMConfiguration.js"(exports, module2) {
+    (function() {
+      var XMLDOMConfiguration, XMLDOMErrorHandler, XMLDOMStringList;
+      XMLDOMErrorHandler = require_XMLDOMErrorHandler();
+      XMLDOMStringList = require_XMLDOMStringList();
+      module2.exports = XMLDOMConfiguration = function() {
+        function XMLDOMConfiguration2() {
+          var clonedSelf;
+          this.defaultParams = {
+            "canonical-form": false,
+            "cdata-sections": false,
+            "comments": false,
+            "datatype-normalization": false,
+            "element-content-whitespace": true,
+            "entities": true,
+            "error-handler": new XMLDOMErrorHandler(),
+            "infoset": true,
+            "validate-if-schema": false,
+            "namespaces": true,
+            "namespace-declarations": true,
+            "normalize-characters": false,
+            "schema-location": "",
+            "schema-type": "",
+            "split-cdata-sections": true,
+            "validate": false,
+            "well-formed": true
+          };
+          this.params = clonedSelf = Object.create(this.defaultParams);
+        }
+        Object.defineProperty(XMLDOMConfiguration2.prototype, "parameterNames", {
+          get: function() {
+            return new XMLDOMStringList(Object.keys(this.defaultParams));
+          }
+        });
+        XMLDOMConfiguration2.prototype.getParameter = function(name) {
+          if (this.params.hasOwnProperty(name)) {
+            return this.params[name];
+          } else {
+            return null;
+          }
+        };
+        XMLDOMConfiguration2.prototype.canSetParameter = function(name, value) {
+          return true;
+        };
+        XMLDOMConfiguration2.prototype.setParameter = function(name, value) {
+          if (value != null) {
+            return this.params[name] = value;
+          } else {
+            return delete this.params[name];
+          }
+        };
+        return XMLDOMConfiguration2;
+      }();
+    }).call(exports);
+  }
+});
+
+// node_modules/xmlbuilder/lib/NodeType.js
+var require_NodeType = __commonJS({
+  "node_modules/xmlbuilder/lib/NodeType.js"(exports, module2) {
+    (function() {
+      module2.exports = {
+        Element: 1,
+        Attribute: 2,
+        Text: 3,
+        CData: 4,
+        EntityReference: 5,
+        EntityDeclaration: 6,
+        ProcessingInstruction: 7,
+        Comment: 8,
+        Document: 9,
+        DocType: 10,
+        DocumentFragment: 11,
+        NotationDeclaration: 12,
+        Declaration: 201,
+        Raw: 202,
+        AttributeDeclaration: 203,
+        ElementDeclaration: 204,
+        Dummy: 205
+      };
     }).call(exports);
   }
 });
@@ -16250,27 +16904,143 @@ var require_Utility = __commonJS({
 var require_XMLAttribute = __commonJS({
   "node_modules/xmlbuilder/lib/XMLAttribute.js"(exports, module2) {
     (function() {
-      var XMLAttribute;
+      var NodeType, XMLAttribute, XMLNode;
+      NodeType = require_NodeType();
+      XMLNode = require_XMLNode();
       module2.exports = XMLAttribute = function() {
         function XMLAttribute2(parent, name, value) {
-          this.options = parent.options;
-          this.stringify = parent.stringify;
+          this.parent = parent;
+          if (this.parent) {
+            this.options = this.parent.options;
+            this.stringify = this.parent.stringify;
+          }
           if (name == null) {
-            throw new Error("Missing attribute name of element " + parent.name);
+            throw new Error("Missing attribute name. " + this.debugInfo(name));
           }
-          if (value == null) {
-            throw new Error("Missing attribute value for attribute " + name + " of element " + parent.name);
-          }
-          this.name = this.stringify.attName(name);
+          this.name = this.stringify.name(name);
           this.value = this.stringify.attValue(value);
+          this.type = NodeType.Attribute;
+          this.isId = false;
+          this.schemaTypeInfo = null;
         }
+        Object.defineProperty(XMLAttribute2.prototype, "nodeType", {
+          get: function() {
+            return this.type;
+          }
+        });
+        Object.defineProperty(XMLAttribute2.prototype, "ownerElement", {
+          get: function() {
+            return this.parent;
+          }
+        });
+        Object.defineProperty(XMLAttribute2.prototype, "textContent", {
+          get: function() {
+            return this.value;
+          },
+          set: function(value) {
+            return this.value = value || "";
+          }
+        });
+        Object.defineProperty(XMLAttribute2.prototype, "namespaceURI", {
+          get: function() {
+            return "";
+          }
+        });
+        Object.defineProperty(XMLAttribute2.prototype, "prefix", {
+          get: function() {
+            return "";
+          }
+        });
+        Object.defineProperty(XMLAttribute2.prototype, "localName", {
+          get: function() {
+            return this.name;
+          }
+        });
+        Object.defineProperty(XMLAttribute2.prototype, "specified", {
+          get: function() {
+            return true;
+          }
+        });
         XMLAttribute2.prototype.clone = function() {
           return Object.create(this);
         };
         XMLAttribute2.prototype.toString = function(options) {
-          return this.options.writer.set(options).attribute(this);
+          return this.options.writer.attribute(this, this.options.writer.filterOptions(options));
+        };
+        XMLAttribute2.prototype.debugInfo = function(name) {
+          name = name || this.name;
+          if (name == null) {
+            return "parent: <" + this.parent.name + ">";
+          } else {
+            return "attribute: {" + name + "}, parent: <" + this.parent.name + ">";
+          }
+        };
+        XMLAttribute2.prototype.isEqualNode = function(node) {
+          if (node.namespaceURI !== this.namespaceURI) {
+            return false;
+          }
+          if (node.prefix !== this.prefix) {
+            return false;
+          }
+          if (node.localName !== this.localName) {
+            return false;
+          }
+          if (node.value !== this.value) {
+            return false;
+          }
+          return true;
         };
         return XMLAttribute2;
+      }();
+    }).call(exports);
+  }
+});
+
+// node_modules/xmlbuilder/lib/XMLNamedNodeMap.js
+var require_XMLNamedNodeMap = __commonJS({
+  "node_modules/xmlbuilder/lib/XMLNamedNodeMap.js"(exports, module2) {
+    (function() {
+      var XMLNamedNodeMap;
+      module2.exports = XMLNamedNodeMap = function() {
+        function XMLNamedNodeMap2(nodes) {
+          this.nodes = nodes;
+        }
+        Object.defineProperty(XMLNamedNodeMap2.prototype, "length", {
+          get: function() {
+            return Object.keys(this.nodes).length || 0;
+          }
+        });
+        XMLNamedNodeMap2.prototype.clone = function() {
+          return this.nodes = null;
+        };
+        XMLNamedNodeMap2.prototype.getNamedItem = function(name) {
+          return this.nodes[name];
+        };
+        XMLNamedNodeMap2.prototype.setNamedItem = function(node) {
+          var oldNode;
+          oldNode = this.nodes[node.nodeName];
+          this.nodes[node.nodeName] = node;
+          return oldNode || null;
+        };
+        XMLNamedNodeMap2.prototype.removeNamedItem = function(name) {
+          var oldNode;
+          oldNode = this.nodes[name];
+          delete this.nodes[name];
+          return oldNode || null;
+        };
+        XMLNamedNodeMap2.prototype.item = function(index) {
+          return this.nodes[Object.keys(this.nodes)[index]] || null;
+        };
+        XMLNamedNodeMap2.prototype.getNamedItemNS = function(namespaceURI, localName) {
+          throw new Error("This DOM method is not implemented.");
+        };
+        XMLNamedNodeMap2.prototype.setNamedItemNS = function(node) {
+          throw new Error("This DOM method is not implemented.");
+        };
+        XMLNamedNodeMap2.prototype.removeNamedItemNS = function(namespaceURI, localName) {
+          throw new Error("This DOM method is not implemented.");
+        };
+        return XMLNamedNodeMap2;
       }();
     }).call(exports);
   }
@@ -16280,7 +17050,7 @@ var require_XMLAttribute = __commonJS({
 var require_XMLElement = __commonJS({
   "node_modules/xmlbuilder/lib/XMLElement.js"(exports, module2) {
     (function() {
-      var XMLAttribute, XMLElement, XMLNode, isFunction, isObject, ref, extend = function(child, parent) {
+      var NodeType, XMLAttribute, XMLElement, XMLNamedNodeMap, XMLNode, getValue, isFunction, isObject, ref, extend = function(child, parent) {
         for (var key in parent) {
           if (hasProp.call(parent, key))
             child[key] = parent[key];
@@ -16293,40 +17063,98 @@ var require_XMLElement = __commonJS({
         child.__super__ = parent.prototype;
         return child;
       }, hasProp = {}.hasOwnProperty;
-      ref = require_Utility(), isObject = ref.isObject, isFunction = ref.isFunction;
+      ref = require_Utility(), isObject = ref.isObject, isFunction = ref.isFunction, getValue = ref.getValue;
       XMLNode = require_XMLNode();
+      NodeType = require_NodeType();
       XMLAttribute = require_XMLAttribute();
+      XMLNamedNodeMap = require_XMLNamedNodeMap();
       module2.exports = XMLElement = function(superClass) {
         extend(XMLElement2, superClass);
         function XMLElement2(parent, name, attributes) {
+          var child, j, len, ref1;
           XMLElement2.__super__.constructor.call(this, parent);
           if (name == null) {
-            throw new Error("Missing element name");
+            throw new Error("Missing element name. " + this.debugInfo());
           }
-          this.name = this.stringify.eleName(name);
-          this.attributes = {};
+          this.name = this.stringify.name(name);
+          this.type = NodeType.Element;
+          this.attribs = {};
+          this.schemaTypeInfo = null;
           if (attributes != null) {
             this.attribute(attributes);
           }
-          if (parent.isDocument) {
+          if (parent.type === NodeType.Document) {
             this.isRoot = true;
             this.documentObject = parent;
             parent.rootObject = this;
+            if (parent.children) {
+              ref1 = parent.children;
+              for (j = 0, len = ref1.length; j < len; j++) {
+                child = ref1[j];
+                if (child.type === NodeType.DocType) {
+                  child.name = this.name;
+                  break;
+                }
+              }
+            }
           }
         }
+        Object.defineProperty(XMLElement2.prototype, "tagName", {
+          get: function() {
+            return this.name;
+          }
+        });
+        Object.defineProperty(XMLElement2.prototype, "namespaceURI", {
+          get: function() {
+            return "";
+          }
+        });
+        Object.defineProperty(XMLElement2.prototype, "prefix", {
+          get: function() {
+            return "";
+          }
+        });
+        Object.defineProperty(XMLElement2.prototype, "localName", {
+          get: function() {
+            return this.name;
+          }
+        });
+        Object.defineProperty(XMLElement2.prototype, "id", {
+          get: function() {
+            throw new Error("This DOM method is not implemented." + this.debugInfo());
+          }
+        });
+        Object.defineProperty(XMLElement2.prototype, "className", {
+          get: function() {
+            throw new Error("This DOM method is not implemented." + this.debugInfo());
+          }
+        });
+        Object.defineProperty(XMLElement2.prototype, "classList", {
+          get: function() {
+            throw new Error("This DOM method is not implemented." + this.debugInfo());
+          }
+        });
+        Object.defineProperty(XMLElement2.prototype, "attributes", {
+          get: function() {
+            if (!this.attributeMap || !this.attributeMap.nodes) {
+              this.attributeMap = new XMLNamedNodeMap(this.attribs);
+            }
+            return this.attributeMap;
+          }
+        });
         XMLElement2.prototype.clone = function() {
           var att, attName, clonedSelf, ref1;
           clonedSelf = Object.create(this);
           if (clonedSelf.isRoot) {
             clonedSelf.documentObject = null;
           }
-          clonedSelf.attributes = {};
-          ref1 = this.attributes;
+          clonedSelf.attribs = {};
+          ref1 = this.attribs;
           for (attName in ref1) {
             if (!hasProp.call(ref1, attName))
               continue;
             att = ref1[attName];
-            clonedSelf.attributes[attName] = att.clone();
+            clonedSelf.attribs[attName] = att.clone();
           }
           clonedSelf.children = [];
           this.children.forEach(function(child) {
@@ -16340,7 +17168,7 @@ var require_XMLElement = __commonJS({
         XMLElement2.prototype.attribute = function(name, value) {
           var attName, attValue;
           if (name != null) {
-            name = name.valueOf();
+            name = getValue(name);
           }
           if (isObject(name)) {
             for (attName in name) {
@@ -16353,30 +17181,32 @@ var require_XMLElement = __commonJS({
             if (isFunction(value)) {
               value = value.apply();
             }
-            if (!this.options.skipNullAttributes || value != null) {
-              this.attributes[name] = new XMLAttribute(this, name, value);
+            if (this.options.keepNullAttributes && value == null) {
+              this.attribs[name] = new XMLAttribute(this, name, "");
+            } else if (value != null) {
+              this.attribs[name] = new XMLAttribute(this, name, value);
             }
           }
           return this;
         };
         XMLElement2.prototype.removeAttribute = function(name) {
-          var attName, i, len;
+          var attName, j, len;
           if (name == null) {
-            throw new Error("Missing attribute name");
+            throw new Error("Missing attribute name. " + this.debugInfo());
           }
-          name = name.valueOf();
+          name = getValue(name);
           if (Array.isArray(name)) {
-            for (i = 0, len = name.length; i < len; i++) {
-              attName = name[i];
-              delete this.attributes[attName];
+            for (j = 0, len = name.length; j < len; j++) {
+              attName = name[j];
+              delete this.attribs[attName];
             }
           } else {
-            delete this.attributes[name];
+            delete this.attribs[name];
           }
           return this;
         };
         XMLElement2.prototype.toString = function(options) {
-          return this.options.writer.set(options).element(this);
+          return this.options.writer.element(this, this.options.writer.filterOptions(options));
         };
         XMLElement2.prototype.att = function(name, value) {
           return this.attribute(name, value);
@@ -16384,7 +17214,181 @@ var require_XMLElement = __commonJS({
         XMLElement2.prototype.a = function(name, value) {
           return this.attribute(name, value);
         };
+        XMLElement2.prototype.getAttribute = function(name) {
+          if (this.attribs.hasOwnProperty(name)) {
+            return this.attribs[name].value;
+          } else {
+            return null;
+          }
+        };
+        XMLElement2.prototype.setAttribute = function(name, value) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.getAttributeNode = function(name) {
+          if (this.attribs.hasOwnProperty(name)) {
+            return this.attribs[name];
+          } else {
+            return null;
+          }
+        };
+        XMLElement2.prototype.setAttributeNode = function(newAttr) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.removeAttributeNode = function(oldAttr) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.getElementsByTagName = function(name) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.getAttributeNS = function(namespaceURI, localName) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.setAttributeNS = function(namespaceURI, qualifiedName, value) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.removeAttributeNS = function(namespaceURI, localName) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.getAttributeNodeNS = function(namespaceURI, localName) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.setAttributeNodeNS = function(newAttr) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.getElementsByTagNameNS = function(namespaceURI, localName) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.hasAttribute = function(name) {
+          return this.attribs.hasOwnProperty(name);
+        };
+        XMLElement2.prototype.hasAttributeNS = function(namespaceURI, localName) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.setIdAttribute = function(name, isId) {
+          if (this.attribs.hasOwnProperty(name)) {
+            return this.attribs[name].isId;
+          } else {
+            return isId;
+          }
+        };
+        XMLElement2.prototype.setIdAttributeNS = function(namespaceURI, localName, isId) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.setIdAttributeNode = function(idAttr, isId) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.getElementsByTagName = function(tagname) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.getElementsByTagNameNS = function(namespaceURI, localName) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.getElementsByClassName = function(classNames) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLElement2.prototype.isEqualNode = function(node) {
+          var i, j, ref1;
+          if (!XMLElement2.__super__.isEqualNode.apply(this, arguments).isEqualNode(node)) {
+            return false;
+          }
+          if (node.namespaceURI !== this.namespaceURI) {
+            return false;
+          }
+          if (node.prefix !== this.prefix) {
+            return false;
+          }
+          if (node.localName !== this.localName) {
+            return false;
+          }
+          if (node.attribs.length !== this.attribs.length) {
+            return false;
+          }
+          for (i = j = 0, ref1 = this.attribs.length - 1; 0 <= ref1 ? j <= ref1 : j >= ref1; i = 0 <= ref1 ? ++j : --j) {
+            if (!this.attribs[i].isEqualNode(node.attribs[i])) {
+              return false;
+            }
+          }
+          return true;
+        };
         return XMLElement2;
+      }(XMLNode);
+    }).call(exports);
+  }
+});
+
+// node_modules/xmlbuilder/lib/XMLCharacterData.js
+var require_XMLCharacterData = __commonJS({
+  "node_modules/xmlbuilder/lib/XMLCharacterData.js"(exports, module2) {
+    (function() {
+      var XMLCharacterData, XMLNode, extend = function(child, parent) {
+        for (var key in parent) {
+          if (hasProp.call(parent, key))
+            child[key] = parent[key];
+        }
+        function ctor() {
+          this.constructor = child;
+        }
+        ctor.prototype = parent.prototype;
+        child.prototype = new ctor();
+        child.__super__ = parent.prototype;
+        return child;
+      }, hasProp = {}.hasOwnProperty;
+      XMLNode = require_XMLNode();
+      module2.exports = XMLCharacterData = function(superClass) {
+        extend(XMLCharacterData2, superClass);
+        function XMLCharacterData2(parent) {
+          XMLCharacterData2.__super__.constructor.call(this, parent);
+          this.value = "";
+        }
+        Object.defineProperty(XMLCharacterData2.prototype, "data", {
+          get: function() {
+            return this.value;
+          },
+          set: function(value) {
+            return this.value = value || "";
+          }
+        });
+        Object.defineProperty(XMLCharacterData2.prototype, "length", {
+          get: function() {
+            return this.value.length;
+          }
+        });
+        Object.defineProperty(XMLCharacterData2.prototype, "textContent", {
+          get: function() {
+            return this.value;
+          },
+          set: function(value) {
+            return this.value = value || "";
+          }
+        });
+        XMLCharacterData2.prototype.clone = function() {
+          return Object.create(this);
+        };
+        XMLCharacterData2.prototype.substringData = function(offset, count) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLCharacterData2.prototype.appendData = function(arg) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLCharacterData2.prototype.insertData = function(offset, arg) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLCharacterData2.prototype.deleteData = function(offset, count) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLCharacterData2.prototype.replaceData = function(offset, count, arg) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLCharacterData2.prototype.isEqualNode = function(node) {
+          if (!XMLCharacterData2.__super__.isEqualNode.apply(this, arguments).isEqualNode(node)) {
+            return false;
+          }
+          if (node.data !== this.data) {
+            return false;
+          }
+          return true;
+        };
+        return XMLCharacterData2;
       }(XMLNode);
     }).call(exports);
   }
@@ -16394,7 +17398,7 @@ var require_XMLElement = __commonJS({
 var require_XMLCData = __commonJS({
   "node_modules/xmlbuilder/lib/XMLCData.js"(exports, module2) {
     (function() {
-      var XMLCData, XMLNode, extend = function(child, parent) {
+      var NodeType, XMLCData, XMLCharacterData, extend = function(child, parent) {
         for (var key in parent) {
           if (hasProp.call(parent, key))
             child[key] = parent[key];
@@ -16407,24 +17411,27 @@ var require_XMLCData = __commonJS({
         child.__super__ = parent.prototype;
         return child;
       }, hasProp = {}.hasOwnProperty;
-      XMLNode = require_XMLNode();
+      NodeType = require_NodeType();
+      XMLCharacterData = require_XMLCharacterData();
       module2.exports = XMLCData = function(superClass) {
         extend(XMLCData2, superClass);
         function XMLCData2(parent, text) {
           XMLCData2.__super__.constructor.call(this, parent);
           if (text == null) {
-            throw new Error("Missing CDATA text");
+            throw new Error("Missing CDATA text. " + this.debugInfo());
           }
-          this.text = this.stringify.cdata(text);
+          this.name = "#cdata-section";
+          this.type = NodeType.CData;
+          this.value = this.stringify.cdata(text);
         }
         XMLCData2.prototype.clone = function() {
           return Object.create(this);
         };
         XMLCData2.prototype.toString = function(options) {
-          return this.options.writer.set(options).cdata(this);
+          return this.options.writer.cdata(this, this.options.writer.filterOptions(options));
         };
         return XMLCData2;
-      }(XMLNode);
+      }(XMLCharacterData);
     }).call(exports);
   }
 });
@@ -16433,7 +17440,7 @@ var require_XMLCData = __commonJS({
 var require_XMLComment = __commonJS({
   "node_modules/xmlbuilder/lib/XMLComment.js"(exports, module2) {
     (function() {
-      var XMLComment, XMLNode, extend = function(child, parent) {
+      var NodeType, XMLCharacterData, XMLComment, extend = function(child, parent) {
         for (var key in parent) {
           if (hasProp.call(parent, key))
             child[key] = parent[key];
@@ -16446,24 +17453,27 @@ var require_XMLComment = __commonJS({
         child.__super__ = parent.prototype;
         return child;
       }, hasProp = {}.hasOwnProperty;
-      XMLNode = require_XMLNode();
+      NodeType = require_NodeType();
+      XMLCharacterData = require_XMLCharacterData();
       module2.exports = XMLComment = function(superClass) {
         extend(XMLComment2, superClass);
         function XMLComment2(parent, text) {
           XMLComment2.__super__.constructor.call(this, parent);
           if (text == null) {
-            throw new Error("Missing comment text");
+            throw new Error("Missing comment text. " + this.debugInfo());
           }
-          this.text = this.stringify.comment(text);
+          this.name = "#comment";
+          this.type = NodeType.Comment;
+          this.value = this.stringify.comment(text);
         }
         XMLComment2.prototype.clone = function() {
           return Object.create(this);
         };
         XMLComment2.prototype.toString = function(options) {
-          return this.options.writer.set(options).comment(this);
+          return this.options.writer.comment(this, this.options.writer.filterOptions(options));
         };
         return XMLComment2;
-      }(XMLNode);
+      }(XMLCharacterData);
     }).call(exports);
   }
 });
@@ -16472,7 +17482,7 @@ var require_XMLComment = __commonJS({
 var require_XMLDeclaration = __commonJS({
   "node_modules/xmlbuilder/lib/XMLDeclaration.js"(exports, module2) {
     (function() {
-      var XMLDeclaration, XMLNode, isObject, extend = function(child, parent) {
+      var NodeType, XMLDeclaration, XMLNode, isObject, extend = function(child, parent) {
         for (var key in parent) {
           if (hasProp.call(parent, key))
             child[key] = parent[key];
@@ -16487,6 +17497,7 @@ var require_XMLDeclaration = __commonJS({
       }, hasProp = {}.hasOwnProperty;
       isObject = require_Utility().isObject;
       XMLNode = require_XMLNode();
+      NodeType = require_NodeType();
       module2.exports = XMLDeclaration = function(superClass) {
         extend(XMLDeclaration2, superClass);
         function XMLDeclaration2(parent, version, encoding, standalone) {
@@ -16498,6 +17509,7 @@ var require_XMLDeclaration = __commonJS({
           if (!version) {
             version = "1.0";
           }
+          this.type = NodeType.Declaration;
           this.version = this.stringify.xmlVersion(version);
           if (encoding != null) {
             this.encoding = this.stringify.xmlEncoding(encoding);
@@ -16507,7 +17519,7 @@ var require_XMLDeclaration = __commonJS({
           }
         }
         XMLDeclaration2.prototype.toString = function(options) {
-          return this.options.writer.set(options).declaration(this);
+          return this.options.writer.declaration(this, this.options.writer.filterOptions(options));
         };
         return XMLDeclaration2;
       }(XMLNode);
@@ -16519,7 +17531,7 @@ var require_XMLDeclaration = __commonJS({
 var require_XMLDTDAttList = __commonJS({
   "node_modules/xmlbuilder/lib/XMLDTDAttList.js"(exports, module2) {
     (function() {
-      var XMLDTDAttList, XMLNode, extend = function(child, parent) {
+      var NodeType, XMLDTDAttList, XMLNode, extend = function(child, parent) {
         for (var key in parent) {
           if (hasProp.call(parent, key))
             child[key] = parent[key];
@@ -16533,39 +17545,43 @@ var require_XMLDTDAttList = __commonJS({
         return child;
       }, hasProp = {}.hasOwnProperty;
       XMLNode = require_XMLNode();
+      NodeType = require_NodeType();
       module2.exports = XMLDTDAttList = function(superClass) {
         extend(XMLDTDAttList2, superClass);
         function XMLDTDAttList2(parent, elementName, attributeName, attributeType, defaultValueType, defaultValue) {
           XMLDTDAttList2.__super__.constructor.call(this, parent);
           if (elementName == null) {
-            throw new Error("Missing DTD element name");
+            throw new Error("Missing DTD element name. " + this.debugInfo());
           }
           if (attributeName == null) {
-            throw new Error("Missing DTD attribute name");
+            throw new Error("Missing DTD attribute name. " + this.debugInfo(elementName));
           }
           if (!attributeType) {
-            throw new Error("Missing DTD attribute type");
+            throw new Error("Missing DTD attribute type. " + this.debugInfo(elementName));
           }
           if (!defaultValueType) {
-            throw new Error("Missing DTD attribute default");
+            throw new Error("Missing DTD attribute default. " + this.debugInfo(elementName));
           }
           if (defaultValueType.indexOf("#") !== 0) {
             defaultValueType = "#" + defaultValueType;
           }
           if (!defaultValueType.match(/^(#REQUIRED|#IMPLIED|#FIXED|#DEFAULT)$/)) {
-            throw new Error("Invalid default value type; expected: #REQUIRED, #IMPLIED, #FIXED or #DEFAULT");
+            throw new Error("Invalid default value type; expected: #REQUIRED, #IMPLIED, #FIXED or #DEFAULT. " + this.debugInfo(elementName));
           }
           if (defaultValue && !defaultValueType.match(/^(#FIXED|#DEFAULT)$/)) {
-            throw new Error("Default value only applies to #FIXED or #DEFAULT");
+            throw new Error("Default value only applies to #FIXED or #DEFAULT. " + this.debugInfo(elementName));
           }
-          this.elementName = this.stringify.eleName(elementName);
-          this.attributeName = this.stringify.attName(attributeName);
+          this.elementName = this.stringify.name(elementName);
+          this.type = NodeType.AttributeDeclaration;
+          this.attributeName = this.stringify.name(attributeName);
           this.attributeType = this.stringify.dtdAttType(attributeType);
-          this.defaultValue = this.stringify.dtdAttDefault(defaultValue);
+          if (defaultValue) {
+            this.defaultValue = this.stringify.dtdAttDefault(defaultValue);
+          }
           this.defaultValueType = defaultValueType;
         }
         XMLDTDAttList2.prototype.toString = function(options) {
-          return this.options.writer.set(options).dtdAttList(this);
+          return this.options.writer.dtdAttList(this, this.options.writer.filterOptions(options));
         };
         return XMLDTDAttList2;
       }(XMLNode);
@@ -16577,7 +17593,7 @@ var require_XMLDTDAttList = __commonJS({
 var require_XMLDTDEntity = __commonJS({
   "node_modules/xmlbuilder/lib/XMLDTDEntity.js"(exports, module2) {
     (function() {
-      var XMLDTDEntity, XMLNode, isObject, extend = function(child, parent) {
+      var NodeType, XMLDTDEntity, XMLNode, isObject, extend = function(child, parent) {
         for (var key in parent) {
           if (hasProp.call(parent, key))
             child[key] = parent[key];
@@ -16592,27 +17608,31 @@ var require_XMLDTDEntity = __commonJS({
       }, hasProp = {}.hasOwnProperty;
       isObject = require_Utility().isObject;
       XMLNode = require_XMLNode();
+      NodeType = require_NodeType();
       module2.exports = XMLDTDEntity = function(superClass) {
         extend(XMLDTDEntity2, superClass);
         function XMLDTDEntity2(parent, pe, name, value) {
           XMLDTDEntity2.__super__.constructor.call(this, parent);
           if (name == null) {
-            throw new Error("Missing entity name");
+            throw new Error("Missing DTD entity name. " + this.debugInfo(name));
           }
           if (value == null) {
-            throw new Error("Missing entity value");
+            throw new Error("Missing DTD entity value. " + this.debugInfo(name));
           }
           this.pe = !!pe;
-          this.name = this.stringify.eleName(name);
+          this.name = this.stringify.name(name);
+          this.type = NodeType.EntityDeclaration;
           if (!isObject(value)) {
             this.value = this.stringify.dtdEntityValue(value);
+            this.internal = true;
           } else {
             if (!value.pubID && !value.sysID) {
-              throw new Error("Public and/or system identifiers are required for an external entity");
+              throw new Error("Public and/or system identifiers are required for an external entity. " + this.debugInfo(name));
             }
             if (value.pubID && !value.sysID) {
-              throw new Error("System identifier is required for a public external entity");
+              throw new Error("System identifier is required for a public external entity. " + this.debugInfo(name));
             }
+            this.internal = false;
             if (value.pubID != null) {
               this.pubID = this.stringify.dtdPubID(value.pubID);
             }
@@ -16623,12 +17643,42 @@ var require_XMLDTDEntity = __commonJS({
               this.nData = this.stringify.dtdNData(value.nData);
             }
             if (this.pe && this.nData) {
-              throw new Error("Notation declaration is not allowed in a parameter entity");
+              throw new Error("Notation declaration is not allowed in a parameter entity. " + this.debugInfo(name));
             }
           }
         }
+        Object.defineProperty(XMLDTDEntity2.prototype, "publicId", {
+          get: function() {
+            return this.pubID;
+          }
+        });
+        Object.defineProperty(XMLDTDEntity2.prototype, "systemId", {
+          get: function() {
+            return this.sysID;
+          }
+        });
+        Object.defineProperty(XMLDTDEntity2.prototype, "notationName", {
+          get: function() {
+            return this.nData || null;
+          }
+        });
+        Object.defineProperty(XMLDTDEntity2.prototype, "inputEncoding", {
+          get: function() {
+            return null;
+          }
+        });
+        Object.defineProperty(XMLDTDEntity2.prototype, "xmlEncoding", {
+          get: function() {
+            return null;
+          }
+        });
+        Object.defineProperty(XMLDTDEntity2.prototype, "xmlVersion", {
+          get: function() {
+            return null;
+          }
+        });
         XMLDTDEntity2.prototype.toString = function(options) {
-          return this.options.writer.set(options).dtdEntity(this);
+          return this.options.writer.dtdEntity(this, this.options.writer.filterOptions(options));
         };
         return XMLDTDEntity2;
       }(XMLNode);
@@ -16640,7 +17690,7 @@ var require_XMLDTDEntity = __commonJS({
 var require_XMLDTDElement = __commonJS({
   "node_modules/xmlbuilder/lib/XMLDTDElement.js"(exports, module2) {
     (function() {
-      var XMLDTDElement, XMLNode, extend = function(child, parent) {
+      var NodeType, XMLDTDElement, XMLNode, extend = function(child, parent) {
         for (var key in parent) {
           if (hasProp.call(parent, key))
             child[key] = parent[key];
@@ -16654,12 +17704,13 @@ var require_XMLDTDElement = __commonJS({
         return child;
       }, hasProp = {}.hasOwnProperty;
       XMLNode = require_XMLNode();
+      NodeType = require_NodeType();
       module2.exports = XMLDTDElement = function(superClass) {
         extend(XMLDTDElement2, superClass);
         function XMLDTDElement2(parent, name, value) {
           XMLDTDElement2.__super__.constructor.call(this, parent);
           if (name == null) {
-            throw new Error("Missing DTD element name");
+            throw new Error("Missing DTD element name. " + this.debugInfo());
           }
           if (!value) {
             value = "(#PCDATA)";
@@ -16667,11 +17718,12 @@ var require_XMLDTDElement = __commonJS({
           if (Array.isArray(value)) {
             value = "(" + value.join(",") + ")";
           }
-          this.name = this.stringify.eleName(name);
+          this.name = this.stringify.name(name);
+          this.type = NodeType.ElementDeclaration;
           this.value = this.stringify.dtdElementValue(value);
         }
         XMLDTDElement2.prototype.toString = function(options) {
-          return this.options.writer.set(options).dtdElement(this);
+          return this.options.writer.dtdElement(this, this.options.writer.filterOptions(options));
         };
         return XMLDTDElement2;
       }(XMLNode);
@@ -16683,7 +17735,7 @@ var require_XMLDTDElement = __commonJS({
 var require_XMLDTDNotation = __commonJS({
   "node_modules/xmlbuilder/lib/XMLDTDNotation.js"(exports, module2) {
     (function() {
-      var XMLDTDNotation, XMLNode, extend = function(child, parent) {
+      var NodeType, XMLDTDNotation, XMLNode, extend = function(child, parent) {
         for (var key in parent) {
           if (hasProp.call(parent, key))
             child[key] = parent[key];
@@ -16697,17 +17749,19 @@ var require_XMLDTDNotation = __commonJS({
         return child;
       }, hasProp = {}.hasOwnProperty;
       XMLNode = require_XMLNode();
+      NodeType = require_NodeType();
       module2.exports = XMLDTDNotation = function(superClass) {
         extend(XMLDTDNotation2, superClass);
         function XMLDTDNotation2(parent, name, value) {
           XMLDTDNotation2.__super__.constructor.call(this, parent);
           if (name == null) {
-            throw new Error("Missing notation name");
+            throw new Error("Missing DTD notation name. " + this.debugInfo(name));
           }
           if (!value.pubID && !value.sysID) {
-            throw new Error("Public or system identifiers are required for an external entity");
+            throw new Error("Public or system identifiers are required for an external entity. " + this.debugInfo(name));
           }
-          this.name = this.stringify.eleName(name);
+          this.name = this.stringify.name(name);
+          this.type = NodeType.NotationDeclaration;
           if (value.pubID != null) {
             this.pubID = this.stringify.dtdPubID(value.pubID);
           }
@@ -16715,8 +17769,18 @@ var require_XMLDTDNotation = __commonJS({
             this.sysID = this.stringify.dtdSysID(value.sysID);
           }
         }
+        Object.defineProperty(XMLDTDNotation2.prototype, "publicId", {
+          get: function() {
+            return this.pubID;
+          }
+        });
+        Object.defineProperty(XMLDTDNotation2.prototype, "systemId", {
+          get: function() {
+            return this.sysID;
+          }
+        });
         XMLDTDNotation2.prototype.toString = function(options) {
-          return this.options.writer.set(options).dtdNotation(this);
+          return this.options.writer.dtdNotation(this, this.options.writer.filterOptions(options));
         };
         return XMLDTDNotation2;
       }(XMLNode);
@@ -16728,7 +17792,7 @@ var require_XMLDTDNotation = __commonJS({
 var require_XMLDocType = __commonJS({
   "node_modules/xmlbuilder/lib/XMLDocType.js"(exports, module2) {
     (function() {
-      var XMLDTDAttList, XMLDTDElement, XMLDTDEntity, XMLDTDNotation, XMLDocType, XMLNode, isObject, extend = function(child, parent) {
+      var NodeType, XMLDTDAttList, XMLDTDElement, XMLDTDEntity, XMLDTDNotation, XMLDocType, XMLNamedNodeMap, XMLNode, isObject, extend = function(child, parent) {
         for (var key in parent) {
           if (hasProp.call(parent, key))
             child[key] = parent[key];
@@ -16743,21 +17807,34 @@ var require_XMLDocType = __commonJS({
       }, hasProp = {}.hasOwnProperty;
       isObject = require_Utility().isObject;
       XMLNode = require_XMLNode();
+      NodeType = require_NodeType();
       XMLDTDAttList = require_XMLDTDAttList();
       XMLDTDEntity = require_XMLDTDEntity();
       XMLDTDElement = require_XMLDTDElement();
       XMLDTDNotation = require_XMLDTDNotation();
+      XMLNamedNodeMap = require_XMLNamedNodeMap();
       module2.exports = XMLDocType = function(superClass) {
         extend(XMLDocType2, superClass);
         function XMLDocType2(parent, pubID, sysID) {
-          var ref, ref1;
+          var child, i, len, ref, ref1, ref2;
           XMLDocType2.__super__.constructor.call(this, parent);
+          this.type = NodeType.DocType;
+          if (parent.children) {
+            ref = parent.children;
+            for (i = 0, len = ref.length; i < len; i++) {
+              child = ref[i];
+              if (child.type === NodeType.Element) {
+                this.name = child.name;
+                break;
+              }
+            }
+          }
           this.documentObject = parent;
           if (isObject(pubID)) {
-            ref = pubID, pubID = ref.pubID, sysID = ref.sysID;
+            ref1 = pubID, pubID = ref1.pubID, sysID = ref1.sysID;
           }
           if (sysID == null) {
-            ref1 = [pubID, sysID], sysID = ref1[0], pubID = ref1[1];
+            ref2 = [pubID, sysID], sysID = ref2[0], pubID = ref2[1];
           }
           if (pubID != null) {
             this.pubID = this.stringify.dtdPubID(pubID);
@@ -16766,6 +17843,49 @@ var require_XMLDocType = __commonJS({
             this.sysID = this.stringify.dtdSysID(sysID);
           }
         }
+        Object.defineProperty(XMLDocType2.prototype, "entities", {
+          get: function() {
+            var child, i, len, nodes, ref;
+            nodes = {};
+            ref = this.children;
+            for (i = 0, len = ref.length; i < len; i++) {
+              child = ref[i];
+              if (child.type === NodeType.EntityDeclaration && !child.pe) {
+                nodes[child.name] = child;
+              }
+            }
+            return new XMLNamedNodeMap(nodes);
+          }
+        });
+        Object.defineProperty(XMLDocType2.prototype, "notations", {
+          get: function() {
+            var child, i, len, nodes, ref;
+            nodes = {};
+            ref = this.children;
+            for (i = 0, len = ref.length; i < len; i++) {
+              child = ref[i];
+              if (child.type === NodeType.NotationDeclaration) {
+                nodes[child.name] = child;
+              }
+            }
+            return new XMLNamedNodeMap(nodes);
+          }
+        });
+        Object.defineProperty(XMLDocType2.prototype, "publicId", {
+          get: function() {
+            return this.pubID;
+          }
+        });
+        Object.defineProperty(XMLDocType2.prototype, "systemId", {
+          get: function() {
+            return this.sysID;
+          }
+        });
+        Object.defineProperty(XMLDocType2.prototype, "internalSubset", {
+          get: function() {
+            throw new Error("This DOM method is not implemented." + this.debugInfo());
+          }
+        });
         XMLDocType2.prototype.element = function(name, value) {
           var child;
           child = new XMLDTDElement(this, name, value);
@@ -16797,7 +17917,7 @@ var require_XMLDocType = __commonJS({
           return this;
         };
         XMLDocType2.prototype.toString = function(options) {
-          return this.options.writer.set(options).docType(this);
+          return this.options.writer.docType(this, this.options.writer.filterOptions(options));
         };
         XMLDocType2.prototype.ele = function(name, value) {
           return this.element(name, value);
@@ -16817,6 +17937,21 @@ var require_XMLDocType = __commonJS({
         XMLDocType2.prototype.up = function() {
           return this.root() || this.documentObject;
         };
+        XMLDocType2.prototype.isEqualNode = function(node) {
+          if (!XMLDocType2.__super__.isEqualNode.apply(this, arguments).isEqualNode(node)) {
+            return false;
+          }
+          if (node.name !== this.name) {
+            return false;
+          }
+          if (node.publicId !== this.publicId) {
+            return false;
+          }
+          if (node.systemId !== this.systemId) {
+            return false;
+          }
+          return true;
+        };
         return XMLDocType2;
       }(XMLNode);
     }).call(exports);
@@ -16827,7 +17962,7 @@ var require_XMLDocType = __commonJS({
 var require_XMLRaw = __commonJS({
   "node_modules/xmlbuilder/lib/XMLRaw.js"(exports, module2) {
     (function() {
-      var XMLNode, XMLRaw, extend = function(child, parent) {
+      var NodeType, XMLNode, XMLRaw, extend = function(child, parent) {
         for (var key in parent) {
           if (hasProp.call(parent, key))
             child[key] = parent[key];
@@ -16840,21 +17975,23 @@ var require_XMLRaw = __commonJS({
         child.__super__ = parent.prototype;
         return child;
       }, hasProp = {}.hasOwnProperty;
+      NodeType = require_NodeType();
       XMLNode = require_XMLNode();
       module2.exports = XMLRaw = function(superClass) {
         extend(XMLRaw2, superClass);
         function XMLRaw2(parent, text) {
           XMLRaw2.__super__.constructor.call(this, parent);
           if (text == null) {
-            throw new Error("Missing raw text");
+            throw new Error("Missing raw text. " + this.debugInfo());
           }
+          this.type = NodeType.Raw;
           this.value = this.stringify.raw(text);
         }
         XMLRaw2.prototype.clone = function() {
           return Object.create(this);
         };
         XMLRaw2.prototype.toString = function(options) {
-          return this.options.writer.set(options).raw(this);
+          return this.options.writer.raw(this, this.options.writer.filterOptions(options));
         };
         return XMLRaw2;
       }(XMLNode);
@@ -16866,7 +18003,7 @@ var require_XMLRaw = __commonJS({
 var require_XMLText = __commonJS({
   "node_modules/xmlbuilder/lib/XMLText.js"(exports, module2) {
     (function() {
-      var XMLNode, XMLText, extend = function(child, parent) {
+      var NodeType, XMLCharacterData, XMLText, extend = function(child, parent) {
         for (var key in parent) {
           if (hasProp.call(parent, key))
             child[key] = parent[key];
@@ -16879,24 +18016,56 @@ var require_XMLText = __commonJS({
         child.__super__ = parent.prototype;
         return child;
       }, hasProp = {}.hasOwnProperty;
-      XMLNode = require_XMLNode();
+      NodeType = require_NodeType();
+      XMLCharacterData = require_XMLCharacterData();
       module2.exports = XMLText = function(superClass) {
         extend(XMLText2, superClass);
         function XMLText2(parent, text) {
           XMLText2.__super__.constructor.call(this, parent);
           if (text == null) {
-            throw new Error("Missing element text");
+            throw new Error("Missing element text. " + this.debugInfo());
           }
-          this.value = this.stringify.eleText(text);
+          this.name = "#text";
+          this.type = NodeType.Text;
+          this.value = this.stringify.text(text);
         }
+        Object.defineProperty(XMLText2.prototype, "isElementContentWhitespace", {
+          get: function() {
+            throw new Error("This DOM method is not implemented." + this.debugInfo());
+          }
+        });
+        Object.defineProperty(XMLText2.prototype, "wholeText", {
+          get: function() {
+            var next, prev, str;
+            str = "";
+            prev = this.previousSibling;
+            while (prev) {
+              str = prev.data + str;
+              prev = prev.previousSibling;
+            }
+            str += this.data;
+            next = this.nextSibling;
+            while (next) {
+              str = str + next.data;
+              next = next.nextSibling;
+            }
+            return str;
+          }
+        });
         XMLText2.prototype.clone = function() {
           return Object.create(this);
         };
         XMLText2.prototype.toString = function(options) {
-          return this.options.writer.set(options).text(this);
+          return this.options.writer.text(this, this.options.writer.filterOptions(options));
+        };
+        XMLText2.prototype.splitText = function(offset) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLText2.prototype.replaceWholeText = function(content) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
         };
         return XMLText2;
-      }(XMLNode);
+      }(XMLCharacterData);
     }).call(exports);
   }
 });
@@ -16905,7 +18074,61 @@ var require_XMLText = __commonJS({
 var require_XMLProcessingInstruction = __commonJS({
   "node_modules/xmlbuilder/lib/XMLProcessingInstruction.js"(exports, module2) {
     (function() {
-      var XMLNode, XMLProcessingInstruction, extend = function(child, parent) {
+      var NodeType, XMLCharacterData, XMLProcessingInstruction, extend = function(child, parent) {
+        for (var key in parent) {
+          if (hasProp.call(parent, key))
+            child[key] = parent[key];
+        }
+        function ctor() {
+          this.constructor = child;
+        }
+        ctor.prototype = parent.prototype;
+        child.prototype = new ctor();
+        child.__super__ = parent.prototype;
+        return child;
+      }, hasProp = {}.hasOwnProperty;
+      NodeType = require_NodeType();
+      XMLCharacterData = require_XMLCharacterData();
+      module2.exports = XMLProcessingInstruction = function(superClass) {
+        extend(XMLProcessingInstruction2, superClass);
+        function XMLProcessingInstruction2(parent, target, value) {
+          XMLProcessingInstruction2.__super__.constructor.call(this, parent);
+          if (target == null) {
+            throw new Error("Missing instruction target. " + this.debugInfo());
+          }
+          this.type = NodeType.ProcessingInstruction;
+          this.target = this.stringify.insTarget(target);
+          this.name = this.target;
+          if (value) {
+            this.value = this.stringify.insValue(value);
+          }
+        }
+        XMLProcessingInstruction2.prototype.clone = function() {
+          return Object.create(this);
+        };
+        XMLProcessingInstruction2.prototype.toString = function(options) {
+          return this.options.writer.processingInstruction(this, this.options.writer.filterOptions(options));
+        };
+        XMLProcessingInstruction2.prototype.isEqualNode = function(node) {
+          if (!XMLProcessingInstruction2.__super__.isEqualNode.apply(this, arguments).isEqualNode(node)) {
+            return false;
+          }
+          if (node.target !== this.target) {
+            return false;
+          }
+          return true;
+        };
+        return XMLProcessingInstruction2;
+      }(XMLCharacterData);
+    }).call(exports);
+  }
+});
+
+// node_modules/xmlbuilder/lib/XMLDummy.js
+var require_XMLDummy = __commonJS({
+  "node_modules/xmlbuilder/lib/XMLDummy.js"(exports, module2) {
+    (function() {
+      var NodeType, XMLDummy, XMLNode, extend = function(child, parent) {
         for (var key in parent) {
           if (hasProp.call(parent, key))
             child[key] = parent[key];
@@ -16919,26 +18142,63 @@ var require_XMLProcessingInstruction = __commonJS({
         return child;
       }, hasProp = {}.hasOwnProperty;
       XMLNode = require_XMLNode();
-      module2.exports = XMLProcessingInstruction = function(superClass) {
-        extend(XMLProcessingInstruction2, superClass);
-        function XMLProcessingInstruction2(parent, target, value) {
-          XMLProcessingInstruction2.__super__.constructor.call(this, parent);
-          if (target == null) {
-            throw new Error("Missing instruction target");
-          }
-          this.target = this.stringify.insTarget(target);
-          if (value) {
-            this.value = this.stringify.insValue(value);
-          }
+      NodeType = require_NodeType();
+      module2.exports = XMLDummy = function(superClass) {
+        extend(XMLDummy2, superClass);
+        function XMLDummy2(parent) {
+          XMLDummy2.__super__.constructor.call(this, parent);
+          this.type = NodeType.Dummy;
         }
-        XMLProcessingInstruction2.prototype.clone = function() {
+        XMLDummy2.prototype.clone = function() {
           return Object.create(this);
         };
-        XMLProcessingInstruction2.prototype.toString = function(options) {
-          return this.options.writer.set(options).processingInstruction(this);
+        XMLDummy2.prototype.toString = function(options) {
+          return "";
         };
-        return XMLProcessingInstruction2;
+        return XMLDummy2;
       }(XMLNode);
+    }).call(exports);
+  }
+});
+
+// node_modules/xmlbuilder/lib/XMLNodeList.js
+var require_XMLNodeList = __commonJS({
+  "node_modules/xmlbuilder/lib/XMLNodeList.js"(exports, module2) {
+    (function() {
+      var XMLNodeList;
+      module2.exports = XMLNodeList = function() {
+        function XMLNodeList2(nodes) {
+          this.nodes = nodes;
+        }
+        Object.defineProperty(XMLNodeList2.prototype, "length", {
+          get: function() {
+            return this.nodes.length || 0;
+          }
+        });
+        XMLNodeList2.prototype.clone = function() {
+          return this.nodes = null;
+        };
+        XMLNodeList2.prototype.item = function(index) {
+          return this.nodes[index] || null;
+        };
+        return XMLNodeList2;
+      }();
+    }).call(exports);
+  }
+});
+
+// node_modules/xmlbuilder/lib/DocumentPosition.js
+var require_DocumentPosition = __commonJS({
+  "node_modules/xmlbuilder/lib/DocumentPosition.js"(exports, module2) {
+    (function() {
+      module2.exports = {
+        Disconnected: 1,
+        Preceding: 2,
+        Following: 4,
+        Contains: 8,
+        ContainedBy: 16,
+        ImplementationSpecific: 32
+      };
     }).call(exports);
   }
 });
@@ -16947,8 +18207,8 @@ var require_XMLProcessingInstruction = __commonJS({
 var require_XMLNode = __commonJS({
   "node_modules/xmlbuilder/lib/XMLNode.js"(exports, module2) {
     (function() {
-      var XMLCData, XMLComment, XMLDeclaration, XMLDocType, XMLElement, XMLNode, XMLProcessingInstruction, XMLRaw, XMLText, isEmpty, isFunction, isObject, ref, hasProp = {}.hasOwnProperty;
-      ref = require_Utility(), isObject = ref.isObject, isFunction = ref.isFunction, isEmpty = ref.isEmpty;
+      var DocumentPosition, NodeType, XMLCData, XMLComment, XMLDeclaration, XMLDocType, XMLDummy, XMLElement, XMLNamedNodeMap, XMLNode, XMLNodeList, XMLProcessingInstruction, XMLRaw, XMLText, getValue, isEmpty, isFunction, isObject, ref1, hasProp = {}.hasOwnProperty;
+      ref1 = require_Utility(), isObject = ref1.isObject, isFunction = ref1.isFunction, isEmpty = ref1.isEmpty, getValue = ref1.getValue;
       XMLElement = null;
       XMLCData = null;
       XMLComment = null;
@@ -16957,14 +18217,21 @@ var require_XMLNode = __commonJS({
       XMLRaw = null;
       XMLText = null;
       XMLProcessingInstruction = null;
+      XMLDummy = null;
+      NodeType = null;
+      XMLNodeList = null;
+      XMLNamedNodeMap = null;
+      DocumentPosition = null;
       module2.exports = XMLNode = function() {
-        function XMLNode2(parent) {
-          this.parent = parent;
+        function XMLNode2(parent1) {
+          this.parent = parent1;
           if (this.parent) {
             this.options = this.parent.options;
             this.stringify = this.parent.stringify;
           }
+          this.value = null;
           this.children = [];
+          this.baseURI = null;
           if (!XMLElement) {
             XMLElement = require_XMLElement();
             XMLCData = require_XMLCData();
@@ -16974,20 +18241,121 @@ var require_XMLNode = __commonJS({
             XMLRaw = require_XMLRaw();
             XMLText = require_XMLText();
             XMLProcessingInstruction = require_XMLProcessingInstruction();
+            XMLDummy = require_XMLDummy();
+            NodeType = require_NodeType();
+            XMLNodeList = require_XMLNodeList();
+            XMLNamedNodeMap = require_XMLNamedNodeMap();
+            DocumentPosition = require_DocumentPosition();
           }
         }
+        Object.defineProperty(XMLNode2.prototype, "nodeName", {
+          get: function() {
+            return this.name;
+          }
+        });
+        Object.defineProperty(XMLNode2.prototype, "nodeType", {
+          get: function() {
+            return this.type;
+          }
+        });
+        Object.defineProperty(XMLNode2.prototype, "nodeValue", {
+          get: function() {
+            return this.value;
+          }
+        });
+        Object.defineProperty(XMLNode2.prototype, "parentNode", {
+          get: function() {
+            return this.parent;
+          }
+        });
+        Object.defineProperty(XMLNode2.prototype, "childNodes", {
+          get: function() {
+            if (!this.childNodeList || !this.childNodeList.nodes) {
+              this.childNodeList = new XMLNodeList(this.children);
+            }
+            return this.childNodeList;
+          }
+        });
+        Object.defineProperty(XMLNode2.prototype, "firstChild", {
+          get: function() {
+            return this.children[0] || null;
+          }
+        });
+        Object.defineProperty(XMLNode2.prototype, "lastChild", {
+          get: function() {
+            return this.children[this.children.length - 1] || null;
+          }
+        });
+        Object.defineProperty(XMLNode2.prototype, "previousSibling", {
+          get: function() {
+            var i;
+            i = this.parent.children.indexOf(this);
+            return this.parent.children[i - 1] || null;
+          }
+        });
+        Object.defineProperty(XMLNode2.prototype, "nextSibling", {
+          get: function() {
+            var i;
+            i = this.parent.children.indexOf(this);
+            return this.parent.children[i + 1] || null;
+          }
+        });
+        Object.defineProperty(XMLNode2.prototype, "ownerDocument", {
+          get: function() {
+            return this.document() || null;
+          }
+        });
+        Object.defineProperty(XMLNode2.prototype, "textContent", {
+          get: function() {
+            var child, j, len, ref2, str;
+            if (this.nodeType === NodeType.Element || this.nodeType === NodeType.DocumentFragment) {
+              str = "";
+              ref2 = this.children;
+              for (j = 0, len = ref2.length; j < len; j++) {
+                child = ref2[j];
+                if (child.textContent) {
+                  str += child.textContent;
+                }
+              }
+              return str;
+            } else {
+              return null;
+            }
+          },
+          set: function(value) {
+            throw new Error("This DOM method is not implemented." + this.debugInfo());
+          }
+        });
+        XMLNode2.prototype.setParent = function(parent) {
+          var child, j, len, ref2, results;
+          this.parent = parent;
+          if (parent) {
+            this.options = parent.options;
+            this.stringify = parent.stringify;
+          }
+          ref2 = this.children;
+          results = [];
+          for (j = 0, len = ref2.length; j < len; j++) {
+            child = ref2[j];
+            results.push(child.setParent(this));
+          }
+          return results;
+        };
         XMLNode2.prototype.element = function(name, attributes, text) {
-          var childNode, item, j, k, key, lastChild, len, len1, ref1, val;
+          var childNode, item, j, k, key, lastChild, len, len1, ref2, ref3, val;
           lastChild = null;
+          if (attributes === null && text == null) {
+            ref2 = [{}, null], attributes = ref2[0], text = ref2[1];
+          }
           if (attributes == null) {
             attributes = {};
           }
-          attributes = attributes.valueOf();
+          attributes = getValue(attributes);
           if (!isObject(attributes)) {
-            ref1 = [attributes, text], text = ref1[0], attributes = ref1[1];
+            ref3 = [attributes, text], text = ref3[0], attributes = ref3[1];
           }
           if (name != null) {
-            name = name.valueOf();
+            name = getValue(name);
           }
           if (Array.isArray(name)) {
             for (j = 0, len = name.length; j < len; j++) {
@@ -17004,11 +18372,14 @@ var require_XMLNode = __commonJS({
               if (isFunction(val)) {
                 val = val.apply();
               }
-              if (isObject(val) && isEmpty(val)) {
-                val = null;
-              }
               if (!this.options.ignoreDecorators && this.stringify.convertAttKey && key.indexOf(this.stringify.convertAttKey) === 0) {
                 lastChild = this.attribute(key.substr(this.stringify.convertAttKey.length), val);
+              } else if (!this.options.separateArrayItems && Array.isArray(val) && isEmpty(val)) {
+                lastChild = this.dummy();
+              } else if (isObject(val) && isEmpty(val)) {
+                lastChild = this.element(key);
+              } else if (!this.options.keepNullNodes && val == null) {
+                lastChild = this.dummy();
               } else if (!this.options.separateArrayItems && Array.isArray(val)) {
                 for (k = 0, len1 = val.length; k < len1; k++) {
                   item = val[k];
@@ -17017,12 +18388,18 @@ var require_XMLNode = __commonJS({
                   lastChild = this.element(childNode);
                 }
               } else if (isObject(val)) {
-                lastChild = this.element(key);
-                lastChild.element(val);
+                if (!this.options.ignoreDecorators && this.stringify.convertTextKey && key.indexOf(this.stringify.convertTextKey) === 0) {
+                  lastChild = this.element(val);
+                } else {
+                  lastChild = this.element(key);
+                  lastChild.element(val);
+                }
               } else {
                 lastChild = this.element(key, val);
               }
             }
+          } else if (!this.options.keepNullNodes && text === null) {
+            lastChild = this.dummy();
           } else {
             if (!this.options.ignoreDecorators && this.stringify.convertTextKey && name.indexOf(this.stringify.convertTextKey) === 0) {
               lastChild = this.text(text);
@@ -17039,25 +18416,40 @@ var require_XMLNode = __commonJS({
             }
           }
           if (lastChild == null) {
-            throw new Error("Could not create any elements with: " + name);
+            throw new Error("Could not create any elements with: " + name + ". " + this.debugInfo());
           }
           return lastChild;
         };
         XMLNode2.prototype.insertBefore = function(name, attributes, text) {
-          var child, i, removed;
-          if (this.isRoot) {
-            throw new Error("Cannot insert elements at root level");
+          var child, i, newChild, refChild, removed;
+          if (name != null ? name.type : void 0) {
+            newChild = name;
+            refChild = attributes;
+            newChild.setParent(this);
+            if (refChild) {
+              i = children.indexOf(refChild);
+              removed = children.splice(i);
+              children.push(newChild);
+              Array.prototype.push.apply(children, removed);
+            } else {
+              children.push(newChild);
+            }
+            return newChild;
+          } else {
+            if (this.isRoot) {
+              throw new Error("Cannot insert elements at root level. " + this.debugInfo(name));
+            }
+            i = this.parent.children.indexOf(this);
+            removed = this.parent.children.splice(i);
+            child = this.parent.element(name, attributes, text);
+            Array.prototype.push.apply(this.parent.children, removed);
+            return child;
           }
-          i = this.parent.children.indexOf(this);
-          removed = this.parent.children.splice(i);
-          child = this.parent.element(name, attributes, text);
-          Array.prototype.push.apply(this.parent.children, removed);
-          return child;
         };
         XMLNode2.prototype.insertAfter = function(name, attributes, text) {
           var child, i, removed;
           if (this.isRoot) {
-            throw new Error("Cannot insert elements at root level");
+            throw new Error("Cannot insert elements at root level. " + this.debugInfo(name));
           }
           i = this.parent.children.indexOf(this);
           removed = this.parent.children.splice(i + 1);
@@ -17066,23 +18458,23 @@ var require_XMLNode = __commonJS({
           return child;
         };
         XMLNode2.prototype.remove = function() {
-          var i, ref1;
+          var i, ref2;
           if (this.isRoot) {
-            throw new Error("Cannot remove the root element");
+            throw new Error("Cannot remove the root element. " + this.debugInfo());
           }
           i = this.parent.children.indexOf(this);
-          [].splice.apply(this.parent.children, [i, i - i + 1].concat(ref1 = [])), ref1;
+          [].splice.apply(this.parent.children, [i, i - i + 1].concat(ref2 = [])), ref2;
           return this.parent;
         };
         XMLNode2.prototype.node = function(name, attributes, text) {
-          var child, ref1;
+          var child, ref2;
           if (name != null) {
-            name = name.valueOf();
+            name = getValue(name);
           }
           attributes || (attributes = {});
-          attributes = attributes.valueOf();
+          attributes = getValue(attributes);
           if (!isObject(attributes)) {
-            ref1 = [attributes, text], text = ref1[0], attributes = ref1[1];
+            ref2 = [attributes, text], text = ref2[0], attributes = ref2[1];
           }
           child = new XMLElement(this, name, attributes);
           if (text != null) {
@@ -17093,6 +18485,9 @@ var require_XMLNode = __commonJS({
         };
         XMLNode2.prototype.text = function(value) {
           var child;
+          if (isObject(value)) {
+            this.element(value);
+          }
           child = new XMLText(this, value);
           this.children.push(child);
           return this;
@@ -17131,13 +18526,18 @@ var require_XMLNode = __commonJS({
           this.children.push(child);
           return this;
         };
+        XMLNode2.prototype.dummy = function() {
+          var child;
+          child = new XMLDummy(this);
+          return child;
+        };
         XMLNode2.prototype.instruction = function(target, value) {
           var insTarget, insValue, instruction, j, len;
           if (target != null) {
-            target = target.valueOf();
+            target = getValue(target);
           }
           if (value != null) {
-            value = value.valueOf();
+            value = getValue(value);
           }
           if (Array.isArray(target)) {
             for (j = 0, len = target.length; j < len; j++) {
@@ -17180,28 +18580,30 @@ var require_XMLNode = __commonJS({
           var doc, xmldec;
           doc = this.document();
           xmldec = new XMLDeclaration(doc, version, encoding, standalone);
-          if (doc.children[0] instanceof XMLDeclaration) {
+          if (doc.children.length === 0) {
+            doc.children.unshift(xmldec);
+          } else if (doc.children[0].type === NodeType.Declaration) {
             doc.children[0] = xmldec;
           } else {
             doc.children.unshift(xmldec);
           }
           return doc.root() || doc;
         };
-        XMLNode2.prototype.doctype = function(pubID, sysID) {
-          var child, doc, doctype, i, j, k, len, len1, ref1, ref2;
+        XMLNode2.prototype.dtd = function(pubID, sysID) {
+          var child, doc, doctype, i, j, k, len, len1, ref2, ref3;
           doc = this.document();
           doctype = new XMLDocType(doc, pubID, sysID);
-          ref1 = doc.children;
-          for (i = j = 0, len = ref1.length; j < len; i = ++j) {
-            child = ref1[i];
-            if (child instanceof XMLDocType) {
+          ref2 = doc.children;
+          for (i = j = 0, len = ref2.length; j < len; i = ++j) {
+            child = ref2[i];
+            if (child.type === NodeType.DocType) {
               doc.children[i] = doctype;
               return doctype;
             }
           }
-          ref2 = doc.children;
-          for (i = k = 0, len1 = ref2.length; k < len1; i = ++k) {
-            child = ref2[i];
+          ref3 = doc.children;
+          for (i = k = 0, len1 = ref3.length; k < len1; i = ++k) {
+            child = ref3[i];
             if (child.isRoot) {
               doc.children.splice(i, 0, doctype);
               return doctype;
@@ -17220,7 +18622,7 @@ var require_XMLNode = __commonJS({
           var node;
           node = this;
           while (node) {
-            if (node.isDocument) {
+            if (node.type === NodeType.Document) {
               return node.rootObject;
             } else if (node.isRoot) {
               return node;
@@ -17233,7 +18635,7 @@ var require_XMLNode = __commonJS({
           var node;
           node = this;
           while (node) {
-            if (node.isDocument) {
+            if (node.type === NodeType.Document) {
               return node;
             } else {
               node = node.parent;
@@ -17247,7 +18649,7 @@ var require_XMLNode = __commonJS({
           var i;
           i = this.parent.children.indexOf(this);
           if (i < 1) {
-            throw new Error("Already at the first node");
+            throw new Error("Already at the first node. " + this.debugInfo());
           }
           return this.parent.children[i - 1];
         };
@@ -17255,7 +18657,7 @@ var require_XMLNode = __commonJS({
           var i;
           i = this.parent.children.indexOf(this);
           if (i === -1 || i === this.parent.children.length - 1) {
-            throw new Error("Already at the last node");
+            throw new Error("Already at the last node. " + this.debugInfo());
           }
           return this.parent.children[i + 1];
         };
@@ -17266,6 +18668,19 @@ var require_XMLNode = __commonJS({
           clonedRoot.isRoot = false;
           this.children.push(clonedRoot);
           return this;
+        };
+        XMLNode2.prototype.debugInfo = function(name) {
+          var ref2, ref3;
+          name = name || this.name;
+          if (name == null && !((ref2 = this.parent) != null ? ref2.name : void 0)) {
+            return "";
+          } else if (name == null) {
+            return "parent: <" + this.parent.name + ">";
+          } else if (!((ref3 = this.parent) != null ? ref3.name : void 0)) {
+            return "node: <" + name + ">";
+          } else {
+            return "node: <" + name + ">, parent: <" + this.parent.name + ">";
+          }
         };
         XMLNode2.prototype.ele = function(name, attributes, text) {
           return this.element(name, attributes, text);
@@ -17290,9 +18705,6 @@ var require_XMLNode = __commonJS({
         };
         XMLNode2.prototype.dec = function(version, encoding, standalone) {
           return this.declaration(version, encoding, standalone);
-        };
-        XMLNode2.prototype.dtd = function(pubID, sysID) {
-          return this.doctype(pubID, sysID);
         };
         XMLNode2.prototype.e = function(name, attributes, text) {
           return this.element(name, attributes, text);
@@ -17321,6 +18733,165 @@ var require_XMLNode = __commonJS({
         XMLNode2.prototype.importXMLBuilder = function(doc) {
           return this.importDocument(doc);
         };
+        XMLNode2.prototype.replaceChild = function(newChild, oldChild) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLNode2.prototype.removeChild = function(oldChild) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLNode2.prototype.appendChild = function(newChild) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLNode2.prototype.hasChildNodes = function() {
+          return this.children.length !== 0;
+        };
+        XMLNode2.prototype.cloneNode = function(deep) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLNode2.prototype.normalize = function() {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLNode2.prototype.isSupported = function(feature, version) {
+          return true;
+        };
+        XMLNode2.prototype.hasAttributes = function() {
+          return this.attribs.length !== 0;
+        };
+        XMLNode2.prototype.compareDocumentPosition = function(other) {
+          var ref, res;
+          ref = this;
+          if (ref === other) {
+            return 0;
+          } else if (this.document() !== other.document()) {
+            res = DocumentPosition.Disconnected | DocumentPosition.ImplementationSpecific;
+            if (Math.random() < 0.5) {
+              res |= DocumentPosition.Preceding;
+            } else {
+              res |= DocumentPosition.Following;
+            }
+            return res;
+          } else if (ref.isAncestor(other)) {
+            return DocumentPosition.Contains | DocumentPosition.Preceding;
+          } else if (ref.isDescendant(other)) {
+            return DocumentPosition.Contains | DocumentPosition.Following;
+          } else if (ref.isPreceding(other)) {
+            return DocumentPosition.Preceding;
+          } else {
+            return DocumentPosition.Following;
+          }
+        };
+        XMLNode2.prototype.isSameNode = function(other) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLNode2.prototype.lookupPrefix = function(namespaceURI) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLNode2.prototype.isDefaultNamespace = function(namespaceURI) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLNode2.prototype.lookupNamespaceURI = function(prefix) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLNode2.prototype.isEqualNode = function(node) {
+          var i, j, ref2;
+          if (node.nodeType !== this.nodeType) {
+            return false;
+          }
+          if (node.children.length !== this.children.length) {
+            return false;
+          }
+          for (i = j = 0, ref2 = this.children.length - 1; 0 <= ref2 ? j <= ref2 : j >= ref2; i = 0 <= ref2 ? ++j : --j) {
+            if (!this.children[i].isEqualNode(node.children[i])) {
+              return false;
+            }
+          }
+          return true;
+        };
+        XMLNode2.prototype.getFeature = function(feature, version) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLNode2.prototype.setUserData = function(key, data, handler) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLNode2.prototype.getUserData = function(key) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLNode2.prototype.contains = function(other) {
+          if (!other) {
+            return false;
+          }
+          return other === this || this.isDescendant(other);
+        };
+        XMLNode2.prototype.isDescendant = function(node) {
+          var child, isDescendantChild, j, len, ref2;
+          ref2 = this.children;
+          for (j = 0, len = ref2.length; j < len; j++) {
+            child = ref2[j];
+            if (node === child) {
+              return true;
+            }
+            isDescendantChild = child.isDescendant(node);
+            if (isDescendantChild) {
+              return true;
+            }
+          }
+          return false;
+        };
+        XMLNode2.prototype.isAncestor = function(node) {
+          return node.isDescendant(this);
+        };
+        XMLNode2.prototype.isPreceding = function(node) {
+          var nodePos, thisPos;
+          nodePos = this.treePosition(node);
+          thisPos = this.treePosition(this);
+          if (nodePos === -1 || thisPos === -1) {
+            return false;
+          } else {
+            return nodePos < thisPos;
+          }
+        };
+        XMLNode2.prototype.isFollowing = function(node) {
+          var nodePos, thisPos;
+          nodePos = this.treePosition(node);
+          thisPos = this.treePosition(this);
+          if (nodePos === -1 || thisPos === -1) {
+            return false;
+          } else {
+            return nodePos > thisPos;
+          }
+        };
+        XMLNode2.prototype.treePosition = function(node) {
+          var found, pos;
+          pos = 0;
+          found = false;
+          this.foreachTreeNode(this.document(), function(childNode) {
+            pos++;
+            if (!found && childNode === node) {
+              return found = true;
+            }
+          });
+          if (found) {
+            return pos;
+          } else {
+            return -1;
+          }
+        };
+        XMLNode2.prototype.foreachTreeNode = function(node, func) {
+          var child, j, len, ref2, res;
+          node || (node = this.document());
+          ref2 = node.children;
+          for (j = 0, len = ref2.length; j < len; j++) {
+            child = ref2[j];
+            if (res = func(child)) {
+              return res;
+            } else {
+              res = this.foreachTreeNode(child, func);
+              if (res) {
+                return res;
+              }
+            }
+          }
+        };
         return XMLNode2;
       }();
     }).call(exports);
@@ -17338,10 +18909,14 @@ var require_XMLStringifier = __commonJS({
       }, hasProp = {}.hasOwnProperty;
       module2.exports = XMLStringifier = function() {
         function XMLStringifier2(options) {
+          this.assertLegalName = bind(this.assertLegalName, this);
           this.assertLegalChar = bind(this.assertLegalChar, this);
           var key, ref, value;
           options || (options = {});
-          this.noDoubleEncoding = options.noDoubleEncoding;
+          this.options = options;
+          if (!this.options.version) {
+            this.options.version = "1.0";
+          }
           ref = options.stringify || {};
           for (key in ref) {
             if (!hasProp.call(ref, key))
@@ -17350,20 +18925,30 @@ var require_XMLStringifier = __commonJS({
             this[key] = value;
           }
         }
-        XMLStringifier2.prototype.eleName = function(val) {
-          val = "" + val || "";
-          return this.assertLegalChar(val);
+        XMLStringifier2.prototype.name = function(val) {
+          if (this.options.noValidation) {
+            return val;
+          }
+          return this.assertLegalName("" + val || "");
         };
-        XMLStringifier2.prototype.eleText = function(val) {
-          val = "" + val || "";
-          return this.assertLegalChar(this.elEscape(val));
+        XMLStringifier2.prototype.text = function(val) {
+          if (this.options.noValidation) {
+            return val;
+          }
+          return this.assertLegalChar(this.textEscape("" + val || ""));
         };
         XMLStringifier2.prototype.cdata = function(val) {
+          if (this.options.noValidation) {
+            return val;
+          }
           val = "" + val || "";
           val = val.replace("]]>", "]]]]><![CDATA[>");
           return this.assertLegalChar(val);
         };
         XMLStringifier2.prototype.comment = function(val) {
+          if (this.options.noValidation) {
+            return val;
+          }
           val = "" + val || "";
           if (val.match(/--/)) {
             throw new Error("Comment text cannot contain double-hypen: " + val);
@@ -17371,26 +18956,37 @@ var require_XMLStringifier = __commonJS({
           return this.assertLegalChar(val);
         };
         XMLStringifier2.prototype.raw = function(val) {
+          if (this.options.noValidation) {
+            return val;
+          }
           return "" + val || "";
-        };
-        XMLStringifier2.prototype.attName = function(val) {
-          return val = "" + val || "";
         };
         XMLStringifier2.prototype.attValue = function(val) {
-          val = "" + val || "";
-          return this.attEscape(val);
+          if (this.options.noValidation) {
+            return val;
+          }
+          return this.assertLegalChar(this.attEscape(val = "" + val || ""));
         };
         XMLStringifier2.prototype.insTarget = function(val) {
-          return "" + val || "";
+          if (this.options.noValidation) {
+            return val;
+          }
+          return this.assertLegalChar("" + val || "");
         };
         XMLStringifier2.prototype.insValue = function(val) {
+          if (this.options.noValidation) {
+            return val;
+          }
           val = "" + val || "";
           if (val.match(/\?>/)) {
             throw new Error("Invalid processing instruction value: " + val);
           }
-          return val;
+          return this.assertLegalChar(val);
         };
         XMLStringifier2.prototype.xmlVersion = function(val) {
+          if (this.options.noValidation) {
+            return val;
+          }
           val = "" + val || "";
           if (!val.match(/1\.[0-9]+/)) {
             throw new Error("Invalid version number: " + val);
@@ -17398,13 +18994,19 @@ var require_XMLStringifier = __commonJS({
           return val;
         };
         XMLStringifier2.prototype.xmlEncoding = function(val) {
+          if (this.options.noValidation) {
+            return val;
+          }
           val = "" + val || "";
           if (!val.match(/^[A-Za-z](?:[A-Za-z0-9._-])*$/)) {
             throw new Error("Invalid encoding: " + val);
           }
-          return val;
+          return this.assertLegalChar(val);
         };
         XMLStringifier2.prototype.xmlStandalone = function(val) {
+          if (this.options.noValidation) {
+            return val;
+          }
           if (val) {
             return "yes";
           } else {
@@ -17412,29 +19014,46 @@ var require_XMLStringifier = __commonJS({
           }
         };
         XMLStringifier2.prototype.dtdPubID = function(val) {
-          return "" + val || "";
-        };
-        XMLStringifier2.prototype.dtdSysID = function(val) {
-          return "" + val || "";
-        };
-        XMLStringifier2.prototype.dtdElementValue = function(val) {
-          return "" + val || "";
-        };
-        XMLStringifier2.prototype.dtdAttType = function(val) {
-          return "" + val || "";
-        };
-        XMLStringifier2.prototype.dtdAttDefault = function(val) {
-          if (val != null) {
-            return "" + val || "";
-          } else {
+          if (this.options.noValidation) {
             return val;
           }
+          return this.assertLegalChar("" + val || "");
+        };
+        XMLStringifier2.prototype.dtdSysID = function(val) {
+          if (this.options.noValidation) {
+            return val;
+          }
+          return this.assertLegalChar("" + val || "");
+        };
+        XMLStringifier2.prototype.dtdElementValue = function(val) {
+          if (this.options.noValidation) {
+            return val;
+          }
+          return this.assertLegalChar("" + val || "");
+        };
+        XMLStringifier2.prototype.dtdAttType = function(val) {
+          if (this.options.noValidation) {
+            return val;
+          }
+          return this.assertLegalChar("" + val || "");
+        };
+        XMLStringifier2.prototype.dtdAttDefault = function(val) {
+          if (this.options.noValidation) {
+            return val;
+          }
+          return this.assertLegalChar("" + val || "");
         };
         XMLStringifier2.prototype.dtdEntityValue = function(val) {
-          return "" + val || "";
+          if (this.options.noValidation) {
+            return val;
+          }
+          return this.assertLegalChar("" + val || "");
         };
         XMLStringifier2.prototype.dtdNData = function(val) {
-          return "" + val || "";
+          if (this.options.noValidation) {
+            return val;
+          }
+          return this.assertLegalChar("" + val || "");
         };
         XMLStringifier2.prototype.convertAttKey = "@";
         XMLStringifier2.prototype.convertPIKey = "?";
@@ -17443,21 +19062,50 @@ var require_XMLStringifier = __commonJS({
         XMLStringifier2.prototype.convertCommentKey = "#comment";
         XMLStringifier2.prototype.convertRawKey = "#raw";
         XMLStringifier2.prototype.assertLegalChar = function(str) {
-          var res;
-          res = str.match(/[\0\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/);
-          if (res) {
-            throw new Error("Invalid character in string: " + str + " at index " + res.index);
+          var regex, res;
+          if (this.options.noValidation) {
+            return str;
+          }
+          regex = "";
+          if (this.options.version === "1.0") {
+            regex = /[\0-\x08\x0B\f\x0E-\x1F\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/;
+            if (res = str.match(regex)) {
+              throw new Error("Invalid character in string: " + str + " at index " + res.index);
+            }
+          } else if (this.options.version === "1.1") {
+            regex = /[\0\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/;
+            if (res = str.match(regex)) {
+              throw new Error("Invalid character in string: " + str + " at index " + res.index);
+            }
           }
           return str;
         };
-        XMLStringifier2.prototype.elEscape = function(str) {
+        XMLStringifier2.prototype.assertLegalName = function(str) {
+          var regex;
+          if (this.options.noValidation) {
+            return str;
+          }
+          this.assertLegalChar(str);
+          regex = /^([:A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]|[\uD800-\uDB7F][\uDC00-\uDFFF])([\x2D\.0-:A-Z_a-z\xB7\xC0-\xD6\xD8-\xF6\xF8-\u037D\u037F-\u1FFF\u200C\u200D\u203F\u2040\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]|[\uD800-\uDB7F][\uDC00-\uDFFF])*$/;
+          if (!str.match(regex)) {
+            throw new Error("Invalid character in name");
+          }
+          return str;
+        };
+        XMLStringifier2.prototype.textEscape = function(str) {
           var ampregex;
-          ampregex = this.noDoubleEncoding ? /(?!&\S+;)&/g : /&/g;
+          if (this.options.noValidation) {
+            return str;
+          }
+          ampregex = this.options.noDoubleEncoding ? /(?!&\S+;)&/g : /&/g;
           return str.replace(ampregex, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\r/g, "&#xD;");
         };
         XMLStringifier2.prototype.attEscape = function(str) {
           var ampregex;
-          ampregex = this.noDoubleEncoding ? /(?!&\S+;)&/g : /&/g;
+          if (this.options.noValidation) {
+            return str;
+          }
+          ampregex = this.options.noDoubleEncoding ? /(?!&\S+;)&/g : /&/g;
           return str.replace(ampregex, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;").replace(/\t/g, "&#x9;").replace(/\n/g, "&#xA;").replace(/\r/g, "&#xD;");
         };
         return XMLStringifier2;
@@ -17466,113 +19114,27 @@ var require_XMLStringifier = __commonJS({
   }
 });
 
-// node_modules/xmlbuilder/lib/XMLWriterBase.js
-var require_XMLWriterBase = __commonJS({
-  "node_modules/xmlbuilder/lib/XMLWriterBase.js"(exports, module2) {
+// node_modules/xmlbuilder/lib/WriterState.js
+var require_WriterState = __commonJS({
+  "node_modules/xmlbuilder/lib/WriterState.js"(exports, module2) {
     (function() {
-      var XMLWriterBase, hasProp = {}.hasOwnProperty;
-      module2.exports = XMLWriterBase = function() {
-        function XMLWriterBase2(options) {
-          var key, ref, ref1, ref2, ref3, ref4, ref5, ref6, value;
-          options || (options = {});
-          this.pretty = options.pretty || false;
-          this.allowEmpty = (ref = options.allowEmpty) != null ? ref : false;
-          if (this.pretty) {
-            this.indent = (ref1 = options.indent) != null ? ref1 : "  ";
-            this.newline = (ref2 = options.newline) != null ? ref2 : "\n";
-            this.offset = (ref3 = options.offset) != null ? ref3 : 0;
-            this.dontprettytextnodes = (ref4 = options.dontprettytextnodes) != null ? ref4 : 0;
-          } else {
-            this.indent = "";
-            this.newline = "";
-            this.offset = 0;
-            this.dontprettytextnodes = 0;
-          }
-          this.spacebeforeslash = (ref5 = options.spacebeforeslash) != null ? ref5 : "";
-          if (this.spacebeforeslash === true) {
-            this.spacebeforeslash = " ";
-          }
-          this.newlinedefault = this.newline;
-          this.prettydefault = this.pretty;
-          ref6 = options.writer || {};
-          for (key in ref6) {
-            if (!hasProp.call(ref6, key))
-              continue;
-            value = ref6[key];
-            this[key] = value;
-          }
-        }
-        XMLWriterBase2.prototype.set = function(options) {
-          var key, ref, value;
-          options || (options = {});
-          if ("pretty" in options) {
-            this.pretty = options.pretty;
-          }
-          if ("allowEmpty" in options) {
-            this.allowEmpty = options.allowEmpty;
-          }
-          if (this.pretty) {
-            this.indent = "indent" in options ? options.indent : "  ";
-            this.newline = "newline" in options ? options.newline : "\n";
-            this.offset = "offset" in options ? options.offset : 0;
-            this.dontprettytextnodes = "dontprettytextnodes" in options ? options.dontprettytextnodes : 0;
-          } else {
-            this.indent = "";
-            this.newline = "";
-            this.offset = 0;
-            this.dontprettytextnodes = 0;
-          }
-          this.spacebeforeslash = "spacebeforeslash" in options ? options.spacebeforeslash : "";
-          if (this.spacebeforeslash === true) {
-            this.spacebeforeslash = " ";
-          }
-          this.newlinedefault = this.newline;
-          this.prettydefault = this.pretty;
-          ref = options.writer || {};
-          for (key in ref) {
-            if (!hasProp.call(ref, key))
-              continue;
-            value = ref[key];
-            this[key] = value;
-          }
-          return this;
-        };
-        XMLWriterBase2.prototype.space = function(level) {
-          var indent;
-          if (this.pretty) {
-            indent = (level || 0) + this.offset + 1;
-            if (indent > 0) {
-              return new Array(indent).join(this.indent);
-            } else {
-              return "";
-            }
-          } else {
-            return "";
-          }
-        };
-        return XMLWriterBase2;
-      }();
+      module2.exports = {
+        None: 0,
+        OpenTag: 1,
+        InsideTag: 2,
+        CloseTag: 3
+      };
     }).call(exports);
   }
 });
 
-// node_modules/xmlbuilder/lib/XMLStringWriter.js
-var require_XMLStringWriter = __commonJS({
-  "node_modules/xmlbuilder/lib/XMLStringWriter.js"(exports, module2) {
+// node_modules/xmlbuilder/lib/XMLWriterBase.js
+var require_XMLWriterBase = __commonJS({
+  "node_modules/xmlbuilder/lib/XMLWriterBase.js"(exports, module2) {
     (function() {
-      var XMLCData, XMLComment, XMLDTDAttList, XMLDTDElement, XMLDTDEntity, XMLDTDNotation, XMLDeclaration, XMLDocType, XMLElement, XMLProcessingInstruction, XMLRaw, XMLStringWriter, XMLText, XMLWriterBase, extend = function(child, parent) {
-        for (var key in parent) {
-          if (hasProp.call(parent, key))
-            child[key] = parent[key];
-        }
-        function ctor() {
-          this.constructor = child;
-        }
-        ctor.prototype = parent.prototype;
-        child.prototype = new ctor();
-        child.__super__ = parent.prototype;
-        return child;
-      }, hasProp = {}.hasOwnProperty;
+      var NodeType, WriterState, XMLCData, XMLComment, XMLDTDAttList, XMLDTDElement, XMLDTDEntity, XMLDTDNotation, XMLDeclaration, XMLDocType, XMLDummy, XMLElement, XMLProcessingInstruction, XMLRaw, XMLText, XMLWriterBase, assign, hasProp = {}.hasOwnProperty;
+      assign = require_Utility().assign;
+      NodeType = require_NodeType();
       XMLDeclaration = require_XMLDeclaration();
       XMLDocType = require_XMLDocType();
       XMLCData = require_XMLCData();
@@ -17581,70 +19143,126 @@ var require_XMLStringWriter = __commonJS({
       XMLRaw = require_XMLRaw();
       XMLText = require_XMLText();
       XMLProcessingInstruction = require_XMLProcessingInstruction();
+      XMLDummy = require_XMLDummy();
       XMLDTDAttList = require_XMLDTDAttList();
       XMLDTDElement = require_XMLDTDElement();
       XMLDTDEntity = require_XMLDTDEntity();
       XMLDTDNotation = require_XMLDTDNotation();
-      XMLWriterBase = require_XMLWriterBase();
-      module2.exports = XMLStringWriter = function(superClass) {
-        extend(XMLStringWriter2, superClass);
-        function XMLStringWriter2(options) {
-          XMLStringWriter2.__super__.constructor.call(this, options);
+      WriterState = require_WriterState();
+      module2.exports = XMLWriterBase = function() {
+        function XMLWriterBase2(options) {
+          var key, ref, value;
+          options || (options = {});
+          this.options = options;
+          ref = options.writer || {};
+          for (key in ref) {
+            if (!hasProp.call(ref, key))
+              continue;
+            value = ref[key];
+            this["_" + key] = this[key];
+            this[key] = value;
+          }
         }
-        XMLStringWriter2.prototype.document = function(doc) {
-          var child, i, len, r, ref;
-          this.textispresent = false;
-          r = "";
-          ref = doc.children;
-          for (i = 0, len = ref.length; i < len; i++) {
-            child = ref[i];
-            r += function() {
-              switch (false) {
-                case !(child instanceof XMLDeclaration):
-                  return this.declaration(child);
-                case !(child instanceof XMLDocType):
-                  return this.docType(child);
-                case !(child instanceof XMLComment):
-                  return this.comment(child);
-                case !(child instanceof XMLProcessingInstruction):
-                  return this.processingInstruction(child);
-                default:
-                  return this.element(child, 0);
-              }
-            }.call(this);
+        XMLWriterBase2.prototype.filterOptions = function(options) {
+          var filteredOptions, ref, ref1, ref2, ref3, ref4, ref5, ref6;
+          options || (options = {});
+          options = assign({}, this.options, options);
+          filteredOptions = {
+            writer: this
+          };
+          filteredOptions.pretty = options.pretty || false;
+          filteredOptions.allowEmpty = options.allowEmpty || false;
+          filteredOptions.indent = (ref = options.indent) != null ? ref : "  ";
+          filteredOptions.newline = (ref1 = options.newline) != null ? ref1 : "\n";
+          filteredOptions.offset = (ref2 = options.offset) != null ? ref2 : 0;
+          filteredOptions.dontPrettyTextNodes = (ref3 = (ref4 = options.dontPrettyTextNodes) != null ? ref4 : options.dontprettytextnodes) != null ? ref3 : 0;
+          filteredOptions.spaceBeforeSlash = (ref5 = (ref6 = options.spaceBeforeSlash) != null ? ref6 : options.spacebeforeslash) != null ? ref5 : "";
+          if (filteredOptions.spaceBeforeSlash === true) {
+            filteredOptions.spaceBeforeSlash = " ";
           }
-          if (this.pretty && r.slice(-this.newline.length) === this.newline) {
-            r = r.slice(0, -this.newline.length);
+          filteredOptions.suppressPrettyCount = 0;
+          filteredOptions.user = {};
+          filteredOptions.state = WriterState.None;
+          return filteredOptions;
+        };
+        XMLWriterBase2.prototype.indent = function(node, options, level) {
+          var indentLevel;
+          if (!options.pretty || options.suppressPrettyCount) {
+            return "";
+          } else if (options.pretty) {
+            indentLevel = (level || 0) + options.offset + 1;
+            if (indentLevel > 0) {
+              return new Array(indentLevel).join(options.indent);
+            }
           }
+          return "";
+        };
+        XMLWriterBase2.prototype.endline = function(node, options, level) {
+          if (!options.pretty || options.suppressPrettyCount) {
+            return "";
+          } else {
+            return options.newline;
+          }
+        };
+        XMLWriterBase2.prototype.attribute = function(att, options, level) {
+          var r;
+          this.openAttribute(att, options, level);
+          r = " " + att.name + '="' + att.value + '"';
+          this.closeAttribute(att, options, level);
           return r;
         };
-        XMLStringWriter2.prototype.attribute = function(att) {
-          return " " + att.name + '="' + att.value + '"';
-        };
-        XMLStringWriter2.prototype.cdata = function(node, level) {
-          return this.space(level) + "<![CDATA[" + node.text + "]]>" + this.newline;
-        };
-        XMLStringWriter2.prototype.comment = function(node, level) {
-          return this.space(level) + "<!-- " + node.text + " -->" + this.newline;
-        };
-        XMLStringWriter2.prototype.declaration = function(node, level) {
+        XMLWriterBase2.prototype.cdata = function(node, options, level) {
           var r;
-          r = this.space(level);
-          r += '<?xml version="' + node.version + '"';
+          this.openNode(node, options, level);
+          options.state = WriterState.OpenTag;
+          r = this.indent(node, options, level) + "<![CDATA[";
+          options.state = WriterState.InsideTag;
+          r += node.value;
+          options.state = WriterState.CloseTag;
+          r += "]]>" + this.endline(node, options, level);
+          options.state = WriterState.None;
+          this.closeNode(node, options, level);
+          return r;
+        };
+        XMLWriterBase2.prototype.comment = function(node, options, level) {
+          var r;
+          this.openNode(node, options, level);
+          options.state = WriterState.OpenTag;
+          r = this.indent(node, options, level) + "<!-- ";
+          options.state = WriterState.InsideTag;
+          r += node.value;
+          options.state = WriterState.CloseTag;
+          r += " -->" + this.endline(node, options, level);
+          options.state = WriterState.None;
+          this.closeNode(node, options, level);
+          return r;
+        };
+        XMLWriterBase2.prototype.declaration = function(node, options, level) {
+          var r;
+          this.openNode(node, options, level);
+          options.state = WriterState.OpenTag;
+          r = this.indent(node, options, level) + "<?xml";
+          options.state = WriterState.InsideTag;
+          r += ' version="' + node.version + '"';
           if (node.encoding != null) {
             r += ' encoding="' + node.encoding + '"';
           }
           if (node.standalone != null) {
             r += ' standalone="' + node.standalone + '"';
           }
-          r += this.spacebeforeslash + "?>";
-          r += this.newline;
+          options.state = WriterState.CloseTag;
+          r += options.spaceBeforeSlash + "?>";
+          r += this.endline(node, options, level);
+          options.state = WriterState.None;
+          this.closeNode(node, options, level);
           return r;
         };
-        XMLStringWriter2.prototype.docType = function(node, level) {
+        XMLWriterBase2.prototype.docType = function(node, options, level) {
           var child, i, len, r, ref;
           level || (level = 0);
-          r = this.space(level);
+          this.openNode(node, options, level);
+          options.state = WriterState.OpenTag;
+          r = this.indent(node, options, level);
           r += "<!DOCTYPE " + node.root().name;
           if (node.pubID && node.sysID) {
             r += ' PUBLIC "' + node.pubID + '" "' + node.sysID + '"';
@@ -17653,154 +19271,204 @@ var require_XMLStringWriter = __commonJS({
           }
           if (node.children.length > 0) {
             r += " [";
-            r += this.newline;
+            r += this.endline(node, options, level);
+            options.state = WriterState.InsideTag;
             ref = node.children;
             for (i = 0, len = ref.length; i < len; i++) {
               child = ref[i];
-              r += function() {
-                switch (false) {
-                  case !(child instanceof XMLDTDAttList):
-                    return this.dtdAttList(child, level + 1);
-                  case !(child instanceof XMLDTDElement):
-                    return this.dtdElement(child, level + 1);
-                  case !(child instanceof XMLDTDEntity):
-                    return this.dtdEntity(child, level + 1);
-                  case !(child instanceof XMLDTDNotation):
-                    return this.dtdNotation(child, level + 1);
-                  case !(child instanceof XMLCData):
-                    return this.cdata(child, level + 1);
-                  case !(child instanceof XMLComment):
-                    return this.comment(child, level + 1);
-                  case !(child instanceof XMLProcessingInstruction):
-                    return this.processingInstruction(child, level + 1);
-                  default:
-                    throw new Error("Unknown DTD node type: " + child.constructor.name);
-                }
-              }.call(this);
+              r += this.writeChildNode(child, options, level + 1);
             }
+            options.state = WriterState.CloseTag;
             r += "]";
           }
-          r += this.spacebeforeslash + ">";
-          r += this.newline;
+          options.state = WriterState.CloseTag;
+          r += options.spaceBeforeSlash + ">";
+          r += this.endline(node, options, level);
+          options.state = WriterState.None;
+          this.closeNode(node, options, level);
           return r;
         };
-        XMLStringWriter2.prototype.element = function(node, level) {
-          var att, child, i, j, len, len1, name, r, ref, ref1, ref2, space, textispresentwasset;
+        XMLWriterBase2.prototype.element = function(node, options, level) {
+          var att, child, childNodeCount, firstChildNode, i, j, len, len1, name, prettySuppressed, r, ref, ref1, ref2;
           level || (level = 0);
-          textispresentwasset = false;
-          if (this.textispresent) {
-            this.newline = "";
-            this.pretty = false;
-          } else {
-            this.newline = this.newlinedefault;
-            this.pretty = this.prettydefault;
-          }
-          space = this.space(level);
+          prettySuppressed = false;
           r = "";
-          r += space + "<" + node.name;
-          ref = node.attributes;
+          this.openNode(node, options, level);
+          options.state = WriterState.OpenTag;
+          r += this.indent(node, options, level) + "<" + node.name;
+          ref = node.attribs;
           for (name in ref) {
             if (!hasProp.call(ref, name))
               continue;
             att = ref[name];
-            r += this.attribute(att);
+            r += this.attribute(att, options, level);
           }
-          if (node.children.length === 0 || node.children.every(function(e) {
-            return e.value === "";
+          childNodeCount = node.children.length;
+          firstChildNode = childNodeCount === 0 ? null : node.children[0];
+          if (childNodeCount === 0 || node.children.every(function(e) {
+            return (e.type === NodeType.Text || e.type === NodeType.Raw) && e.value === "";
           })) {
-            if (this.allowEmpty) {
-              r += "></" + node.name + ">" + this.newline;
+            if (options.allowEmpty) {
+              r += ">";
+              options.state = WriterState.CloseTag;
+              r += "</" + node.name + ">" + this.endline(node, options, level);
             } else {
-              r += this.spacebeforeslash + "/>" + this.newline;
+              options.state = WriterState.CloseTag;
+              r += options.spaceBeforeSlash + "/>" + this.endline(node, options, level);
             }
-          } else if (this.pretty && node.children.length === 1 && node.children[0].value != null) {
+          } else if (options.pretty && childNodeCount === 1 && (firstChildNode.type === NodeType.Text || firstChildNode.type === NodeType.Raw) && firstChildNode.value != null) {
             r += ">";
-            r += node.children[0].value;
-            r += "</" + node.name + ">" + this.newline;
+            options.state = WriterState.InsideTag;
+            options.suppressPrettyCount++;
+            prettySuppressed = true;
+            r += this.writeChildNode(firstChildNode, options, level + 1);
+            options.suppressPrettyCount--;
+            prettySuppressed = false;
+            options.state = WriterState.CloseTag;
+            r += "</" + node.name + ">" + this.endline(node, options, level);
           } else {
-            if (this.dontprettytextnodes) {
+            if (options.dontPrettyTextNodes) {
               ref1 = node.children;
               for (i = 0, len = ref1.length; i < len; i++) {
                 child = ref1[i];
-                if (child.value != null) {
-                  this.textispresent++;
-                  textispresentwasset = true;
+                if ((child.type === NodeType.Text || child.type === NodeType.Raw) && child.value != null) {
+                  options.suppressPrettyCount++;
+                  prettySuppressed = true;
                   break;
                 }
               }
             }
-            if (this.textispresent) {
-              this.newline = "";
-              this.pretty = false;
-              space = this.space(level);
-            }
-            r += ">" + this.newline;
+            r += ">" + this.endline(node, options, level);
+            options.state = WriterState.InsideTag;
             ref2 = node.children;
             for (j = 0, len1 = ref2.length; j < len1; j++) {
               child = ref2[j];
-              r += function() {
-                switch (false) {
-                  case !(child instanceof XMLCData):
-                    return this.cdata(child, level + 1);
-                  case !(child instanceof XMLComment):
-                    return this.comment(child, level + 1);
-                  case !(child instanceof XMLElement):
-                    return this.element(child, level + 1);
-                  case !(child instanceof XMLRaw):
-                    return this.raw(child, level + 1);
-                  case !(child instanceof XMLText):
-                    return this.text(child, level + 1);
-                  case !(child instanceof XMLProcessingInstruction):
-                    return this.processingInstruction(child, level + 1);
-                  default:
-                    throw new Error("Unknown XML node type: " + child.constructor.name);
-                }
-              }.call(this);
+              r += this.writeChildNode(child, options, level + 1);
             }
-            if (textispresentwasset) {
-              this.textispresent--;
+            options.state = WriterState.CloseTag;
+            r += this.indent(node, options, level) + "</" + node.name + ">";
+            if (prettySuppressed) {
+              options.suppressPrettyCount--;
             }
-            if (!this.textispresent) {
-              this.newline = this.newlinedefault;
-              this.pretty = this.prettydefault;
-            }
-            r += space + "</" + node.name + ">" + this.newline;
+            r += this.endline(node, options, level);
+            options.state = WriterState.None;
           }
+          this.closeNode(node, options, level);
           return r;
         };
-        XMLStringWriter2.prototype.processingInstruction = function(node, level) {
+        XMLWriterBase2.prototype.writeChildNode = function(node, options, level) {
+          switch (node.type) {
+            case NodeType.CData:
+              return this.cdata(node, options, level);
+            case NodeType.Comment:
+              return this.comment(node, options, level);
+            case NodeType.Element:
+              return this.element(node, options, level);
+            case NodeType.Raw:
+              return this.raw(node, options, level);
+            case NodeType.Text:
+              return this.text(node, options, level);
+            case NodeType.ProcessingInstruction:
+              return this.processingInstruction(node, options, level);
+            case NodeType.Dummy:
+              return "";
+            case NodeType.Declaration:
+              return this.declaration(node, options, level);
+            case NodeType.DocType:
+              return this.docType(node, options, level);
+            case NodeType.AttributeDeclaration:
+              return this.dtdAttList(node, options, level);
+            case NodeType.ElementDeclaration:
+              return this.dtdElement(node, options, level);
+            case NodeType.EntityDeclaration:
+              return this.dtdEntity(node, options, level);
+            case NodeType.NotationDeclaration:
+              return this.dtdNotation(node, options, level);
+            default:
+              throw new Error("Unknown XML node type: " + node.constructor.name);
+          }
+        };
+        XMLWriterBase2.prototype.processingInstruction = function(node, options, level) {
           var r;
-          r = this.space(level) + "<?" + node.target;
+          this.openNode(node, options, level);
+          options.state = WriterState.OpenTag;
+          r = this.indent(node, options, level) + "<?";
+          options.state = WriterState.InsideTag;
+          r += node.target;
           if (node.value) {
             r += " " + node.value;
           }
-          r += this.spacebeforeslash + "?>" + this.newline;
+          options.state = WriterState.CloseTag;
+          r += options.spaceBeforeSlash + "?>";
+          r += this.endline(node, options, level);
+          options.state = WriterState.None;
+          this.closeNode(node, options, level);
           return r;
         };
-        XMLStringWriter2.prototype.raw = function(node, level) {
-          return this.space(level) + node.value + this.newline;
-        };
-        XMLStringWriter2.prototype.text = function(node, level) {
-          return this.space(level) + node.value + this.newline;
-        };
-        XMLStringWriter2.prototype.dtdAttList = function(node, level) {
+        XMLWriterBase2.prototype.raw = function(node, options, level) {
           var r;
-          r = this.space(level) + "<!ATTLIST " + node.elementName + " " + node.attributeName + " " + node.attributeType;
+          this.openNode(node, options, level);
+          options.state = WriterState.OpenTag;
+          r = this.indent(node, options, level);
+          options.state = WriterState.InsideTag;
+          r += node.value;
+          options.state = WriterState.CloseTag;
+          r += this.endline(node, options, level);
+          options.state = WriterState.None;
+          this.closeNode(node, options, level);
+          return r;
+        };
+        XMLWriterBase2.prototype.text = function(node, options, level) {
+          var r;
+          this.openNode(node, options, level);
+          options.state = WriterState.OpenTag;
+          r = this.indent(node, options, level);
+          options.state = WriterState.InsideTag;
+          r += node.value;
+          options.state = WriterState.CloseTag;
+          r += this.endline(node, options, level);
+          options.state = WriterState.None;
+          this.closeNode(node, options, level);
+          return r;
+        };
+        XMLWriterBase2.prototype.dtdAttList = function(node, options, level) {
+          var r;
+          this.openNode(node, options, level);
+          options.state = WriterState.OpenTag;
+          r = this.indent(node, options, level) + "<!ATTLIST";
+          options.state = WriterState.InsideTag;
+          r += " " + node.elementName + " " + node.attributeName + " " + node.attributeType;
           if (node.defaultValueType !== "#DEFAULT") {
             r += " " + node.defaultValueType;
           }
           if (node.defaultValue) {
             r += ' "' + node.defaultValue + '"';
           }
-          r += this.spacebeforeslash + ">" + this.newline;
+          options.state = WriterState.CloseTag;
+          r += options.spaceBeforeSlash + ">" + this.endline(node, options, level);
+          options.state = WriterState.None;
+          this.closeNode(node, options, level);
           return r;
         };
-        XMLStringWriter2.prototype.dtdElement = function(node, level) {
-          return this.space(level) + "<!ELEMENT " + node.name + " " + node.value + this.spacebeforeslash + ">" + this.newline;
-        };
-        XMLStringWriter2.prototype.dtdEntity = function(node, level) {
+        XMLWriterBase2.prototype.dtdElement = function(node, options, level) {
           var r;
-          r = this.space(level) + "<!ENTITY";
+          this.openNode(node, options, level);
+          options.state = WriterState.OpenTag;
+          r = this.indent(node, options, level) + "<!ELEMENT";
+          options.state = WriterState.InsideTag;
+          r += " " + node.name + " " + node.value;
+          options.state = WriterState.CloseTag;
+          r += options.spaceBeforeSlash + ">" + this.endline(node, options, level);
+          options.state = WriterState.None;
+          this.closeNode(node, options, level);
+          return r;
+        };
+        XMLWriterBase2.prototype.dtdEntity = function(node, options, level) {
+          var r;
+          this.openNode(node, options, level);
+          options.state = WriterState.OpenTag;
+          r = this.indent(node, options, level) + "<!ENTITY";
+          options.state = WriterState.InsideTag;
           if (node.pe) {
             r += " %";
           }
@@ -17817,12 +19485,19 @@ var require_XMLStringWriter = __commonJS({
               r += " NDATA " + node.nData;
             }
           }
-          r += this.spacebeforeslash + ">" + this.newline;
+          options.state = WriterState.CloseTag;
+          r += options.spaceBeforeSlash + ">" + this.endline(node, options, level);
+          options.state = WriterState.None;
+          this.closeNode(node, options, level);
           return r;
         };
-        XMLStringWriter2.prototype.dtdNotation = function(node, level) {
+        XMLWriterBase2.prototype.dtdNotation = function(node, options, level) {
           var r;
-          r = this.space(level) + "<!NOTATION " + node.name;
+          this.openNode(node, options, level);
+          options.state = WriterState.OpenTag;
+          r = this.indent(node, options, level) + "<!NOTATION";
+          options.state = WriterState.InsideTag;
+          r += " " + node.name;
           if (node.pubID && node.sysID) {
             r += ' PUBLIC "' + node.pubID + '" "' + node.sysID + '"';
           } else if (node.pubID) {
@@ -17830,42 +19505,62 @@ var require_XMLStringWriter = __commonJS({
           } else if (node.sysID) {
             r += ' SYSTEM "' + node.sysID + '"';
           }
-          r += this.spacebeforeslash + ">" + this.newline;
+          options.state = WriterState.CloseTag;
+          r += options.spaceBeforeSlash + ">" + this.endline(node, options, level);
+          options.state = WriterState.None;
+          this.closeNode(node, options, level);
           return r;
         };
-        XMLStringWriter2.prototype.openNode = function(node, level) {
-          var att, name, r, ref;
-          level || (level = 0);
-          if (node instanceof XMLElement) {
-            r = this.space(level) + "<" + node.name;
-            ref = node.attributes;
-            for (name in ref) {
-              if (!hasProp.call(ref, name))
-                continue;
-              att = ref[name];
-              r += this.attribute(att);
-            }
-            r += (node.children ? ">" : "/>") + this.newline;
-            return r;
-          } else {
-            r = this.space(level) + "<!DOCTYPE " + node.rootNodeName;
-            if (node.pubID && node.sysID) {
-              r += ' PUBLIC "' + node.pubID + '" "' + node.sysID + '"';
-            } else if (node.sysID) {
-              r += ' SYSTEM "' + node.sysID + '"';
-            }
-            r += (node.children ? " [" : ">") + this.newline;
-            return r;
-          }
+        XMLWriterBase2.prototype.openNode = function(node, options, level) {
         };
-        XMLStringWriter2.prototype.closeNode = function(node, level) {
-          level || (level = 0);
-          switch (false) {
-            case !(node instanceof XMLElement):
-              return this.space(level) + "</" + node.name + ">" + this.newline;
-            case !(node instanceof XMLDocType):
-              return this.space(level) + "]>" + this.newline;
+        XMLWriterBase2.prototype.closeNode = function(node, options, level) {
+        };
+        XMLWriterBase2.prototype.openAttribute = function(att, options, level) {
+        };
+        XMLWriterBase2.prototype.closeAttribute = function(att, options, level) {
+        };
+        return XMLWriterBase2;
+      }();
+    }).call(exports);
+  }
+});
+
+// node_modules/xmlbuilder/lib/XMLStringWriter.js
+var require_XMLStringWriter = __commonJS({
+  "node_modules/xmlbuilder/lib/XMLStringWriter.js"(exports, module2) {
+    (function() {
+      var XMLStringWriter, XMLWriterBase, extend = function(child, parent) {
+        for (var key in parent) {
+          if (hasProp.call(parent, key))
+            child[key] = parent[key];
+        }
+        function ctor() {
+          this.constructor = child;
+        }
+        ctor.prototype = parent.prototype;
+        child.prototype = new ctor();
+        child.__super__ = parent.prototype;
+        return child;
+      }, hasProp = {}.hasOwnProperty;
+      XMLWriterBase = require_XMLWriterBase();
+      module2.exports = XMLStringWriter = function(superClass) {
+        extend(XMLStringWriter2, superClass);
+        function XMLStringWriter2(options) {
+          XMLStringWriter2.__super__.constructor.call(this, options);
+        }
+        XMLStringWriter2.prototype.document = function(doc, options) {
+          var child, i, len, r, ref;
+          options = this.filterOptions(options);
+          r = "";
+          ref = doc.children;
+          for (i = 0, len = ref.length; i < len; i++) {
+            child = ref[i];
+            r += this.writeChildNode(child, options, 0);
           }
+          if (options.pretty && r.slice(-options.newline.length) === options.newline) {
+            r = r.slice(0, -options.newline.length);
+          }
+          return r;
         };
         return XMLStringWriter2;
       }(XMLWriterBase);
@@ -17877,7 +19572,7 @@ var require_XMLStringWriter = __commonJS({
 var require_XMLDocument = __commonJS({
   "node_modules/xmlbuilder/lib/XMLDocument.js"(exports, module2) {
     (function() {
-      var XMLDocument, XMLNode, XMLStringWriter, XMLStringifier, isPlainObject, extend = function(child, parent) {
+      var NodeType, XMLDOMConfiguration, XMLDOMImplementation, XMLDocument, XMLNode, XMLStringWriter, XMLStringifier, isPlainObject, extend = function(child, parent) {
         for (var key in parent) {
           if (hasProp.call(parent, key))
             child[key] = parent[key];
@@ -17891,33 +19586,189 @@ var require_XMLDocument = __commonJS({
         return child;
       }, hasProp = {}.hasOwnProperty;
       isPlainObject = require_Utility().isPlainObject;
+      XMLDOMImplementation = require_XMLDOMImplementation();
+      XMLDOMConfiguration = require_XMLDOMConfiguration();
       XMLNode = require_XMLNode();
+      NodeType = require_NodeType();
       XMLStringifier = require_XMLStringifier();
       XMLStringWriter = require_XMLStringWriter();
       module2.exports = XMLDocument = function(superClass) {
         extend(XMLDocument2, superClass);
         function XMLDocument2(options) {
           XMLDocument2.__super__.constructor.call(this, null);
+          this.name = "#document";
+          this.type = NodeType.Document;
+          this.documentURI = null;
+          this.domConfig = new XMLDOMConfiguration();
           options || (options = {});
           if (!options.writer) {
             options.writer = new XMLStringWriter();
           }
           this.options = options;
           this.stringify = new XMLStringifier(options);
-          this.isDocument = true;
         }
+        Object.defineProperty(XMLDocument2.prototype, "implementation", {
+          value: new XMLDOMImplementation()
+        });
+        Object.defineProperty(XMLDocument2.prototype, "doctype", {
+          get: function() {
+            var child, i, len, ref;
+            ref = this.children;
+            for (i = 0, len = ref.length; i < len; i++) {
+              child = ref[i];
+              if (child.type === NodeType.DocType) {
+                return child;
+              }
+            }
+            return null;
+          }
+        });
+        Object.defineProperty(XMLDocument2.prototype, "documentElement", {
+          get: function() {
+            return this.rootObject || null;
+          }
+        });
+        Object.defineProperty(XMLDocument2.prototype, "inputEncoding", {
+          get: function() {
+            return null;
+          }
+        });
+        Object.defineProperty(XMLDocument2.prototype, "strictErrorChecking", {
+          get: function() {
+            return false;
+          }
+        });
+        Object.defineProperty(XMLDocument2.prototype, "xmlEncoding", {
+          get: function() {
+            if (this.children.length !== 0 && this.children[0].type === NodeType.Declaration) {
+              return this.children[0].encoding;
+            } else {
+              return null;
+            }
+          }
+        });
+        Object.defineProperty(XMLDocument2.prototype, "xmlStandalone", {
+          get: function() {
+            if (this.children.length !== 0 && this.children[0].type === NodeType.Declaration) {
+              return this.children[0].standalone === "yes";
+            } else {
+              return false;
+            }
+          }
+        });
+        Object.defineProperty(XMLDocument2.prototype, "xmlVersion", {
+          get: function() {
+            if (this.children.length !== 0 && this.children[0].type === NodeType.Declaration) {
+              return this.children[0].version;
+            } else {
+              return "1.0";
+            }
+          }
+        });
+        Object.defineProperty(XMLDocument2.prototype, "URL", {
+          get: function() {
+            return this.documentURI;
+          }
+        });
+        Object.defineProperty(XMLDocument2.prototype, "origin", {
+          get: function() {
+            return null;
+          }
+        });
+        Object.defineProperty(XMLDocument2.prototype, "compatMode", {
+          get: function() {
+            return null;
+          }
+        });
+        Object.defineProperty(XMLDocument2.prototype, "characterSet", {
+          get: function() {
+            return null;
+          }
+        });
+        Object.defineProperty(XMLDocument2.prototype, "contentType", {
+          get: function() {
+            return null;
+          }
+        });
         XMLDocument2.prototype.end = function(writer) {
           var writerOptions;
+          writerOptions = {};
           if (!writer) {
             writer = this.options.writer;
           } else if (isPlainObject(writer)) {
             writerOptions = writer;
-            writer = this.options.writer.set(writerOptions);
+            writer = this.options.writer;
           }
-          return writer.document(this);
+          return writer.document(this, writer.filterOptions(writerOptions));
         };
         XMLDocument2.prototype.toString = function(options) {
-          return this.options.writer.set(options).document(this);
+          return this.options.writer.document(this, this.options.writer.filterOptions(options));
+        };
+        XMLDocument2.prototype.createElement = function(tagName) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.createDocumentFragment = function() {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.createTextNode = function(data) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.createComment = function(data) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.createCDATASection = function(data) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.createProcessingInstruction = function(target, data) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.createAttribute = function(name) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.createEntityReference = function(name) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.getElementsByTagName = function(tagname) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.importNode = function(importedNode, deep) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.createElementNS = function(namespaceURI, qualifiedName) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.createAttributeNS = function(namespaceURI, qualifiedName) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.getElementsByTagNameNS = function(namespaceURI, localName) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.getElementById = function(elementId) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.adoptNode = function(source) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.normalizeDocument = function() {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.renameNode = function(node, namespaceURI, qualifiedName) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.getElementsByClassName = function(classNames) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.createEvent = function(eventInterface) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.createRange = function() {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.createNodeIterator = function(root, whatToShow, filter) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
+        };
+        XMLDocument2.prototype.createTreeWalker = function(root, whatToShow, filter) {
+          throw new Error("This DOM method is not implemented." + this.debugInfo());
         };
         return XMLDocument2;
       }(XMLNode);
@@ -17929,8 +19780,10 @@ var require_XMLDocument = __commonJS({
 var require_XMLDocumentCB = __commonJS({
   "node_modules/xmlbuilder/lib/XMLDocumentCB.js"(exports, module2) {
     (function() {
-      var XMLAttribute, XMLCData, XMLComment, XMLDTDAttList, XMLDTDElement, XMLDTDEntity, XMLDTDNotation, XMLDeclaration, XMLDocType, XMLDocumentCB, XMLElement, XMLProcessingInstruction, XMLRaw, XMLStringWriter, XMLStringifier, XMLText, isFunction, isObject, isPlainObject, ref, hasProp = {}.hasOwnProperty;
-      ref = require_Utility(), isObject = ref.isObject, isFunction = ref.isFunction, isPlainObject = ref.isPlainObject;
+      var NodeType, WriterState, XMLAttribute, XMLCData, XMLComment, XMLDTDAttList, XMLDTDElement, XMLDTDEntity, XMLDTDNotation, XMLDeclaration, XMLDocType, XMLDocument, XMLDocumentCB, XMLElement, XMLProcessingInstruction, XMLRaw, XMLStringWriter, XMLStringifier, XMLText, getValue, isFunction, isObject, isPlainObject, ref, hasProp = {}.hasOwnProperty;
+      ref = require_Utility(), isObject = ref.isObject, isFunction = ref.isFunction, isPlainObject = ref.isPlainObject, getValue = ref.getValue;
+      NodeType = require_NodeType();
+      XMLDocument = require_XMLDocument();
       XMLElement = require_XMLElement();
       XMLCData = require_XMLCData();
       XMLComment = require_XMLComment();
@@ -17946,18 +19799,23 @@ var require_XMLDocumentCB = __commonJS({
       XMLAttribute = require_XMLAttribute();
       XMLStringifier = require_XMLStringifier();
       XMLStringWriter = require_XMLStringWriter();
+      WriterState = require_WriterState();
       module2.exports = XMLDocumentCB = function() {
         function XMLDocumentCB2(options, onData, onEnd) {
           var writerOptions;
+          this.name = "?xml";
+          this.type = NodeType.Document;
           options || (options = {});
+          writerOptions = {};
           if (!options.writer) {
-            options.writer = new XMLStringWriter(options);
+            options.writer = new XMLStringWriter();
           } else if (isPlainObject(options.writer)) {
             writerOptions = options.writer;
-            options.writer = new XMLStringWriter(writerOptions);
+            options.writer = new XMLStringWriter();
           }
           this.options = options;
           this.writer = options.writer;
+          this.writerOptions = this.writer.filterOptions(writerOptions);
           this.stringify = new XMLStringifier(options);
           this.onDataCallback = onData || function() {
           };
@@ -17970,20 +19828,68 @@ var require_XMLDocumentCB = __commonJS({
           this.documentCompleted = false;
           this.root = null;
         }
+        XMLDocumentCB2.prototype.createChildNode = function(node) {
+          var att, attName, attributes, child, i, len, ref1, ref2;
+          switch (node.type) {
+            case NodeType.CData:
+              this.cdata(node.value);
+              break;
+            case NodeType.Comment:
+              this.comment(node.value);
+              break;
+            case NodeType.Element:
+              attributes = {};
+              ref1 = node.attribs;
+              for (attName in ref1) {
+                if (!hasProp.call(ref1, attName))
+                  continue;
+                att = ref1[attName];
+                attributes[attName] = att.value;
+              }
+              this.node(node.name, attributes);
+              break;
+            case NodeType.Dummy:
+              this.dummy();
+              break;
+            case NodeType.Raw:
+              this.raw(node.value);
+              break;
+            case NodeType.Text:
+              this.text(node.value);
+              break;
+            case NodeType.ProcessingInstruction:
+              this.instruction(node.target, node.value);
+              break;
+            default:
+              throw new Error("This XML node type is not supported in a JS object: " + node.constructor.name);
+          }
+          ref2 = node.children;
+          for (i = 0, len = ref2.length; i < len; i++) {
+            child = ref2[i];
+            this.createChildNode(child);
+            if (child.type === NodeType.Element) {
+              this.up();
+            }
+          }
+          return this;
+        };
+        XMLDocumentCB2.prototype.dummy = function() {
+          return this;
+        };
         XMLDocumentCB2.prototype.node = function(name, attributes, text) {
           var ref1;
           if (name == null) {
-            throw new Error("Missing node name");
+            throw new Error("Missing node name.");
           }
           if (this.root && this.currentLevel === -1) {
-            throw new Error("Document can only have one root node");
+            throw new Error("Document can only have one root node. " + this.debugInfo(name));
           }
           this.openCurrent();
-          name = name.valueOf();
+          name = getValue(name);
           if (attributes == null) {
             attributes = {};
           }
-          attributes = attributes.valueOf();
+          attributes = getValue(attributes);
           if (!isObject(attributes)) {
             ref1 = [attributes, text], text = ref1[0], attributes = ref1[1];
           }
@@ -17997,19 +19903,37 @@ var require_XMLDocumentCB = __commonJS({
           return this;
         };
         XMLDocumentCB2.prototype.element = function(name, attributes, text) {
-          if (this.currentNode && this.currentNode instanceof XMLDocType) {
-            return this.dtdElement.apply(this, arguments);
+          var child, i, len, oldValidationFlag, ref1, root;
+          if (this.currentNode && this.currentNode.type === NodeType.DocType) {
+            this.dtdElement.apply(this, arguments);
           } else {
-            return this.node(name, attributes, text);
+            if (Array.isArray(name) || isObject(name) || isFunction(name)) {
+              oldValidationFlag = this.options.noValidation;
+              this.options.noValidation = true;
+              root = new XMLDocument(this.options).element("TEMP_ROOT");
+              root.element(name);
+              this.options.noValidation = oldValidationFlag;
+              ref1 = root.children;
+              for (i = 0, len = ref1.length; i < len; i++) {
+                child = ref1[i];
+                this.createChildNode(child);
+                if (child.type === NodeType.Element) {
+                  this.up();
+                }
+              }
+            } else {
+              this.node(name, attributes, text);
+            }
           }
+          return this;
         };
         XMLDocumentCB2.prototype.attribute = function(name, value) {
           var attName, attValue;
           if (!this.currentNode || this.currentNode.children) {
-            throw new Error("att() can only be used immediately after an ele() call in callback mode");
+            throw new Error("att() can only be used immediately after an ele() call in callback mode. " + this.debugInfo(name));
           }
           if (name != null) {
-            name = name.valueOf();
+            name = getValue(name);
           }
           if (isObject(name)) {
             for (attName in name) {
@@ -18022,8 +19946,10 @@ var require_XMLDocumentCB = __commonJS({
             if (isFunction(value)) {
               value = value.apply();
             }
-            if (!this.options.skipNullAttributes || value != null) {
-              this.currentNode.attributes[name] = new XMLAttribute(this, name, value);
+            if (this.options.keepNullAttributes && value == null) {
+              this.currentNode.attribs[name] = new XMLAttribute(this, name, "");
+            } else if (value != null) {
+              this.currentNode.attribs[name] = new XMLAttribute(this, name, value);
             }
           }
           return this;
@@ -18032,38 +19958,38 @@ var require_XMLDocumentCB = __commonJS({
           var node;
           this.openCurrent();
           node = new XMLText(this, value);
-          this.onData(this.writer.text(node, this.currentLevel + 1));
+          this.onData(this.writer.text(node, this.writerOptions, this.currentLevel + 1), this.currentLevel + 1);
           return this;
         };
         XMLDocumentCB2.prototype.cdata = function(value) {
           var node;
           this.openCurrent();
           node = new XMLCData(this, value);
-          this.onData(this.writer.cdata(node, this.currentLevel + 1));
+          this.onData(this.writer.cdata(node, this.writerOptions, this.currentLevel + 1), this.currentLevel + 1);
           return this;
         };
         XMLDocumentCB2.prototype.comment = function(value) {
           var node;
           this.openCurrent();
           node = new XMLComment(this, value);
-          this.onData(this.writer.comment(node, this.currentLevel + 1));
+          this.onData(this.writer.comment(node, this.writerOptions, this.currentLevel + 1), this.currentLevel + 1);
           return this;
         };
         XMLDocumentCB2.prototype.raw = function(value) {
           var node;
           this.openCurrent();
           node = new XMLRaw(this, value);
-          this.onData(this.writer.raw(node, this.currentLevel + 1));
+          this.onData(this.writer.raw(node, this.writerOptions, this.currentLevel + 1), this.currentLevel + 1);
           return this;
         };
         XMLDocumentCB2.prototype.instruction = function(target, value) {
           var i, insTarget, insValue, len, node;
           this.openCurrent();
           if (target != null) {
-            target = target.valueOf();
+            target = getValue(target);
           }
           if (value != null) {
-            value = value.valueOf();
+            value = getValue(value);
           }
           if (Array.isArray(target)) {
             for (i = 0, len = target.length; i < len; i++) {
@@ -18082,7 +20008,7 @@ var require_XMLDocumentCB = __commonJS({
               value = value.apply();
             }
             node = new XMLProcessingInstruction(this, target, value);
-            this.onData(this.writer.processingInstruction(node, this.currentLevel + 1));
+            this.onData(this.writer.processingInstruction(node, this.writerOptions, this.currentLevel + 1), this.currentLevel + 1);
           }
           return this;
         };
@@ -18090,19 +20016,19 @@ var require_XMLDocumentCB = __commonJS({
           var node;
           this.openCurrent();
           if (this.documentStarted) {
-            throw new Error("declaration() must be the first node");
+            throw new Error("declaration() must be the first node.");
           }
           node = new XMLDeclaration(this, version, encoding, standalone);
-          this.onData(this.writer.declaration(node, this.currentLevel + 1));
+          this.onData(this.writer.declaration(node, this.writerOptions, this.currentLevel + 1), this.currentLevel + 1);
           return this;
         };
         XMLDocumentCB2.prototype.doctype = function(root, pubID, sysID) {
           this.openCurrent();
           if (root == null) {
-            throw new Error("Missing root node name");
+            throw new Error("Missing root node name.");
           }
           if (this.root) {
-            throw new Error("dtd() must come before the root node");
+            throw new Error("dtd() must come before the root node.");
           }
           this.currentNode = new XMLDocType(this, pubID, sysID);
           this.currentNode.rootNodeName = root;
@@ -18115,40 +20041,40 @@ var require_XMLDocumentCB = __commonJS({
           var node;
           this.openCurrent();
           node = new XMLDTDElement(this, name, value);
-          this.onData(this.writer.dtdElement(node, this.currentLevel + 1));
+          this.onData(this.writer.dtdElement(node, this.writerOptions, this.currentLevel + 1), this.currentLevel + 1);
           return this;
         };
         XMLDocumentCB2.prototype.attList = function(elementName, attributeName, attributeType, defaultValueType, defaultValue) {
           var node;
           this.openCurrent();
           node = new XMLDTDAttList(this, elementName, attributeName, attributeType, defaultValueType, defaultValue);
-          this.onData(this.writer.dtdAttList(node, this.currentLevel + 1));
+          this.onData(this.writer.dtdAttList(node, this.writerOptions, this.currentLevel + 1), this.currentLevel + 1);
           return this;
         };
         XMLDocumentCB2.prototype.entity = function(name, value) {
           var node;
           this.openCurrent();
           node = new XMLDTDEntity(this, false, name, value);
-          this.onData(this.writer.dtdEntity(node, this.currentLevel + 1));
+          this.onData(this.writer.dtdEntity(node, this.writerOptions, this.currentLevel + 1), this.currentLevel + 1);
           return this;
         };
         XMLDocumentCB2.prototype.pEntity = function(name, value) {
           var node;
           this.openCurrent();
           node = new XMLDTDEntity(this, true, name, value);
-          this.onData(this.writer.dtdEntity(node, this.currentLevel + 1));
+          this.onData(this.writer.dtdEntity(node, this.writerOptions, this.currentLevel + 1), this.currentLevel + 1);
           return this;
         };
         XMLDocumentCB2.prototype.notation = function(name, value) {
           var node;
           this.openCurrent();
           node = new XMLDTDNotation(this, name, value);
-          this.onData(this.writer.dtdNotation(node, this.currentLevel + 1));
+          this.onData(this.writer.dtdNotation(node, this.writerOptions, this.currentLevel + 1), this.currentLevel + 1);
           return this;
         };
         XMLDocumentCB2.prototype.up = function() {
           if (this.currentLevel < 0) {
-            throw new Error("The document node has no parent");
+            throw new Error("The document node has no parent.");
           }
           if (this.currentNode) {
             if (this.currentNode.children) {
@@ -18177,27 +20103,74 @@ var require_XMLDocumentCB = __commonJS({
           }
         };
         XMLDocumentCB2.prototype.openNode = function(node) {
+          var att, chunk, name, ref1;
           if (!node.isOpen) {
-            if (!this.root && this.currentLevel === 0 && node instanceof XMLElement) {
+            if (!this.root && this.currentLevel === 0 && node.type === NodeType.Element) {
               this.root = node;
             }
-            this.onData(this.writer.openNode(node, this.currentLevel));
+            chunk = "";
+            if (node.type === NodeType.Element) {
+              this.writerOptions.state = WriterState.OpenTag;
+              chunk = this.writer.indent(node, this.writerOptions, this.currentLevel) + "<" + node.name;
+              ref1 = node.attribs;
+              for (name in ref1) {
+                if (!hasProp.call(ref1, name))
+                  continue;
+                att = ref1[name];
+                chunk += this.writer.attribute(att, this.writerOptions, this.currentLevel);
+              }
+              chunk += (node.children ? ">" : "/>") + this.writer.endline(node, this.writerOptions, this.currentLevel);
+              this.writerOptions.state = WriterState.InsideTag;
+            } else {
+              this.writerOptions.state = WriterState.OpenTag;
+              chunk = this.writer.indent(node, this.writerOptions, this.currentLevel) + "<!DOCTYPE " + node.rootNodeName;
+              if (node.pubID && node.sysID) {
+                chunk += ' PUBLIC "' + node.pubID + '" "' + node.sysID + '"';
+              } else if (node.sysID) {
+                chunk += ' SYSTEM "' + node.sysID + '"';
+              }
+              if (node.children) {
+                chunk += " [";
+                this.writerOptions.state = WriterState.InsideTag;
+              } else {
+                this.writerOptions.state = WriterState.CloseTag;
+                chunk += ">";
+              }
+              chunk += this.writer.endline(node, this.writerOptions, this.currentLevel);
+            }
+            this.onData(chunk, this.currentLevel);
             return node.isOpen = true;
           }
         };
         XMLDocumentCB2.prototype.closeNode = function(node) {
+          var chunk;
           if (!node.isClosed) {
-            this.onData(this.writer.closeNode(node, this.currentLevel));
+            chunk = "";
+            this.writerOptions.state = WriterState.CloseTag;
+            if (node.type === NodeType.Element) {
+              chunk = this.writer.indent(node, this.writerOptions, this.currentLevel) + "</" + node.name + ">" + this.writer.endline(node, this.writerOptions, this.currentLevel);
+            } else {
+              chunk = this.writer.indent(node, this.writerOptions, this.currentLevel) + "]>" + this.writer.endline(node, this.writerOptions, this.currentLevel);
+            }
+            this.writerOptions.state = WriterState.None;
+            this.onData(chunk, this.currentLevel);
             return node.isClosed = true;
           }
         };
-        XMLDocumentCB2.prototype.onData = function(chunk) {
+        XMLDocumentCB2.prototype.onData = function(chunk, level) {
           this.documentStarted = true;
-          return this.onDataCallback(chunk);
+          return this.onDataCallback(chunk, level + 1);
         };
         XMLDocumentCB2.prototype.onEnd = function() {
           this.documentCompleted = true;
           return this.onEndCallback();
+        };
+        XMLDocumentCB2.prototype.debugInfo = function(name) {
+          if (name == null) {
+            return "";
+          } else {
+            return "node: <" + name + ">";
+          }
         };
         XMLDocumentCB2.prototype.ele = function() {
           return this.element.apply(this, arguments);
@@ -18245,14 +20218,14 @@ var require_XMLDocumentCB = __commonJS({
           return this.instruction(target, value);
         };
         XMLDocumentCB2.prototype.att = function() {
-          if (this.currentNode && this.currentNode instanceof XMLDocType) {
+          if (this.currentNode && this.currentNode.type === NodeType.DocType) {
             return this.attList.apply(this, arguments);
           } else {
             return this.attribute.apply(this, arguments);
           }
         };
         XMLDocumentCB2.prototype.a = function() {
-          if (this.currentNode && this.currentNode instanceof XMLDocType) {
+          if (this.currentNode && this.currentNode.type === NodeType.DocType) {
             return this.attList.apply(this, arguments);
           } else {
             return this.attribute.apply(this, arguments);
@@ -18277,7 +20250,7 @@ var require_XMLDocumentCB = __commonJS({
 var require_XMLStreamWriter = __commonJS({
   "node_modules/xmlbuilder/lib/XMLStreamWriter.js"(exports, module2) {
     (function() {
-      var XMLCData, XMLComment, XMLDTDAttList, XMLDTDElement, XMLDTDEntity, XMLDTDNotation, XMLDeclaration, XMLDocType, XMLElement, XMLProcessingInstruction, XMLRaw, XMLStreamWriter, XMLText, XMLWriterBase, extend = function(child, parent) {
+      var NodeType, WriterState, XMLStreamWriter, XMLWriterBase, extend = function(child, parent) {
         for (var key in parent) {
           if (hasProp.call(parent, key))
             child[key] = parent[key];
@@ -18290,81 +20263,56 @@ var require_XMLStreamWriter = __commonJS({
         child.__super__ = parent.prototype;
         return child;
       }, hasProp = {}.hasOwnProperty;
-      XMLDeclaration = require_XMLDeclaration();
-      XMLDocType = require_XMLDocType();
-      XMLCData = require_XMLCData();
-      XMLComment = require_XMLComment();
-      XMLElement = require_XMLElement();
-      XMLRaw = require_XMLRaw();
-      XMLText = require_XMLText();
-      XMLProcessingInstruction = require_XMLProcessingInstruction();
-      XMLDTDAttList = require_XMLDTDAttList();
-      XMLDTDElement = require_XMLDTDElement();
-      XMLDTDEntity = require_XMLDTDEntity();
-      XMLDTDNotation = require_XMLDTDNotation();
+      NodeType = require_NodeType();
       XMLWriterBase = require_XMLWriterBase();
+      WriterState = require_WriterState();
       module2.exports = XMLStreamWriter = function(superClass) {
         extend(XMLStreamWriter2, superClass);
         function XMLStreamWriter2(stream, options) {
-          XMLStreamWriter2.__super__.constructor.call(this, options);
           this.stream = stream;
+          XMLStreamWriter2.__super__.constructor.call(this, options);
         }
-        XMLStreamWriter2.prototype.document = function(doc) {
-          var child, i, j, len, len1, ref, ref1, results;
-          ref = doc.children;
-          for (i = 0, len = ref.length; i < len; i++) {
-            child = ref[i];
-            child.isLastRootNode = false;
+        XMLStreamWriter2.prototype.endline = function(node, options, level) {
+          if (node.isLastRootNode && options.state === WriterState.CloseTag) {
+            return "";
+          } else {
+            return XMLStreamWriter2.__super__.endline.call(this, node, options, level);
           }
-          doc.children[doc.children.length - 1].isLastRootNode = true;
+        };
+        XMLStreamWriter2.prototype.document = function(doc, options) {
+          var child, i, j, k, len, len1, ref, ref1, results;
+          ref = doc.children;
+          for (i = j = 0, len = ref.length; j < len; i = ++j) {
+            child = ref[i];
+            child.isLastRootNode = i === doc.children.length - 1;
+          }
+          options = this.filterOptions(options);
           ref1 = doc.children;
           results = [];
-          for (j = 0, len1 = ref1.length; j < len1; j++) {
-            child = ref1[j];
-            switch (false) {
-              case !(child instanceof XMLDeclaration):
-                results.push(this.declaration(child));
-                break;
-              case !(child instanceof XMLDocType):
-                results.push(this.docType(child));
-                break;
-              case !(child instanceof XMLComment):
-                results.push(this.comment(child));
-                break;
-              case !(child instanceof XMLProcessingInstruction):
-                results.push(this.processingInstruction(child));
-                break;
-              default:
-                results.push(this.element(child));
-            }
+          for (k = 0, len1 = ref1.length; k < len1; k++) {
+            child = ref1[k];
+            results.push(this.writeChildNode(child, options, 0));
           }
           return results;
         };
-        XMLStreamWriter2.prototype.attribute = function(att) {
-          return this.stream.write(" " + att.name + '="' + att.value + '"');
+        XMLStreamWriter2.prototype.attribute = function(att, options, level) {
+          return this.stream.write(XMLStreamWriter2.__super__.attribute.call(this, att, options, level));
         };
-        XMLStreamWriter2.prototype.cdata = function(node, level) {
-          return this.stream.write(this.space(level) + "<![CDATA[" + node.text + "]]>" + this.endline(node));
+        XMLStreamWriter2.prototype.cdata = function(node, options, level) {
+          return this.stream.write(XMLStreamWriter2.__super__.cdata.call(this, node, options, level));
         };
-        XMLStreamWriter2.prototype.comment = function(node, level) {
-          return this.stream.write(this.space(level) + "<!-- " + node.text + " -->" + this.endline(node));
+        XMLStreamWriter2.prototype.comment = function(node, options, level) {
+          return this.stream.write(XMLStreamWriter2.__super__.comment.call(this, node, options, level));
         };
-        XMLStreamWriter2.prototype.declaration = function(node, level) {
-          this.stream.write(this.space(level));
-          this.stream.write('<?xml version="' + node.version + '"');
-          if (node.encoding != null) {
-            this.stream.write(' encoding="' + node.encoding + '"');
-          }
-          if (node.standalone != null) {
-            this.stream.write(' standalone="' + node.standalone + '"');
-          }
-          this.stream.write(this.spacebeforeslash + "?>");
-          return this.stream.write(this.endline(node));
+        XMLStreamWriter2.prototype.declaration = function(node, options, level) {
+          return this.stream.write(XMLStreamWriter2.__super__.declaration.call(this, node, options, level));
         };
-        XMLStreamWriter2.prototype.docType = function(node, level) {
-          var child, i, len, ref;
+        XMLStreamWriter2.prototype.docType = function(node, options, level) {
+          var child, j, len, ref;
           level || (level = 0);
-          this.stream.write(this.space(level));
+          this.openNode(node, options, level);
+          options.state = WriterState.OpenTag;
+          this.stream.write(this.indent(node, options, level));
           this.stream.write("<!DOCTYPE " + node.root().name);
           if (node.pubID && node.sysID) {
             this.stream.write(' PUBLIC "' + node.pubID + '" "' + node.sysID + '"');
@@ -18373,161 +20321,93 @@ var require_XMLStreamWriter = __commonJS({
           }
           if (node.children.length > 0) {
             this.stream.write(" [");
-            this.stream.write(this.endline(node));
+            this.stream.write(this.endline(node, options, level));
+            options.state = WriterState.InsideTag;
             ref = node.children;
-            for (i = 0, len = ref.length; i < len; i++) {
-              child = ref[i];
-              switch (false) {
-                case !(child instanceof XMLDTDAttList):
-                  this.dtdAttList(child, level + 1);
-                  break;
-                case !(child instanceof XMLDTDElement):
-                  this.dtdElement(child, level + 1);
-                  break;
-                case !(child instanceof XMLDTDEntity):
-                  this.dtdEntity(child, level + 1);
-                  break;
-                case !(child instanceof XMLDTDNotation):
-                  this.dtdNotation(child, level + 1);
-                  break;
-                case !(child instanceof XMLCData):
-                  this.cdata(child, level + 1);
-                  break;
-                case !(child instanceof XMLComment):
-                  this.comment(child, level + 1);
-                  break;
-                case !(child instanceof XMLProcessingInstruction):
-                  this.processingInstruction(child, level + 1);
-                  break;
-                default:
-                  throw new Error("Unknown DTD node type: " + child.constructor.name);
-              }
+            for (j = 0, len = ref.length; j < len; j++) {
+              child = ref[j];
+              this.writeChildNode(child, options, level + 1);
             }
+            options.state = WriterState.CloseTag;
             this.stream.write("]");
           }
-          this.stream.write(this.spacebeforeslash + ">");
-          return this.stream.write(this.endline(node));
+          options.state = WriterState.CloseTag;
+          this.stream.write(options.spaceBeforeSlash + ">");
+          this.stream.write(this.endline(node, options, level));
+          options.state = WriterState.None;
+          return this.closeNode(node, options, level);
         };
-        XMLStreamWriter2.prototype.element = function(node, level) {
-          var att, child, i, len, name, ref, ref1, space;
+        XMLStreamWriter2.prototype.element = function(node, options, level) {
+          var att, child, childNodeCount, firstChildNode, j, len, name, prettySuppressed, ref, ref1;
           level || (level = 0);
-          space = this.space(level);
-          this.stream.write(space + "<" + node.name);
-          ref = node.attributes;
+          this.openNode(node, options, level);
+          options.state = WriterState.OpenTag;
+          this.stream.write(this.indent(node, options, level) + "<" + node.name);
+          ref = node.attribs;
           for (name in ref) {
             if (!hasProp.call(ref, name))
               continue;
             att = ref[name];
-            this.attribute(att);
+            this.attribute(att, options, level);
           }
-          if (node.children.length === 0 || node.children.every(function(e) {
-            return e.value === "";
+          childNodeCount = node.children.length;
+          firstChildNode = childNodeCount === 0 ? null : node.children[0];
+          if (childNodeCount === 0 || node.children.every(function(e) {
+            return (e.type === NodeType.Text || e.type === NodeType.Raw) && e.value === "";
           })) {
-            if (this.allowEmpty) {
-              this.stream.write("></" + node.name + ">");
+            if (options.allowEmpty) {
+              this.stream.write(">");
+              options.state = WriterState.CloseTag;
+              this.stream.write("</" + node.name + ">");
             } else {
-              this.stream.write(this.spacebeforeslash + "/>");
+              options.state = WriterState.CloseTag;
+              this.stream.write(options.spaceBeforeSlash + "/>");
             }
-          } else if (this.pretty && node.children.length === 1 && node.children[0].value != null) {
+          } else if (options.pretty && childNodeCount === 1 && (firstChildNode.type === NodeType.Text || firstChildNode.type === NodeType.Raw) && firstChildNode.value != null) {
             this.stream.write(">");
-            this.stream.write(node.children[0].value);
+            options.state = WriterState.InsideTag;
+            options.suppressPrettyCount++;
+            prettySuppressed = true;
+            this.writeChildNode(firstChildNode, options, level + 1);
+            options.suppressPrettyCount--;
+            prettySuppressed = false;
+            options.state = WriterState.CloseTag;
             this.stream.write("</" + node.name + ">");
           } else {
-            this.stream.write(">" + this.newline);
+            this.stream.write(">" + this.endline(node, options, level));
+            options.state = WriterState.InsideTag;
             ref1 = node.children;
-            for (i = 0, len = ref1.length; i < len; i++) {
-              child = ref1[i];
-              switch (false) {
-                case !(child instanceof XMLCData):
-                  this.cdata(child, level + 1);
-                  break;
-                case !(child instanceof XMLComment):
-                  this.comment(child, level + 1);
-                  break;
-                case !(child instanceof XMLElement):
-                  this.element(child, level + 1);
-                  break;
-                case !(child instanceof XMLRaw):
-                  this.raw(child, level + 1);
-                  break;
-                case !(child instanceof XMLText):
-                  this.text(child, level + 1);
-                  break;
-                case !(child instanceof XMLProcessingInstruction):
-                  this.processingInstruction(child, level + 1);
-                  break;
-                default:
-                  throw new Error("Unknown XML node type: " + child.constructor.name);
-              }
+            for (j = 0, len = ref1.length; j < len; j++) {
+              child = ref1[j];
+              this.writeChildNode(child, options, level + 1);
             }
-            this.stream.write(space + "</" + node.name + ">");
+            options.state = WriterState.CloseTag;
+            this.stream.write(this.indent(node, options, level) + "</" + node.name + ">");
           }
-          return this.stream.write(this.endline(node));
+          this.stream.write(this.endline(node, options, level));
+          options.state = WriterState.None;
+          return this.closeNode(node, options, level);
         };
-        XMLStreamWriter2.prototype.processingInstruction = function(node, level) {
-          this.stream.write(this.space(level) + "<?" + node.target);
-          if (node.value) {
-            this.stream.write(" " + node.value);
-          }
-          return this.stream.write(this.spacebeforeslash + "?>" + this.endline(node));
+        XMLStreamWriter2.prototype.processingInstruction = function(node, options, level) {
+          return this.stream.write(XMLStreamWriter2.__super__.processingInstruction.call(this, node, options, level));
         };
-        XMLStreamWriter2.prototype.raw = function(node, level) {
-          return this.stream.write(this.space(level) + node.value + this.endline(node));
+        XMLStreamWriter2.prototype.raw = function(node, options, level) {
+          return this.stream.write(XMLStreamWriter2.__super__.raw.call(this, node, options, level));
         };
-        XMLStreamWriter2.prototype.text = function(node, level) {
-          return this.stream.write(this.space(level) + node.value + this.endline(node));
+        XMLStreamWriter2.prototype.text = function(node, options, level) {
+          return this.stream.write(XMLStreamWriter2.__super__.text.call(this, node, options, level));
         };
-        XMLStreamWriter2.prototype.dtdAttList = function(node, level) {
-          this.stream.write(this.space(level) + "<!ATTLIST " + node.elementName + " " + node.attributeName + " " + node.attributeType);
-          if (node.defaultValueType !== "#DEFAULT") {
-            this.stream.write(" " + node.defaultValueType);
-          }
-          if (node.defaultValue) {
-            this.stream.write(' "' + node.defaultValue + '"');
-          }
-          return this.stream.write(this.spacebeforeslash + ">" + this.endline(node));
+        XMLStreamWriter2.prototype.dtdAttList = function(node, options, level) {
+          return this.stream.write(XMLStreamWriter2.__super__.dtdAttList.call(this, node, options, level));
         };
-        XMLStreamWriter2.prototype.dtdElement = function(node, level) {
-          this.stream.write(this.space(level) + "<!ELEMENT " + node.name + " " + node.value);
-          return this.stream.write(this.spacebeforeslash + ">" + this.endline(node));
+        XMLStreamWriter2.prototype.dtdElement = function(node, options, level) {
+          return this.stream.write(XMLStreamWriter2.__super__.dtdElement.call(this, node, options, level));
         };
-        XMLStreamWriter2.prototype.dtdEntity = function(node, level) {
-          this.stream.write(this.space(level) + "<!ENTITY");
-          if (node.pe) {
-            this.stream.write(" %");
-          }
-          this.stream.write(" " + node.name);
-          if (node.value) {
-            this.stream.write(' "' + node.value + '"');
-          } else {
-            if (node.pubID && node.sysID) {
-              this.stream.write(' PUBLIC "' + node.pubID + '" "' + node.sysID + '"');
-            } else if (node.sysID) {
-              this.stream.write(' SYSTEM "' + node.sysID + '"');
-            }
-            if (node.nData) {
-              this.stream.write(" NDATA " + node.nData);
-            }
-          }
-          return this.stream.write(this.spacebeforeslash + ">" + this.endline(node));
+        XMLStreamWriter2.prototype.dtdEntity = function(node, options, level) {
+          return this.stream.write(XMLStreamWriter2.__super__.dtdEntity.call(this, node, options, level));
         };
-        XMLStreamWriter2.prototype.dtdNotation = function(node, level) {
-          this.stream.write(this.space(level) + "<!NOTATION " + node.name);
-          if (node.pubID && node.sysID) {
-            this.stream.write(' PUBLIC "' + node.pubID + '" "' + node.sysID + '"');
-          } else if (node.pubID) {
-            this.stream.write(' PUBLIC "' + node.pubID + '"');
-          } else if (node.sysID) {
-            this.stream.write(' SYSTEM "' + node.sysID + '"');
-          }
-          return this.stream.write(this.spacebeforeslash + ">" + this.endline(node));
-        };
-        XMLStreamWriter2.prototype.endline = function(node) {
-          if (!node.isLastRootNode) {
-            return this.newline;
-          } else {
-            return "";
-          }
+        XMLStreamWriter2.prototype.dtdNotation = function(node, options, level) {
+          return this.stream.write(XMLStreamWriter2.__super__.dtdNotation.call(this, node, options, level));
         };
         return XMLStreamWriter2;
       }(XMLWriterBase);
@@ -18539,16 +20419,19 @@ var require_XMLStreamWriter = __commonJS({
 var require_lib3 = __commonJS({
   "node_modules/xmlbuilder/lib/index.js"(exports, module2) {
     (function() {
-      var XMLDocument, XMLDocumentCB, XMLStreamWriter, XMLStringWriter, assign, isFunction, ref;
+      var NodeType, WriterState, XMLDOMImplementation, XMLDocument, XMLDocumentCB, XMLStreamWriter, XMLStringWriter, assign, isFunction, ref;
       ref = require_Utility(), assign = ref.assign, isFunction = ref.isFunction;
+      XMLDOMImplementation = require_XMLDOMImplementation();
       XMLDocument = require_XMLDocument();
       XMLDocumentCB = require_XMLDocumentCB();
       XMLStringWriter = require_XMLStringWriter();
       XMLStreamWriter = require_XMLStreamWriter();
+      NodeType = require_NodeType();
+      WriterState = require_WriterState();
       module2.exports.create = function(name, xmldec, doctype, options) {
         var doc, root;
         if (name == null) {
-          throw new Error("Root element needs a name");
+          throw new Error("Root element needs a name.");
         }
         options = assign({}, xmldec, doctype, options);
         doc = new XMLDocument(options);
@@ -18556,7 +20439,7 @@ var require_lib3 = __commonJS({
         if (!options.headless) {
           doc.declaration(options);
           if (options.pubID != null || options.sysID != null) {
-            doc.doctype(options);
+            doc.dtd(options);
           }
         }
         return root;
@@ -18579,6 +20462,9 @@ var require_lib3 = __commonJS({
       module2.exports.streamWriter = function(stream, options) {
         return new XMLStreamWriter(stream, options);
       };
+      module2.exports.implementation = new XMLDOMImplementation();
+      module2.exports.nodeType = NodeType;
+      module2.exports.writerState = WriterState;
     }).call(exports);
   }
 });
@@ -20211,6 +22097,7 @@ var require_parser2 = __commonJS({
       exports.Parser = function(superClass) {
         extend(Parser, superClass);
         function Parser(opts) {
+          this.parseStringPromise = bind(this.parseStringPromise, this);
           this.parseString = bind(this.parseString, this);
           this.reset = bind(this.reset, this);
           this.assignOrPush = bind(this.assignOrPush, this);
@@ -20315,7 +22202,7 @@ var require_parser2 = __commonJS({
           this.saxParser.onopentag = function(_this) {
             return function(node) {
               var key, newValue, obj, processedKey, ref;
-              obj = {};
+              obj = /* @__PURE__ */ Object.create(null);
               obj[charkey] = "";
               if (!_this.options.ignoreAttrs) {
                 ref = node.attributes;
@@ -20323,7 +22210,7 @@ var require_parser2 = __commonJS({
                   if (!hasProp.call(ref, key))
                     continue;
                   if (!(attrkey in obj) && !_this.options.mergeAttrs) {
-                    obj[attrkey] = {};
+                    obj[attrkey] = /* @__PURE__ */ Object.create(null);
                   }
                   newValue = _this.options.attrValueProcessors ? processItem(_this.options.attrValueProcessors, node.attributes[key], key) : node.attributes[key];
                   processedKey = _this.options.attrNameProcessors ? processItem(_this.options.attrNameProcessors, key) : key;
@@ -20373,7 +22260,11 @@ var require_parser2 = __commonJS({
                 }
               }
               if (isEmpty(obj)) {
-                obj = _this.options.emptyTag !== "" ? _this.options.emptyTag : emptyStr;
+                if (typeof _this.options.emptyTag === "function") {
+                  obj = _this.options.emptyTag();
+                } else {
+                  obj = _this.options.emptyTag !== "" ? _this.options.emptyTag : emptyStr;
+                }
               }
               if (_this.options.validator != null) {
                 xpath = "/" + function() {
@@ -20397,7 +22288,7 @@ var require_parser2 = __commonJS({
               }
               if (_this.options.explicitChildren && !_this.options.mergeAttrs && typeof obj === "object") {
                 if (!_this.options.preserveChildrenOrder) {
-                  node = {};
+                  node = /* @__PURE__ */ Object.create(null);
                   if (_this.options.attrkey in obj) {
                     node[_this.options.attrkey] = obj[_this.options.attrkey];
                     delete obj[_this.options.attrkey];
@@ -20412,7 +22303,7 @@ var require_parser2 = __commonJS({
                   obj = node;
                 } else if (s) {
                   s[_this.options.childkey] = s[_this.options.childkey] || [];
-                  objClone = {};
+                  objClone = /* @__PURE__ */ Object.create(null);
                   for (key in obj) {
                     if (!hasProp.call(obj, key))
                       continue;
@@ -20430,7 +22321,7 @@ var require_parser2 = __commonJS({
               } else {
                 if (_this.options.explicitRoot) {
                   old = obj;
-                  obj = {};
+                  obj = /* @__PURE__ */ Object.create(null);
                   obj[nodeName] = old;
                 }
                 _this.resultObject = obj;
@@ -20506,8 +22397,21 @@ var require_parser2 = __commonJS({
             }
           }
         };
+        Parser.prototype.parseStringPromise = function(str) {
+          return new Promise(function(_this) {
+            return function(resolve, reject) {
+              return _this.parseString(str, function(err, value) {
+                if (err) {
+                  return reject(err);
+                } else {
+                  return resolve(value);
+                }
+              });
+            };
+          }(this));
+        };
         return Parser;
-      }(events.EventEmitter);
+      }(events);
       exports.parseString = function(str, a, b) {
         var cb, options, parser;
         if (b != null) {
@@ -20525,6 +22429,14 @@ var require_parser2 = __commonJS({
         }
         parser = new exports.Parser(options);
         return parser.parseString(str, cb);
+      };
+      exports.parseStringPromise = function(str, a) {
+        var options, parser;
+        if (typeof a === "object") {
+          options = a;
+        }
+        parser = new exports.Parser(options);
+        return parser.parseStringPromise(str);
       };
     }).call(exports);
   }
@@ -20564,6 +22476,7 @@ var require_xml2js = __commonJS({
       exports.Builder = builder.Builder;
       exports.Parser = parser.Parser;
       exports.parseString = parser.parseString;
+      exports.parseStringPromise = parser.parseStringPromise;
     }).call(exports);
   }
 });
@@ -20748,12 +22661,12 @@ var require_node = __commonJS({
           headers: httpRequest.headers,
           path: pathPrefix + httpRequest.path
         };
+        AWS2.util.update(options, httpOptions);
         if (!httpOptions.agent) {
           options.agent = this.getAgent(useSSL, {
             keepAlive: process.env[CONNECTION_REUSE_ENV_NAME] === "1" ? true : false
           });
         }
-        AWS2.util.update(options, httpOptions);
         delete options.proxy;
         delete options.timeout;
         var stream = http.request(options, function(httpResp) {
@@ -21125,7 +23038,7 @@ var require_metadata_service = __commonJS({
     require_http();
     var inherit = AWS2.util.inherit;
     var getMetadataServiceEndpoint = require_get_metadata_service_endpoint();
-    var URL = require("url").URL;
+    var URL2 = require("url").URL;
     AWS2.MetadataService = inherit({
       endpoint: getMetadataServiceEndpoint(),
       httpOptions: { timeout: 0 },
@@ -21147,8 +23060,8 @@ var require_metadata_service = __commonJS({
           return;
         }
         path = path || "/";
-        if (URL) {
-          new URL(this.endpoint);
+        if (URL2) {
+          new URL2(this.endpoint);
         }
         var httpRequest = new AWS2.HttpRequest(this.endpoint + path);
         httpRequest.method = options.method || "GET";
@@ -21631,6 +23544,7 @@ var require_shared_ini_file_credentials = __commonJS({
         var externalId = roleProfile["external_id"];
         var mfaSerial = roleProfile["mfa_serial"];
         var sourceProfileName = roleProfile["source_profile"];
+        var durationSeconds = parseInt(roleProfile["duration_seconds"], 10) || void 0;
         var profileRegion = roleProfile["region"] || ASSUME_ROLE_DEFAULT_REGION;
         if (!sourceProfileName) {
           throw AWS2.util.error(
@@ -21658,6 +23572,7 @@ var require_shared_ini_file_credentials = __commonJS({
           httpOptions: this.httpOptions
         });
         var roleParams = {
+          DurationSeconds: durationSeconds,
           RoleArn: roleArn,
           RoleSessionName: roleSessionName || "aws-sdk-js-" + Date.now()
         };
@@ -21713,7 +23628,6 @@ var require_sso_credentials = __commonJS({
         this.get(options.callback || AWS2.util.fn.noop);
       },
       load: function load(callback) {
-        var EXPIRE_WINDOW_MS = 15 * 60 * 1e3;
         var self = this;
         try {
           var profiles = AWS2.util.getProfilesFromSharedConfig(iniLoader, this.filename);
@@ -21724,12 +23638,80 @@ var require_sso_credentials = __commonJS({
               { code: self.errorCode }
             );
           }
-          if (!profile.sso_start_url || !profile.sso_account_id || !profile.sso_region || !profile.sso_role_name) {
-            throw AWS2.util.error(
-              new Error("Profile " + this.profile + ' does not have valid SSO credentials. Required parameters "sso_account_id", "sso_region", "sso_role_name", "sso_start_url". Reference: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html'),
-              { code: self.errorCode }
-            );
+          if (profile.sso_session) {
+            if (!profile.sso_account_id || !profile.sso_role_name) {
+              throw AWS2.util.error(
+                new Error("Profile " + this.profile + " with session " + profile.sso_session + ' does not have valid SSO credentials. Required parameters "sso_account_id", "sso_session", "sso_role_name". Reference: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html'),
+                { code: self.errorCode }
+              );
+            }
+          } else {
+            if (!profile.sso_start_url || !profile.sso_account_id || !profile.sso_region || !profile.sso_role_name) {
+              throw AWS2.util.error(
+                new Error("Profile " + this.profile + ' does not have valid SSO credentials. Required parameters "sso_account_id", "sso_region", "sso_role_name", "sso_start_url". Reference: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html'),
+                { code: self.errorCode }
+              );
+            }
           }
+          this.getToken(this.profile, profile, function(err, token) {
+            if (err) {
+              return callback(err);
+            }
+            var request = {
+              accessToken: token,
+              accountId: profile.sso_account_id,
+              roleName: profile.sso_role_name
+            };
+            if (!self.service || self.service.config.region !== profile.sso_region) {
+              self.service = new AWS2.SSO({
+                region: profile.sso_region,
+                httpOptions: self.httpOptions
+              });
+            }
+            self.service.getRoleCredentials(request, function(err2, data) {
+              if (err2 || !data || !data.roleCredentials) {
+                callback(AWS2.util.error(
+                  err2 || new Error('Please log in using "aws sso login"'),
+                  { code: self.errorCode }
+                ), null);
+              } else if (!data.roleCredentials.accessKeyId || !data.roleCredentials.secretAccessKey || !data.roleCredentials.sessionToken || !data.roleCredentials.expiration) {
+                throw AWS2.util.error(new Error(
+                  "SSO returns an invalid temporary credential."
+                ));
+              } else {
+                self.expired = false;
+                self.accessKeyId = data.roleCredentials.accessKeyId;
+                self.secretAccessKey = data.roleCredentials.secretAccessKey;
+                self.sessionToken = data.roleCredentials.sessionToken;
+                self.expireTime = new Date(data.roleCredentials.expiration);
+                callback(null);
+              }
+            });
+          });
+        } catch (err) {
+          callback(err);
+        }
+      },
+      getToken: function getToken(profileName2, profile, callback) {
+        var self = this;
+        if (profile.sso_session) {
+          var _iniLoader = AWS2.util.iniLoader;
+          var ssoSessions = _iniLoader.loadSsoSessionsFrom();
+          var ssoSession = ssoSessions[profile.sso_session];
+          Object.assign(profile, ssoSession);
+          var ssoTokenProvider = new AWS2.SSOTokenProvider({
+            profile: profileName2
+          });
+          ssoTokenProvider.load(function(err) {
+            if (err) {
+              return callback(err);
+            }
+            return callback(null, ssoTokenProvider.token);
+          });
+          return;
+        }
+        try {
+          var EXPIRE_WINDOW_MS = 15 * 60 * 1e3;
           var hasher = crypto.createHash("sha1");
           var fileName = hasher.update(profile.sso_start_url).digest("hex") + ".json";
           var cachePath = path.join(
@@ -21760,38 +23742,9 @@ var require_sso_credentials = __commonJS({
               "The SSO session associated with this profile has expired. To refresh this SSO session run aws sso login with the corresponding profile."
             ));
           }
-          if (!self.service || self.service.config.region !== profile.sso_region) {
-            self.service = new AWS2.SSO({
-              region: profile.sso_region,
-              httpOptions: this.httpOptions
-            });
-          }
-          var request = {
-            accessToken: cacheContent.accessToken,
-            accountId: profile.sso_account_id,
-            roleName: profile.sso_role_name
-          };
-          self.service.getRoleCredentials(request, function(err, data) {
-            if (err || !data || !data.roleCredentials) {
-              callback(AWS2.util.error(
-                err || new Error('Please log in using "aws sso login"'),
-                { code: self.errorCode }
-              ), null);
-            } else if (!data.roleCredentials.accessKeyId || !data.roleCredentials.secretAccessKey || !data.roleCredentials.sessionToken || !data.roleCredentials.expiration) {
-              throw AWS2.util.error(new Error(
-                "SSO returns an invalid temporary credential."
-              ));
-            } else {
-              self.expired = false;
-              self.accessKeyId = data.roleCredentials.accessKeyId;
-              self.secretAccessKey = data.roleCredentials.secretAccessKey;
-              self.sessionToken = data.roleCredentials.sessionToken;
-              self.expireTime = new Date(data.roleCredentials.expiration);
-              callback(null);
-            }
-          });
+          return callback(null, cacheContent.accessToken);
         } catch (err) {
-          callback(err);
+          return callback(err, null);
         }
       },
       refresh: function refresh(callback) {
@@ -23684,6 +25637,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -23728,6 +25684,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -23864,6 +25823,9 @@ var require_s3_2006_03_01_min = __commonJS({
                 locationName: "x-amz-acl"
               },
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24115,6 +26077,9 @@ var require_s3_2006_03_01_min = __commonJS({
                 locationName: "x-amz-acl"
               },
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24169,7 +26134,12 @@ var require_s3_2006_03_01_min = __commonJS({
               }
             }
           },
-          alias: "PutBucket"
+          alias: "PutBucket",
+          staticContextParams: {
+            DisableAccessPoints: {
+              value: true
+            }
+          }
         },
         CreateMultipartUpload: {
           http: {
@@ -24187,6 +26157,9 @@ var require_s3_2006_03_01_min = __commonJS({
                 locationName: "x-amz-acl"
               },
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24380,6 +26353,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24404,6 +26380,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24431,6 +26410,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24454,6 +26436,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24478,6 +26463,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24502,6 +26490,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24529,6 +26520,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24553,6 +26547,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24580,6 +26577,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24603,6 +26603,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24626,6 +26629,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24649,6 +26655,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24672,6 +26681,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24696,6 +26708,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24759,6 +26774,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24798,6 +26816,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24912,6 +26933,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24934,19 +26958,30 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
               ExpectedBucketOwner: {
                 location: "header",
                 locationName: "x-amz-expected-bucket-owner"
+              },
+              RequestPayer: {
+                location: "header",
+                locationName: "x-amz-request-payer"
               }
             }
           },
           output: {
             type: "structure",
             members: {
-              Status: {}
+              Status: {},
+              RequestCharged: {
+                location: "header",
+                locationName: "x-amz-request-charged"
+              }
             }
           }
         },
@@ -24962,6 +26997,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -24997,6 +27035,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25032,6 +27073,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25063,6 +27107,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25095,6 +27142,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25127,6 +27177,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25162,6 +27215,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25194,6 +27250,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25225,6 +27284,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25253,6 +27315,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25284,6 +27349,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25344,6 +27412,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25375,6 +27446,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25404,6 +27478,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25441,6 +27518,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25472,6 +27552,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25500,6 +27583,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25533,6 +27619,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25564,6 +27653,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25604,6 +27696,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25879,6 +27974,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -25931,6 +28029,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -26073,6 +28174,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -26116,6 +28220,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -26148,6 +28255,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -26192,6 +28302,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -26242,6 +28355,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -26286,6 +28402,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -26317,6 +28436,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -26340,6 +28462,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -26569,6 +28694,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -26613,6 +28741,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -26653,6 +28784,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -26697,6 +28831,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -26768,6 +28905,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -26799,6 +28939,10 @@ var require_s3_2006_03_01_min = __commonJS({
               ExpectedBucketOwner: {
                 location: "header",
                 locationName: "x-amz-expected-bucket-owner"
+              },
+              RequestPayer: {
+                location: "header",
+                locationName: "x-amz-request-payer"
               }
             }
           },
@@ -26844,7 +28988,11 @@ var require_s3_2006_03_01_min = __commonJS({
               CommonPrefixes: {
                 shape: "Sbs"
               },
-              EncodingType: {}
+              EncodingType: {},
+              RequestCharged: {
+                location: "header",
+                locationName: "x-amz-request-charged"
+              }
             }
           }
         },
@@ -26860,6 +29008,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -26891,6 +29042,15 @@ var require_s3_2006_03_01_min = __commonJS({
               ExpectedBucketOwner: {
                 location: "header",
                 locationName: "x-amz-expected-bucket-owner"
+              },
+              RequestPayer: {
+                location: "header",
+                locationName: "x-amz-request-payer"
+              },
+              OptionalObjectAttributes: {
+                shape: "Sbx",
+                location: "header",
+                locationName: "x-amz-optional-object-attributes"
               }
             }
           },
@@ -26912,7 +29072,7 @@ var require_s3_2006_03_01_min = __commonJS({
                   members: {
                     ETag: {},
                     ChecksumAlgorithm: {
-                      shape: "Sc1"
+                      shape: "Sc3"
                     },
                     Size: {
                       type: "integer"
@@ -26928,6 +29088,9 @@ var require_s3_2006_03_01_min = __commonJS({
                     },
                     Owner: {
                       shape: "S3d"
+                    },
+                    RestoreStatus: {
+                      shape: "Sc6"
                     }
                   }
                 },
@@ -26963,7 +29126,11 @@ var require_s3_2006_03_01_min = __commonJS({
               CommonPrefixes: {
                 shape: "Sbs"
               },
-              EncodingType: {}
+              EncodingType: {},
+              RequestCharged: {
+                location: "header",
+                locationName: "x-amz-request-charged"
+              }
             }
           },
           alias: "GetBucketObjectVersions"
@@ -26980,6 +29147,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27011,6 +29181,11 @@ var require_s3_2006_03_01_min = __commonJS({
               ExpectedBucketOwner: {
                 location: "header",
                 locationName: "x-amz-expected-bucket-owner"
+              },
+              OptionalObjectAttributes: {
+                shape: "Sbx",
+                location: "header",
+                locationName: "x-amz-optional-object-attributes"
               }
             }
           },
@@ -27023,7 +29198,7 @@ var require_s3_2006_03_01_min = __commonJS({
               Marker: {},
               NextMarker: {},
               Contents: {
-                shape: "Sca"
+                shape: "Scf"
               },
               Name: {},
               Prefix: {},
@@ -27034,7 +29209,11 @@ var require_s3_2006_03_01_min = __commonJS({
               CommonPrefixes: {
                 shape: "Sbs"
               },
-              EncodingType: {}
+              EncodingType: {},
+              RequestCharged: {
+                location: "header",
+                locationName: "x-amz-request-charged"
+              }
             }
           },
           alias: "GetBucket"
@@ -27051,6 +29230,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27091,6 +29273,11 @@ var require_s3_2006_03_01_min = __commonJS({
               ExpectedBucketOwner: {
                 location: "header",
                 locationName: "x-amz-expected-bucket-owner"
+              },
+              OptionalObjectAttributes: {
+                shape: "Sbx",
+                location: "header",
+                locationName: "x-amz-optional-object-attributes"
               }
             }
           },
@@ -27101,7 +29288,7 @@ var require_s3_2006_03_01_min = __commonJS({
                 type: "boolean"
               },
               Contents: {
-                shape: "Sca"
+                shape: "Scf"
               },
               Name: {},
               Prefix: {},
@@ -27118,7 +29305,11 @@ var require_s3_2006_03_01_min = __commonJS({
               },
               ContinuationToken: {},
               NextContinuationToken: {},
-              StartAfter: {}
+              StartAfter: {},
+              RequestCharged: {
+                location: "header",
+                locationName: "x-amz-request-charged"
+              }
             }
           }
         },
@@ -27136,6 +29327,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27259,6 +29453,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27304,13 +29501,16 @@ var require_s3_2006_03_01_min = __commonJS({
                 locationName: "x-amz-acl"
               },
               AccessControlPolicy: {
-                shape: "Scp",
+                shape: "Scu",
                 locationName: "AccessControlPolicy",
                 xmlNamespace: {
                   uri: "http://s3.amazonaws.com/doc/2006-03-01/"
                 }
               },
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27368,6 +29568,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27403,6 +29606,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27455,6 +29661,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27499,6 +29708,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27531,6 +29743,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27565,6 +29780,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27617,6 +29835,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27665,6 +29886,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27714,6 +29938,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27749,6 +29976,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27793,6 +30023,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27829,6 +30062,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27867,6 +30103,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27909,6 +30148,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -27956,6 +30198,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -28005,6 +30250,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -28017,7 +30265,7 @@ var require_s3_2006_03_01_min = __commonJS({
                 locationName: "x-amz-sdk-checksum-algorithm"
               },
               Tagging: {
-                shape: "Sdf",
+                shape: "Sdk",
                 locationName: "Tagging",
                 xmlNamespace: {
                   uri: "http://s3.amazonaws.com/doc/2006-03-01/"
@@ -28048,6 +30296,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -28101,6 +30352,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -28166,6 +30420,9 @@ var require_s3_2006_03_01_min = __commonJS({
                 type: "blob"
               },
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -28402,13 +30659,16 @@ var require_s3_2006_03_01_min = __commonJS({
                 locationName: "x-amz-acl"
               },
               AccessControlPolicy: {
-                shape: "Scp",
+                shape: "Scu",
                 locationName: "AccessControlPolicy",
                 xmlNamespace: {
                   uri: "http://s3.amazonaws.com/doc/2006-03-01/"
                 }
               },
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -28486,6 +30746,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -28549,6 +30812,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -28609,6 +30875,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -28679,6 +30948,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -28699,7 +30971,7 @@ var require_s3_2006_03_01_min = __commonJS({
                 locationName: "x-amz-sdk-checksum-algorithm"
               },
               Tagging: {
-                shape: "Sdf",
+                shape: "Sdk",
                 locationName: "Tagging",
                 xmlNamespace: {
                   uri: "http://s3.amazonaws.com/doc/2006-03-01/"
@@ -28743,6 +31015,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -28785,6 +31060,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -28828,12 +31106,12 @@ var require_s3_2006_03_01_min = __commonJS({
                     ],
                     members: {
                       InputSerialization: {
-                        shape: "Se5"
+                        shape: "Sea"
                       },
                       ExpressionType: {},
                       Expression: {},
                       OutputSerialization: {
-                        shape: "Sek"
+                        shape: "Sep"
                       }
                     }
                   },
@@ -28867,7 +31145,7 @@ var require_s3_2006_03_01_min = __commonJS({
                             shape: "S3g"
                           },
                           Tagging: {
-                            shape: "Sdf"
+                            shape: "Sdk"
                           },
                           UserMetadata: {
                             type: "list",
@@ -28941,6 +31219,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -28972,10 +31253,10 @@ var require_s3_2006_03_01_min = __commonJS({
                 }
               },
               InputSerialization: {
-                shape: "Se5"
+                shape: "Sea"
               },
               OutputSerialization: {
-                shape: "Sek"
+                shape: "Sep"
               },
               ScanRange: {
                 type: "structure",
@@ -29088,6 +31369,9 @@ var require_s3_2006_03_01_min = __commonJS({
                 type: "blob"
               },
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -29229,6 +31513,9 @@ var require_s3_2006_03_01_min = __commonJS({
             ],
             members: {
               Bucket: {
+                contextParam: {
+                  name: "Bucket"
+                },
                 location: "uri",
                 locationName: "Bucket"
               },
@@ -29551,6 +31838,11 @@ var require_s3_2006_03_01_min = __commonJS({
           authtype: "v4-unsigned-body",
           endpoint: {
             hostPrefix: "{RequestRoute}."
+          },
+          staticContextParams: {
+            UseObjectLambdaEndpoint: {
+              value: true
+            }
           }
         }
       },
@@ -30140,6 +32432,9 @@ var require_s3_2006_03_01_min = __commonJS({
           ],
           members: {
             Bucket: {
+              contextParam: {
+                name: "Bucket"
+              },
               location: "uri",
               locationName: "Bucket"
             },
@@ -30613,12 +32908,27 @@ var require_s3_2006_03_01_min = __commonJS({
           },
           flattened: true
         },
-        Sc1: {
+        Sbx: {
+          type: "list",
+          member: {}
+        },
+        Sc3: {
           type: "list",
           member: {},
           flattened: true
         },
-        Sca: {
+        Sc6: {
+          type: "structure",
+          members: {
+            IsRestoreInProgress: {
+              type: "boolean"
+            },
+            RestoreExpiryDate: {
+              type: "timestamp"
+            }
+          }
+        },
+        Scf: {
           type: "list",
           member: {
             type: "structure",
@@ -30629,7 +32939,7 @@ var require_s3_2006_03_01_min = __commonJS({
               },
               ETag: {},
               ChecksumAlgorithm: {
-                shape: "Sc1"
+                shape: "Sc3"
               },
               Size: {
                 type: "integer"
@@ -30637,12 +32947,15 @@ var require_s3_2006_03_01_min = __commonJS({
               StorageClass: {},
               Owner: {
                 shape: "S3d"
+              },
+              RestoreStatus: {
+                shape: "Sc6"
               }
             }
           },
           flattened: true
         },
-        Scp: {
+        Scu: {
           type: "structure",
           members: {
             Grants: {
@@ -30654,7 +32967,7 @@ var require_s3_2006_03_01_min = __commonJS({
             }
           }
         },
-        Sdf: {
+        Sdk: {
           type: "structure",
           required: [
             "TagSet"
@@ -30665,7 +32978,7 @@ var require_s3_2006_03_01_min = __commonJS({
             }
           }
         },
-        Se5: {
+        Sea: {
           type: "structure",
           members: {
             CSV: {
@@ -30695,7 +33008,7 @@ var require_s3_2006_03_01_min = __commonJS({
             }
           }
         },
-        Sek: {
+        Sep: {
           type: "structure",
           members: {
             CSV: {
@@ -30715,6 +33028,24 @@ var require_s3_2006_03_01_min = __commonJS({
               }
             }
           }
+        }
+      },
+      clientContextParams: {
+        Accelerate: {
+          documentation: "Enables this client to use S3 Transfer Acceleration endpoints.",
+          type: "boolean"
+        },
+        DisableMultiRegionAccessPoints: {
+          documentation: "Disables this client's usage of Multi-Region Access Points.",
+          type: "boolean"
+        },
+        ForcePathStyle: {
+          documentation: "Forces this client to use path-style addressing for buckets.",
+          type: "boolean"
+        },
+        UseArnRegion: {
+          documentation: "Enables this client to use an ARN's region when constructing an endpoint instead of the client's configured region.",
+          type: "boolean"
         }
       }
     };
@@ -30896,12 +33227,85 @@ var require_s33 = __commonJS({
   }
 });
 
+// node_modules/dotenv/package.json
+var require_package = __commonJS({
+  "node_modules/dotenv/package.json"(exports, module2) {
+    module2.exports = {
+      name: "dotenv",
+      version: "16.3.1",
+      description: "Loads environment variables from .env file",
+      main: "lib/main.js",
+      types: "lib/main.d.ts",
+      exports: {
+        ".": {
+          types: "./lib/main.d.ts",
+          require: "./lib/main.js",
+          default: "./lib/main.js"
+        },
+        "./config": "./config.js",
+        "./config.js": "./config.js",
+        "./lib/env-options": "./lib/env-options.js",
+        "./lib/env-options.js": "./lib/env-options.js",
+        "./lib/cli-options": "./lib/cli-options.js",
+        "./lib/cli-options.js": "./lib/cli-options.js",
+        "./package.json": "./package.json"
+      },
+      scripts: {
+        "dts-check": "tsc --project tests/types/tsconfig.json",
+        lint: "standard",
+        "lint-readme": "standard-markdown",
+        pretest: "npm run lint && npm run dts-check",
+        test: "tap tests/*.js --100 -Rspec",
+        prerelease: "npm test",
+        release: "standard-version"
+      },
+      repository: {
+        type: "git",
+        url: "git://github.com/motdotla/dotenv.git"
+      },
+      funding: "https://github.com/motdotla/dotenv?sponsor=1",
+      keywords: [
+        "dotenv",
+        "env",
+        ".env",
+        "environment",
+        "variables",
+        "config",
+        "settings"
+      ],
+      readmeFilename: "README.md",
+      license: "BSD-2-Clause",
+      devDependencies: {
+        "@definitelytyped/dtslint": "^0.0.133",
+        "@types/node": "^18.11.3",
+        decache: "^4.6.1",
+        sinon: "^14.0.1",
+        standard: "^17.0.0",
+        "standard-markdown": "^7.1.0",
+        "standard-version": "^9.5.0",
+        tap: "^16.3.0",
+        tar: "^6.1.11",
+        typescript: "^4.8.4"
+      },
+      engines: {
+        node: ">=12"
+      },
+      browser: {
+        fs: false
+      }
+    };
+  }
+});
+
 // node_modules/dotenv/lib/main.js
 var require_main = __commonJS({
   "node_modules/dotenv/lib/main.js"(exports, module2) {
     var fs2 = require("fs");
     var path = require("path");
     var os = require("os");
+    var crypto = require("crypto");
+    var packageJson = require_package();
+    var version = packageJson.version;
     var LINE = /(?:^|^)\s*(?:export\s+)?([\w.-]+)(?:\s*=\s*?|:\s+?)(\s*'(?:\\'|[^'])*'|\s*"(?:\\"|[^"])*"|\s*`(?:\\`|[^`])*`|[^#\r\n]+)?\s*(?:#.*)?(?:$|$)/mg;
     function parse(src) {
       const obj = {};
@@ -30922,17 +33326,96 @@ var require_main = __commonJS({
       }
       return obj;
     }
+    function _parseVault(options) {
+      const vaultPath = _vaultPath(options);
+      const result = DotenvModule.configDotenv({ path: vaultPath });
+      if (!result.parsed) {
+        throw new Error(`MISSING_DATA: Cannot parse ${vaultPath} for an unknown reason`);
+      }
+      const keys = _dotenvKey(options).split(",");
+      const length = keys.length;
+      let decrypted;
+      for (let i = 0; i < length; i++) {
+        try {
+          const key = keys[i].trim();
+          const attrs = _instructions(result, key);
+          decrypted = DotenvModule.decrypt(attrs.ciphertext, attrs.key);
+          break;
+        } catch (error) {
+          if (i + 1 >= length) {
+            throw error;
+          }
+        }
+      }
+      return DotenvModule.parse(decrypted);
+    }
     function _log(message) {
-      console.log(`[dotenv][DEBUG] ${message}`);
+      console.log(`[dotenv@${version}][INFO] ${message}`);
+    }
+    function _warn(message) {
+      console.log(`[dotenv@${version}][WARN] ${message}`);
+    }
+    function _debug(message) {
+      console.log(`[dotenv@${version}][DEBUG] ${message}`);
+    }
+    function _dotenvKey(options) {
+      if (options && options.DOTENV_KEY && options.DOTENV_KEY.length > 0) {
+        return options.DOTENV_KEY;
+      }
+      if (process.env.DOTENV_KEY && process.env.DOTENV_KEY.length > 0) {
+        return process.env.DOTENV_KEY;
+      }
+      return "";
+    }
+    function _instructions(result, dotenvKey) {
+      let uri;
+      try {
+        uri = new URL(dotenvKey);
+      } catch (error) {
+        if (error.code === "ERR_INVALID_URL") {
+          throw new Error("INVALID_DOTENV_KEY: Wrong format. Must be in valid uri format like dotenv://:key_1234@dotenv.org/vault/.env.vault?environment=development");
+        }
+        throw error;
+      }
+      const key = uri.password;
+      if (!key) {
+        throw new Error("INVALID_DOTENV_KEY: Missing key part");
+      }
+      const environment = uri.searchParams.get("environment");
+      if (!environment) {
+        throw new Error("INVALID_DOTENV_KEY: Missing environment part");
+      }
+      const environmentKey = `DOTENV_VAULT_${environment.toUpperCase()}`;
+      const ciphertext = result.parsed[environmentKey];
+      if (!ciphertext) {
+        throw new Error(`NOT_FOUND_DOTENV_ENVIRONMENT: Cannot locate environment ${environmentKey} in your .env.vault file.`);
+      }
+      return { ciphertext, key };
+    }
+    function _vaultPath(options) {
+      let dotenvPath = path.resolve(process.cwd(), ".env");
+      if (options && options.path && options.path.length > 0) {
+        dotenvPath = options.path;
+      }
+      return dotenvPath.endsWith(".vault") ? dotenvPath : `${dotenvPath}.vault`;
     }
     function _resolveHome(envPath) {
       return envPath[0] === "~" ? path.join(os.homedir(), envPath.slice(1)) : envPath;
     }
-    function config(options) {
+    function _configVault(options) {
+      _log("Loading env from encrypted .env.vault");
+      const parsed = DotenvModule._parseVault(options);
+      let processEnv = process.env;
+      if (options && options.processEnv != null) {
+        processEnv = options.processEnv;
+      }
+      DotenvModule.populate(processEnv, parsed, options);
+      return { parsed };
+    }
+    function configDotenv(options) {
       let dotenvPath = path.resolve(process.cwd(), ".env");
       let encoding = "utf8";
       const debug = Boolean(options && options.debug);
-      const override = Boolean(options && options.override);
       if (options) {
         if (options.path != null) {
           dotenvPath = _resolveHome(options.path);
@@ -30943,36 +33426,96 @@ var require_main = __commonJS({
       }
       try {
         const parsed = DotenvModule.parse(fs2.readFileSync(dotenvPath, { encoding }));
-        Object.keys(parsed).forEach(function(key) {
-          if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
-            process.env[key] = parsed[key];
-          } else {
-            if (override === true) {
-              process.env[key] = parsed[key];
-            }
-            if (debug) {
-              if (override === true) {
-                _log(`"${key}" is already defined in \`process.env\` and WAS overwritten`);
-              } else {
-                _log(`"${key}" is already defined in \`process.env\` and was NOT overwritten`);
-              }
-            }
-          }
-        });
+        let processEnv = process.env;
+        if (options && options.processEnv != null) {
+          processEnv = options.processEnv;
+        }
+        DotenvModule.populate(processEnv, parsed, options);
         return { parsed };
       } catch (e) {
         if (debug) {
-          _log(`Failed to load ${dotenvPath} ${e.message}`);
+          _debug(`Failed to load ${dotenvPath} ${e.message}`);
         }
         return { error: e };
       }
     }
+    function config(options) {
+      const vaultPath = _vaultPath(options);
+      if (_dotenvKey(options).length === 0) {
+        return DotenvModule.configDotenv(options);
+      }
+      if (!fs2.existsSync(vaultPath)) {
+        _warn(`You set DOTENV_KEY but you are missing a .env.vault file at ${vaultPath}. Did you forget to build it?`);
+        return DotenvModule.configDotenv(options);
+      }
+      return DotenvModule._configVault(options);
+    }
+    function decrypt(encrypted, keyStr) {
+      const key = Buffer.from(keyStr.slice(-64), "hex");
+      let ciphertext = Buffer.from(encrypted, "base64");
+      const nonce = ciphertext.slice(0, 12);
+      const authTag = ciphertext.slice(-16);
+      ciphertext = ciphertext.slice(12, -16);
+      try {
+        const aesgcm = crypto.createDecipheriv("aes-256-gcm", key, nonce);
+        aesgcm.setAuthTag(authTag);
+        return `${aesgcm.update(ciphertext)}${aesgcm.final()}`;
+      } catch (error) {
+        const isRange = error instanceof RangeError;
+        const invalidKeyLength = error.message === "Invalid key length";
+        const decryptionFailed = error.message === "Unsupported state or unable to authenticate data";
+        if (isRange || invalidKeyLength) {
+          const msg = "INVALID_DOTENV_KEY: It must be 64 characters long (or more)";
+          throw new Error(msg);
+        } else if (decryptionFailed) {
+          const msg = "DECRYPTION_FAILED: Please check your DOTENV_KEY";
+          throw new Error(msg);
+        } else {
+          console.error("Error: ", error.code);
+          console.error("Error: ", error.message);
+          throw error;
+        }
+      }
+    }
+    function populate(processEnv, parsed, options = {}) {
+      const debug = Boolean(options && options.debug);
+      const override = Boolean(options && options.override);
+      if (typeof parsed !== "object") {
+        throw new Error("OBJECT_REQUIRED: Please check the processEnv argument being passed to populate");
+      }
+      for (const key of Object.keys(parsed)) {
+        if (Object.prototype.hasOwnProperty.call(processEnv, key)) {
+          if (override === true) {
+            processEnv[key] = parsed[key];
+          }
+          if (debug) {
+            if (override === true) {
+              _debug(`"${key}" is already defined and WAS overwritten`);
+            } else {
+              _debug(`"${key}" is already defined and was NOT overwritten`);
+            }
+          }
+        } else {
+          processEnv[key] = parsed[key];
+        }
+      }
+    }
     var DotenvModule = {
+      configDotenv,
+      _configVault,
+      _parseVault,
       config,
-      parse
+      decrypt,
+      parse,
+      populate
     };
+    module2.exports.configDotenv = DotenvModule.configDotenv;
+    module2.exports._configVault = DotenvModule._configVault;
+    module2.exports._parseVault = DotenvModule._parseVault;
     module2.exports.config = DotenvModule.config;
+    module2.exports.decrypt = DotenvModule.decrypt;
     module2.exports.parse = DotenvModule.parse;
+    module2.exports.populate = DotenvModule.populate;
     module2.exports = DotenvModule;
   }
 });
@@ -30993,6 +33536,9 @@ var require_env_options = __commonJS({
     if (process.env.DOTENV_CONFIG_OVERRIDE != null) {
       options.override = process.env.DOTENV_CONFIG_OVERRIDE;
     }
+    if (process.env.DOTENV_CONFIG_DOTENV_KEY != null) {
+      options.DOTENV_KEY = process.env.DOTENV_CONFIG_DOTENV_KEY;
+    }
     module2.exports = options;
   }
 });
@@ -31000,7 +33546,7 @@ var require_env_options = __commonJS({
 // node_modules/dotenv/lib/cli-options.js
 var require_cli_options = __commonJS({
   "node_modules/dotenv/lib/cli-options.js"(exports, module2) {
-    var re = /^dotenv_config_(encoding|path|debug|override)=(.+)$/;
+    var re = /^dotenv_config_(encoding|path|debug|override|DOTENV_KEY)=(.+)$/;
     module2.exports = function optionMatcher(args) {
       return args.reduce(function(acc, cur) {
         const matches = cur.match(re);
@@ -31066,93 +33612,79 @@ function check(githubOrganization2, githubRepository2, bucketName2, region2, acc
     throw new Error("AWS_SECRET_KEY is undefined");
   }
 }
-async function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-async function run(organization, repository) {
+async function getRepoNames(organization) {
   console.log("Get list of repositories...");
-  const list = await octokit.request("GET /orgs/{org}/repos", {
-    org: organization,
-    type: "all",
-    per_page: 100
-  });
-  const repositories = list.data.map((item) => item.full_name);
-  console.log(repositories);
-  console.log("Starting migration...");
-  const migration = await octokit.request("POST /orgs/{org}/migrations", {
-    org: organization,
-    repositories,
-    lock_repositories: false
-  });
-  console.log(
-    `Migration started successfully! 
-The current migration id is ${migration.data.id} and the state is currently on ${migration.data.state}`
-  );
-  let state = migration.data.state;
-  while (state !== "exported") {
-    const check2 = await octokit.request(
-      "GET /orgs/{org}/migrations/{migration_id}",
+  let repoNames = [];
+  let fetchMore = true;
+  let page = 1;
+  const n_results = 10;
+  while (fetchMore) {
+    const repos = await octokit.request("GET /orgs/{org}/repos", {
+      org: organization,
+      type: "all",
+      per_page: n_results,
+      sort: "full_name",
+      page: page++
+    });
+    repoNames = repoNames.concat(repos.data.map((item) => item.full_name));
+    fetchMore = repos.data.length >= n_results;
+  }
+  return repoNames;
+}
+async function run(organization) {
+  try {
+    let downloadArchive = function(url, filename2) {
+      https.get(url, (res) => {
+        const writeStream = fs.createWriteStream(filename2);
+        console.log("\nDownloading archive file...");
+        res.pipe(writeStream);
+        writeStream.on("finish", () => {
+          console.log("Download completed!");
+          uploadArchive(filename2);
+          deleteArchive(organization, 3462389);
+          console.log("Backup completed! Goodbye.");
+        });
+        writeStream.on("error", () => {
+          console.log("Error while downloading file");
+        });
+      });
+    };
+    const repoNames = await getRepoNames(organization);
+    console.log(repoNames);
+    console.log("Starting migration...");
+    const archive = await octokit.request(
+      "GET /orgs/{org}/migrations/{migration_id}/archive",
       {
         org: organization,
-        migration_id: migration.data.id
+        migration_id: 3462389
       }
     );
-    console.log(`State is ${check2.data.state}... 
-`);
-    state = check2.data.state;
-    await sleep(5e3);
-  }
-  console.log(
-    `State changed to ${state}! 
-Requesting download url of archive...
-`
-  );
-  const archive = await octokit.request(
-    "GET /orgs/{org}/migrations/{migration_id}/archive",
-    {
-      org: organization,
-      migration_id: migration.data.id
+    console.log(archive.url);
+    async function uploadArchive(filename2) {
+      console.log("Uploading archive to our own S3 bucket");
+      const fileStream = fs.createReadStream(filename2);
+      const uploadParams = {
+        Bucket: bucketName,
+        Body: fileStream,
+        Key: filename2
+      };
+      return s3.upload(uploadParams).promise();
     }
-  );
-  console.log(archive.url);
-  async function uploadArchive(filename2) {
-    console.log("Uploading archive to our own S3 bucket");
-    const fileStream = fs.createReadStream(filename2);
-    const uploadParams = {
-      Bucket: bucketName,
-      Body: fileStream,
-      Key: filename2
-    };
-    return s3.upload(uploadParams).promise();
+    async function deleteArchive(organization2, migrationId) {
+      console.log("Deleting organization migration archive from GitHub");
+      await octokit.request(
+        "DELETE /orgs/{org}/migrations/{migration_id}/archive",
+        {
+          org: organization2,
+          migration_id: migrationId
+        }
+      );
+    }
+    const filename = `gh_org_archive_${githubOrganization}_${new Date().toJSON().slice(0, 10)}.tar.gz`;
+    downloadArchive(archive.url, filename);
+  } catch (error) {
+    console.error("Error occurred during migration:", error);
   }
-  async function deleteArchive(organization2, migrationId) {
-    console.log("Deleting organization migration archive from GitHub");
-    await octokit.request(
-      "DELETE /orgs/{org}/migrations/{migration_id}/archive",
-      {
-        org: organization2,
-        migration_id: migrationId
-      }
-    );
-  }
-  function downloadArchive(url, filename2) {
-    https.get(url, (res) => {
-      const writeStream = fs.createWriteStream(filename2);
-      console.log("\nDownloading archive file...");
-      res.pipe(writeStream);
-      writeStream.on("finish", () => {
-        console.log("Download completed!");
-        uploadArchive(filename2);
-        deleteArchive(organization, migration.data.id);
-        console.log("Backup completed! Goodbye.");
-      });
-      writeStream.on("error", () => {
-        console.log("Error while downloading file");
-      });
-    });
-  }
-  const filename = `gh_org_archive_${githubOrganization}_${new Date().toJSON().slice(0, 10)}.tar.gz`;
-  downloadArchive(archive.url, filename);
 }
 check(
   githubOrganization,
@@ -31162,7 +33694,7 @@ check(
   accessKeyId,
   secretAccessKey
 );
-run(githubOrganization, githubRepository);
+run(githubOrganization);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   check
