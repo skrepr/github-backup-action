@@ -27,9 +27,12 @@
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@actions/github": "^5.0.3",
+    "@aws-sdk/client-s3": "^3.386.0",
+    "@aws-sdk/lib-storage": "^3.386.0",
     "@octokit/core": "^4.0.5",
     "@types/node": "^18.7.21",
     "aws-sdk": "^2.1150.0",
+    "axios": "^1.4.0",
     "dotenv": "^16.0.2",
     "esbuild": "^0.15.9",
     "eslint-plugin-github": "^4.3.7",

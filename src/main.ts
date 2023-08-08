@@ -1,9 +1,10 @@
 /* eslint-disable no-inner-declarations */
 import {Octokit} from '@octokit/core'
 import * as core from '@actions/core'
-import S3, {PutObjectRequest} from 'aws-sdk/clients/s3'
+import { Upload } from "@aws-sdk/lib-storage";
+import * as AWS_S3 from "@aws-sdk/client-s3";
 import * as fs from 'fs'
-import * as https from 'https'
+import axios from 'axios';
 import 'dotenv/config'
 
 // All the GitHub variables
@@ -14,20 +15,24 @@ const octokit = new Octokit({
 })
 
 // All the AWS variables
+const { S3 } = AWS_S3;
 const bucketName: string = process.env.AWS_BUCKET_NAME as string
-const region: string = process.env.AWS_BUCKET_REGION as string
-const accessKeyId: string = process.env.AWS_ACCESS_KEY as string
-const secretAccessKey: string = process.env.AWS_SECRET_KEY as string
-const s3 = new S3({region, accessKeyId, secretAccessKey})
+const s3 = new S3({
+  region: process.env.AWS_BUCKET_REGION as string,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY as string,
+    secretAccessKey: process.env.AWS_SECRET_KEY as string,
+  },
+});
+
+// All the script variables
+const downloadMigration: boolean = process.env.DOWNLOAD_MIGRATION === 'true'
 
 // Check if all the variables necessary are defined
 export function check(
     githubOrganization: string,
     githubRepository: string,
     bucketName: string,
-    region: string,
-    accessKeyId: string,
-    secretAccessKey: string
 ): void {
     if (!githubOrganization) {
         throw new Error('GH_ORG is undefined')
@@ -40,18 +45,6 @@ export function check(
     if (!bucketName) {
         throw new Error('AWS_BUCKET_NAME is undefined')
     }
-
-    if (!region) {
-        throw new Error('AWS_BUCKET_REGION is undefined')
-    }
-
-    if (!accessKeyId) {
-        throw new Error('AWS_ACCESS_KEY is undefined')
-    }
-
-    if (!secretAccessKey) {
-        throw new Error('AWS_SECRET_KEY is undefined')
-    }
 }
 
 // Add sleep function to reduce calls to GitHub API when checking the status of the migration
@@ -60,7 +53,7 @@ async function sleep(ms: number): Promise<void> {
 }
 
 async function getRepoNames(organization: string): Promise<string[]> {
-    console.log('Get list of repositories...')
+    console.log('\nGet list of repositories...\n')
 
     let repoNames: string[] = []
     let fetchMore = true
@@ -82,124 +75,188 @@ async function getRepoNames(organization: string): Promise<string[]> {
     return repoNames
 }
 
-// Main function for running the migration
-async function run(organization: string): Promise<void> {
+async function retrieveMigrationData() {
+  try {
+    // Read the contents of the file
+    const fileContents = fs.readFileSync('migration_response.json', 'utf-8');
+
+    // Parse the JSON contents back into a JavaScript object
+    const migrationData = JSON.parse(fileContents);
+
+    // Now you can access the data from the migration response
+    console.log('Successfully loaded migration data!\n');
+
+    return migrationData; // Return the parsed data to be used later
+  } catch (error) {
+    console.error('Error occurred while reading the file:', error);
+    return null;
+  }
+}
+
+// Function for running the migration
+async function runMigration(organization: string): Promise<void> {
     try {
         // Fetch repo names asynchronously
         const repoNames = await getRepoNames(organization)
 
         console.log(repoNames)
 
-        console.log('Starting migration...')
+        console.log('\nStarting migration...\n')
 
-        // Start the migration on GitHub
-        const migration = await octokit.request('POST /orgs/{org}/migrations', {
-            org: organization,
-            repositories: repoNames,
-            lock_repositories: false
-        })
+    // Start the migration on GitHub
+    const migration = await octokit.request('POST /orgs/{org}/migrations', {
+      org: organization,
+      repositories: repoNames,
+      lock_repositories: false
+    });
 
-        console.log(
-            `Migration started successfully! \nThe current migration id is ${migration.data.id} and the state is currently on ${migration.data.state}`
-        )
-
-        // TODO RUNNER TAKEN OPSPLITSEN VANAF HIER <---->
-
-        // REMOVE IN FUTURE --->
-        // Need a migration status when entering the while loop for the first time
-        let state = migration.data.state
-
-        // Wait for status of migration to be exported
-        while (state !== 'exported') {
-            const check = await octokit.request(
-                'GET /orgs/{org}/migrations/{migration_id}',
-                {
-                    org: organization,
-                    migration_id: migration.data.id
-                }
-            )
-            console.log(`State is ${check.data.state}... \n`)
-            state = check.data.state
-            await sleep(5000)
-        }
+    // Write the response to a file
+    fs.writeFileSync('migration_response.json', JSON.stringify(migration.data));
 
         console.log(
-            `State changed to ${state}! \nRequesting download url of archive...\n`
-        )
-        // REMOVE IN FUTURE <---
-
-        // Fetches the URL to a migration archive
-        const archive = await octokit.request(
-            'GET /orgs/{org}/migrations/{migration_id}/archive',
-            {
-                org: organization,
-                migration_id: migration.data.id
-            }
+            `Migration started successfully!\n The current migration id is ${migration.data.id} and the state is currently on ${migration.data.state}\n`
         )
 
-        console.log(archive.url)
-
-        // Function for uploading archive to our own S3 Bucket
-        async function uploadArchive(filename: string): Promise<unknown> {
-            console.log('Uploading archive to our own S3 bucket')
-            const fileStream = fs.createReadStream(filename)
-            const uploadParams: PutObjectRequest = {
-                Bucket: bucketName,
-                Body: fileStream,
-                Key: filename
-            }
-
-            // this will upload the archive to S3
-            return s3.upload(uploadParams).promise()
-        }
-
-        // Function for deleting archive from Github
-        async function deleteArchive(
-            organization: string,
-            migrationId: number
-        ): Promise<void> {
-            console.log('Deleting organization migration archive from GitHub')
-            await octokit.request(
-                'DELETE /orgs/{org}/migrations/{migration_id}/archive',
-                {
-                    org: organization,
-                    migration_id: migrationId
-                }
-            )
-        }
-
-        // Function for downloading archive from Github S3 environment
-        function downloadArchive(url: string, filename: string): void {
-            https.get(url, res => {
-                const writeStream = fs.createWriteStream(filename)
-                console.log('\nDownloading archive file...')
-                res.pipe(writeStream)
-
-                writeStream.on('finish', () => {
-                    console.log('Download completed!')
-                    // Upload archive to our own S3 Bucket
-                    uploadArchive(filename)
-                    // Deletes the migration archive. Migration archives are otherwise automatically deleted after seven days.
-                deleteArchive(organization, migration.data.id)
-                console.log('Backup completed! Goodbye.')
-            })
-
-                writeStream.on('error', () => {
-                    console.log('Error while downloading file')
-                })
-            })
-        }
-
-        // Create a name for the file which has the current date attached to it
-        const filename = `gh_org_archive_${githubOrganization}_${new Date()
-            .toJSON()
-            .slice(0, 10)}.tar.gz`
-
-        // Download archive from Github and upload it to our own S3 bucket
-        downloadArchive(archive.url, filename)
     } catch (error) {
-        console.error('Error occurred during migration:', error)
+        console.error('Error occurred during the migration:', error)
     }
+}
+
+// Function for downloading the migration
+async function runDownload(organization: string): Promise<void> {
+  try {
+
+      // Retrieve the migration data from the file
+      const migration = await retrieveMigrationData();
+
+      // Need a migration status when entering the while loop for the first time
+      let state = migration.state
+
+      // Wait for status of migration to be exported
+      while (state !== 'exported') {
+          const check = await octokit.request(
+              'GET /orgs/{org}/migrations/{migration_id}',
+              {
+                  org: organization,
+                  migration_id: migration.id
+              }
+          )
+          console.log(`State is ${check.data.state}... \n`)
+          state = check.data.state
+          await sleep(5000)
+      }
+
+      console.log(
+        `State changed to ${state}!\n`
+      )
+
+      // Function for uploading archive to our own S3 Bucket
+      async function uploadArchive(filename: string): Promise<unknown> {
+          console.log('Uploading archive to our own S3 bucket...\n')
+          const fileStream = fs.createReadStream(filename)
+          const uploadParams: AWS_S3.PutObjectCommandInput = {
+              Bucket: bucketName,
+              Body: fileStream,
+              Key: filename
+          }
+
+          // this will upload the archive to S3
+          return new Upload({
+              client: s3,
+              params: uploadParams
+          }).done();
+      }
+
+      // Function for deleting archive from Github
+      async function deleteArchive(
+          organization: string,
+          migrationId: number
+      ): Promise<void> {
+          console.log('Deleting organization migration archive from GitHub...\n')
+          await octokit.request(
+              'DELETE /orgs/{org}/migrations/{migration_id}/archive',
+              {
+                  org: organization,
+                  migration_id: migrationId
+              }
+          )
+      }
+
+      // Function for downloading archive from GitHub S3 environment
+      async function downloadArchive(organization, migration, url) {
+        const maxRetries = 3;
+        const timeoutDuration = 30000; // 30 seconds
+        for (let retryCount = 1; retryCount <= maxRetries; retryCount++) {
+          try {
+
+            console.log(
+              `Requesting download of archive with migration_id: ${migration}...\n`
+            )
+
+            const archiveUrl = url + '/archive'
+
+            const archiveResponse = await axios.get(archiveUrl, {
+              responseType: 'stream',
+              headers: {
+                Authorization: `token ${process.env.GH_APIKEY}`,
+              },
+            });
+
+            console.log(
+              `Creating filename...\n`
+            )
+            // Create a name for the file which has the current date attached to it
+            const filename = `gh_org_archive_${organization}_${new Date()
+              .toJSON()
+              .slice(0, 10)}.tar.gz`
+
+              console.log(
+                `Starting download...\n`
+              )
+
+            const writeStream = fs.createWriteStream(filename);
+            console.log('\nDownloading archive file...\n');
+
+            archiveResponse.data.pipe(writeStream);
+
+            return new Promise<void>((resolve, reject) => {
+              writeStream.on('finish', () => {
+                console.log('Download completed!\n');
+                // Upload archive to our own S3 Bucket
+                uploadArchive(filename);
+                // Deletes the migration archive. Migration archives are otherwise automatically deleted after seven days.
+                deleteArchive(organization, migration);
+                console.log('Backup completed! Goodbye.\n');
+                resolve();
+              });
+
+              writeStream.on('error', (err) => {
+                console.log('Error while downloading file:', err.message);
+                reject(err);
+              });
+            });
+          } catch (error) {
+            // Handle the API call error here
+            console.error(`Error occurred during attempt ${retryCount}:`, error);
+      
+            // If it's the last retry, throw the error to be caught outside the loop
+            if (retryCount === maxRetries) {
+              throw error;
+            }
+      
+            // If it's not the last retry, wait for the timeout before retrying
+            console.log('Retrying in 30 seconds...\n');
+            await sleep(timeoutDuration);
+          }
+        }
+      }
+
+      // Download archive from Github and upload it to our own S3 bucket
+      downloadArchive(organization, migration.id, migration.url)
+
+  } catch (error) {
+      console.error('Error occurred during download:', error)
+  }
 }
 
 // Check if all variables are defined
@@ -207,10 +264,12 @@ check(
     githubOrganization,
     githubRepository,
     bucketName,
-    region,
-    accessKeyId,
-    secretAccessKey
 )
 
-// Start the backup script
-run(githubOrganization)
+if (!downloadMigration) {
+  // Start the backup script when downloadMigration is false
+  runMigration(githubOrganization);
+} else {
+  // Start the download script when downloadMigration is true
+  runDownload(githubOrganization);
+}
