@@ -55779,15 +55779,21 @@ var s3 = new S3({
   }
 });
 var downloadMigration = process.env.DOWNLOAD_MIGRATION === "true";
-function check(githubOrganization2, githubRepository2, bucketName2) {
-  if (!githubOrganization2) {
-    throw new Error("GH_ORG is undefined");
-  }
-  if (!githubRepository2) {
-    throw new Error("GH_REPO is undefined");
-  }
-  if (!bucketName2) {
-    throw new Error("AWS_BUCKET_NAME is undefined");
+function check() {
+  const requiredVariables = [
+    "GH_ORG",
+    "GH_REPO",
+    "GH_APIKEY",
+    "AWS_BUCKET_NAME",
+    "AWS_BUCKET_REGION",
+    "AWS_ACCESS_KEY",
+    "AWS_SECRET_KEY",
+    "DOWNLOAD_MIGRATION"
+  ];
+  for (const variable of requiredVariables) {
+    if (!process.env[variable]) {
+      throw new Error(`${variable} is undefined`);
+    }
   }
 }
 async function sleep(ms) {
@@ -55812,17 +55818,6 @@ async function getRepoNames(organization) {
   }
   return repoNames;
 }
-async function retrieveMigrationData() {
-  try {
-    const fileContents = fs.readFileSync("migration_response.json", "utf-8");
-    const migrationData = JSON.parse(fileContents);
-    console.log("Successfully loaded migration data!\n");
-    return migrationData;
-  } catch (error) {
-    console.error("Error occurred while reading the file:", error);
-    return null;
-  }
-}
 async function runMigration(organization) {
   try {
     const repoNames = await getRepoNames(organization);
@@ -55844,6 +55839,17 @@ async function runMigration(organization) {
   }
 }
 async function runDownload(organization) {
+  async function retrieveMigrationData() {
+    try {
+      const fileContents = fs.readFileSync("migration_response.json", "utf-8");
+      const migrationData = JSON.parse(fileContents);
+      console.log("Successfully loaded migration data!\n");
+      return migrationData;
+    } catch (error) {
+      console.error("Error occurred while reading the file:", error);
+      return null;
+    }
+  }
   try {
     const migration = await retrieveMigrationData();
     let state = migration.state;
@@ -55913,7 +55919,7 @@ async function runDownload(organization) {
 `
           );
           const writeStream = fs.createWriteStream(filename);
-          console.log("\nDownloading archive file...\n");
+          console.log("Downloading archive file...\n");
           archiveResponse.data.pipe(writeStream);
           return new Promise((resolve, reject) => {
             writeStream.on("finish", () => {
@@ -55943,11 +55949,7 @@ async function runDownload(organization) {
     console.error("Error occurred during download:", error);
   }
 }
-check(
-  githubOrganization,
-  githubRepository,
-  bucketName
-);
+check();
 if (!downloadMigration) {
   runMigration(githubOrganization);
 } else {

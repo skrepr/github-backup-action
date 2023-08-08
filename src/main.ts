@@ -29,22 +29,19 @@ const s3 = new S3({
 const downloadMigration: boolean = process.env.DOWNLOAD_MIGRATION === 'true'
 
 // Check if all the variables necessary are defined
-export function check(
-    githubOrganization: string,
-    githubRepository: string,
-    bucketName: string,
-): void {
-    if (!githubOrganization) {
-        throw new Error('GH_ORG is undefined')
-    }
+export function check(): void {
+  const requiredVariables = [
+      'GH_ORG', 'GH_REPO', 'GH_APIKEY',
+      'AWS_BUCKET_NAME', 'AWS_BUCKET_REGION',
+      'AWS_ACCESS_KEY', 'AWS_SECRET_KEY',
+      'DOWNLOAD_MIGRATION'
+  ];
 
-    if (!githubRepository) {
-        throw new Error('GH_REPO is undefined')
-    }
-
-    if (!bucketName) {
-        throw new Error('AWS_BUCKET_NAME is undefined')
-    }
+  for (const variable of requiredVariables) {
+      if (!process.env[variable]) {
+          throw new Error(`${variable} is undefined`);
+      }
+  }
 }
 
 // Add sleep function to reduce calls to GitHub API when checking the status of the migration
@@ -73,24 +70,6 @@ async function getRepoNames(organization: string): Promise<string[]> {
         fetchMore = repos.data.length >= n_results
     }
     return repoNames
-}
-
-async function retrieveMigrationData() {
-  try {
-    // Read the contents of the file
-    const fileContents = fs.readFileSync('migration_response.json', 'utf-8');
-
-    // Parse the JSON contents back into a JavaScript object
-    const migrationData = JSON.parse(fileContents);
-
-    // Now you can access the data from the migration response
-    console.log('Successfully loaded migration data!\n');
-
-    return migrationData; // Return the parsed data to be used later
-  } catch (error) {
-    console.error('Error occurred while reading the file:', error);
-    return null;
-  }
 }
 
 // Function for running the migration
@@ -124,8 +103,27 @@ async function runMigration(organization: string): Promise<void> {
 
 // Function for downloading the migration
 async function runDownload(organization: string): Promise<void> {
-  try {
 
+  // Function for retrieving data from the stored file that the runMigration function created
+  async function retrieveMigrationData() {
+    try {
+      // Read the contents of the file
+      const fileContents = fs.readFileSync('migration_response.json', 'utf-8');
+  
+      // Parse the JSON contents back into a JavaScript object
+      const migrationData = JSON.parse(fileContents);
+  
+      // Now you can access the data from the migration response
+      console.log('Successfully loaded migration data!\n');
+  
+      return migrationData; // Return the parsed data to be used later
+    } catch (error) {
+      console.error('Error occurred while reading the file:', error);
+      return null;
+    }
+  }
+
+  try {
       // Retrieve the migration data from the file
       const migration = await retrieveMigrationData();
 
@@ -215,7 +213,7 @@ async function runDownload(organization: string): Promise<void> {
               )
 
             const writeStream = fs.createWriteStream(filename);
-            console.log('\nDownloading archive file...\n');
+            console.log('Downloading archive file...\n');
 
             archiveResponse.data.pipe(writeStream);
 
@@ -260,11 +258,7 @@ async function runDownload(organization: string): Promise<void> {
 }
 
 // Check if all variables are defined
-check(
-    githubOrganization,
-    githubRepository,
-    bucketName,
-)
+check()
 
 if (!downloadMigration) {
   // Start the backup script when downloadMigration is false
