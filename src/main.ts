@@ -103,7 +103,7 @@ async function runMigration(organization: string): Promise<void> {
 
         console.log(repoNames)
 
-        console.log('\nStarting migration...\n')
+        console.log(`\nStarting backup for ${repoNames.length} repositories...\n`)
         // Start the migration on GitHub
         const migration = await octokit.request('POST /orgs/{org}/migrations', {
             org: organization,
@@ -172,49 +172,6 @@ async function runDownload(organization: string): Promise<void> {
 
         console.log(`State changed to ${state}!\n`)
 
-        // Function for uploading archive to our own S3 Bucket
-        async function uploadArchive(filename: string): Promise<unknown> {
-            try {
-                console.log('Uploading archive to our own S3 bucket...\n')
-                const fileStream = fs.createReadStream(filename)
-                const uploadParams: AWS_S3.PutObjectCommandInput = {
-                    Bucket: bucketName,
-                    Body: fileStream,
-                    Key: filename
-                }
-
-                // this will upload the archive to S3
-                return new Upload({
-                    client: s3,
-                    params: uploadParams
-                }).done()
-            } catch (error) {
-                console.error('Error occurred while uploading the file:', error)
-            }
-        }
-        // Function for deleting archive from Github
-        async function deleteArchive(
-            organization: string,
-            migrationId: number
-        ): Promise<void> {
-            try {
-                console.log(
-                    'Deleting organization migration archive from GitHub...\n'
-                )
-                await octokit.request(
-                    'DELETE /orgs/{org}/migrations/{migration_id}/archive',
-                    {
-                        org: organization,
-                        migration_id: migrationId
-                    }
-                )
-            } catch (error) {
-                console.error(
-                    'Error occurred while deleting the archive:',
-                    error
-                )
-            }
-        }
         // Function for downloading archive from GitHub S3 environment
         async function downloadArchive(organization, migration, url) {
             const maxRetries = 3
@@ -280,6 +237,50 @@ async function runDownload(organization: string): Promise<void> {
                 }
             }
         }
+
+        // Function for uploading archive to our own S3 Bucket
+        async function uploadArchive(filename: string): Promise<unknown> {
+          try {
+              console.log('Uploading archive to our own S3 bucket...\n')
+              const fileStream = fs.createReadStream(filename)
+              const uploadParams: AWS_S3.PutObjectCommandInput = {
+                  Bucket: bucketName,
+                  Body: fileStream,
+                  Key: filename
+              }
+
+              // this will upload the archive to S3
+              return new Upload({
+                  client: s3,
+                  params: uploadParams
+              }).done()
+          } catch (error) {
+              console.error('Error occurred while uploading the file:', error)
+          }
+      }
+      // Function for deleting archive from Github
+      async function deleteArchive(
+          organization: string,
+          migrationId: number
+      ): Promise<void> {
+          try {
+              console.log(
+                  'Deleting organization migration archive from GitHub...\n'
+              )
+              await octokit.request(
+                  'DELETE /orgs/{org}/migrations/{migration_id}/archive',
+                  {
+                      org: organization,
+                      migration_id: migrationId
+                  }
+              )
+          } catch (error) {
+              console.error(
+                  'Error occurred while deleting the archive:',
+                  error
+              )
+          }
+      }
 
         // Download archive from Github and upload it to our own S3 bucket
         downloadArchive(organization, migration.id, migration.url)
