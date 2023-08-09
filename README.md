@@ -28,38 +28,81 @@ To minimize downtime, make a list of repositories you want to export from the so
 
 # Commands
 
-To build the project: `npm build`
-To watch project during developement: `npm watch`
-To run the script: `npm dist/main.ts`
+To build the project: `npm run build`
+To watch project during developement: `npm run watch`
+To run the script: `node dist/main.ts`
 List all repos: `curl "https://api.github.com/orgs/skrepr/repos" \
      -u 'username:<personal access token>'`
 # Github Action example config
 
+## Create archive
+
 ```yaml
-name: Backup repository
+name: Backup repositories
 
 on:
   schedule:
     - cron: '0 1 * * 0'  # At 01:00 on Sunday
-  workflow_dispatch:
 
 jobs:
   backup:
-    name: Backup repository
+    name: Create archive
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
     - name: Github Migrations Backup
       uses: skrepr/github-backup-action@1.0.0
-      env:
-        GH_ORG: 'your-org-here'
-        GH_REPO: 'your-repo-here'
-        GH_APIKEY: ${{ secrets.GH_PAT }} # You can't use GITHUB_TOKEN to use the API
-        AWS_BUCKET_NAME: 'your-bucket-here'
-        AWS_BUCKET_REGION: 'eu-west-1'
-        AWS_ARN: 'arn:aws:s3:::your-bucket-here'
-        AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }} # Github Secret is advised
-        AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }} # Github Secret is advised
+      with:
+        github-organization: "your-organization-here"
+        github-apikey: ${}
+        aws-bucket-name: "your-bucket-here"
+        aws-bucket-region: "your-bucket-region-here"
+        aws-access-key: ${AWS_ACCESS_KEY} # Github Secret is advised
+        aws-secret-key: ${AWS_SECRET_KEY} # Github Secret is advised
+
+    # Save migration.data.id as an artifact at the end of the first run
+    - name: Archive Data
+      uses: actions/upload-artifact@v2
+      with:
+        name: migration-data
+        path: migration_response.json
+```
+
+## Download archive
+
+```yaml
+name: Download archive
+
+on:
+  schedule:
+    - cron: '0 3 * * 0'  # At 03:00 on Sunday
+
+jobs:
+  backup:
+    name: Download archive
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+
+    # Download the migration.data.id as an artifact at the beginning of the second run
+    - name: Archive Data
+      uses: actions/download-artifact@v2
+      with:
+        name: migration-data
+        path: migration_response.json
+
+    - name: Github Migrations Backup
+      uses: skrepr/github-backup-action@1.0.0
+      with:
+        download-migration: true
+        github-organization: "your-organization-here"
+        github-apikey: ${}
+        aws-bucket-name: "your-bucket-here"
+        aws-bucket-region: "your-bucket-region-here"
+        aws-access-key: ${AWS_ACCESS_KEY} # Github Secret is advised
+        aws-secret-key: ${AWS_SECRET_KEY} # Github Secret is advised
 ```
 
 # AWS policy for S3 bucket user
