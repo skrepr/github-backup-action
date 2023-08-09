@@ -258,11 +258,8 @@ async function runDownload(organization: string): Promise<void> {
               console.error('Error occurred while uploading the file:', error)
           }
       }
-      // Function for deleting archive from Github
-      async function deleteArchive(
-          organization: string,
-          migrationId: number
-      ): Promise<void> {
+        // Function for deleting archive from Github
+        async function deleteArchive( organization: string, migrationId: number ): Promise<void> {
           try {
               console.log(
                   'Deleting organization migration archive from GitHub...\n'
@@ -275,10 +272,7 @@ async function runDownload(organization: string): Promise<void> {
                   }
               )
           } catch (error) {
-              console.error(
-                  'Error occurred while deleting the archive:',
-                  error
-              )
+              console.error('Error occurred while deleting the archive:', error)
           }
       }
 
