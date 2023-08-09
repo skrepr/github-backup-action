@@ -91,7 +91,6 @@ async function runMigration(organization: string): Promise<void> {
         console.log(repoNames)
 
         console.log('\nStarting migration...\n')
-
         // Start the migration on GitHub
         const migration = await octokit.request('POST /orgs/{org}/migrations', {
             org: organization,
@@ -106,7 +105,7 @@ async function runMigration(organization: string): Promise<void> {
         )
 
         console.log(
-            `Migration started successfully!\n The current migration id is ${migration.data.id} and the state is currently on ${migration.data.state}\n`
+            `Migration started successfully!\n\nThe current migration id is ${migration.data.id} and the state is currently on ${migration.data.state}\n`
         )
     } catch (error) {
         console.error('Error occurred during the migration:', error)
@@ -180,7 +179,6 @@ async function runDownload(organization: string): Promise<void> {
                 console.error('Error occurred while uploading the file:', error)
             }
         }
-
         // Function for deleting archive from Github
         async function deleteArchive(
             organization: string,
@@ -204,7 +202,6 @@ async function runDownload(organization: string): Promise<void> {
                 )
             }
         }
-
         // Function for downloading archive from GitHub S3 environment
         async function downloadArchive(organization, migration, url) {
             const maxRetries = 3
@@ -231,10 +228,8 @@ async function runDownload(organization: string): Promise<void> {
                         .slice(0, 10)}.tar.gz`
 
                     console.log(`Starting download...\n`)
-
                     const writeStream = fs.createWriteStream(filename)
                     console.log('Downloading archive file...\n')
-
                     archiveResponse.data.pipe(writeStream)
 
                     return new Promise<void>((resolve, reject) => {
@@ -262,12 +257,10 @@ async function runDownload(organization: string): Promise<void> {
                         `Error occurred during attempt ${retryCount}:`,
                         error
                     )
-
                     // If it's the last retry, throw the error to be caught outside the loop
                     if (retryCount === maxRetries) {
                         throw error
                     }
-
                     // If it's not the last retry, wait for the timeout before retrying
                     console.log('Retrying in 30 seconds...\n')
                     await sleep(timeoutDuration)

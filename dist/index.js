@@ -55765,7 +55765,6 @@ var {
 
 // src/main.ts
 var githubOrganization = process.env.GH_ORG;
-var githubRepository = process.env.GH_REPO;
 var octokit = new import_core.Octokit({
   auth: process.env.GH_APIKEY
 });
@@ -55782,7 +55781,6 @@ var downloadMigration = process.env.DOWNLOAD_MIGRATION === "true";
 function check() {
   const requiredVariables = [
     "GH_ORG",
-    "GH_REPO",
     "GH_APIKEY",
     "AWS_BUCKET_NAME",
     "AWS_BUCKET_REGION",
@@ -55800,23 +55798,31 @@ async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 async function getRepoNames(organization) {
-  console.log("\nGet list of repositories...\n");
-  let repoNames = [];
-  let fetchMore = true;
-  let page = 1;
-  const n_results = 10;
-  while (fetchMore) {
-    const repos = await octokit.request("GET /orgs/{org}/repos", {
-      org: organization,
-      type: "all",
-      per_page: n_results,
-      sort: "full_name",
-      page: page++
-    });
-    repoNames = repoNames.concat(repos.data.map((item) => item.full_name));
-    fetchMore = repos.data.length >= n_results;
+  try {
+    console.log("\nGet list of repositories...\n");
+    let repoNames = [];
+    let fetchMore = true;
+    let page = 1;
+    const n_results = 10;
+    while (fetchMore) {
+      const repos = await octokit.request("GET /orgs/{org}/repos", {
+        org: organization,
+        type: "all",
+        per_page: n_results,
+        sort: "full_name",
+        page: page++
+      });
+      repoNames = repoNames.concat(repos.data.map((item) => item.full_name));
+      fetchMore = repos.data.length >= n_results;
+    }
+    return repoNames;
+  } catch (error) {
+    console.error(
+      "Error occurred while retrieving list of repositories:",
+      error
+    );
+    throw error;
   }
-  return repoNames;
 }
 async function runMigration(organization) {
   try {
@@ -55828,7 +55834,10 @@ async function runMigration(organization) {
       repositories: repoNames,
       lock_repositories: false
     });
-    fs.writeFileSync("migration_response.json", JSON.stringify(migration.data));
+    fs.writeFileSync(
+      "migration_response.json",
+      JSON.stringify(migration.data)
+    );
     console.log(
       `Migration started successfully!
  The current migration id is ${migration.data.id} and the state is currently on ${migration.data.state}
@@ -55841,7 +55850,10 @@ async function runMigration(organization) {
 async function runDownload(organization) {
   async function retrieveMigrationData() {
     try {
-      const fileContents = fs.readFileSync("migration_response.json", "utf-8");
+      const fileContents = fs.readFileSync(
+        "migration_response.json",
+        "utf-8"
+      );
       const migrationData = JSON.parse(fileContents);
       console.log("Successfully loaded migration data!\n");
       return migrationData;
@@ -55866,32 +55878,43 @@ async function runDownload(organization) {
       state = check2.data.state;
       await sleep(5e3);
     }
-    console.log(
-      `State changed to ${state}!
-`
-    );
+    console.log(`State changed to ${state}!
+`);
     async function uploadArchive(filename) {
-      console.log("Uploading archive to our own S3 bucket...\n");
-      const fileStream = fs.createReadStream(filename);
-      const uploadParams = {
-        Bucket: bucketName,
-        Body: fileStream,
-        Key: filename
-      };
-      return new import_lib_storage.Upload({
-        client: s3,
-        params: uploadParams
-      }).done();
+      try {
+        console.log("Uploading archive to our own S3 bucket...\n");
+        const fileStream = fs.createReadStream(filename);
+        const uploadParams = {
+          Bucket: bucketName,
+          Body: fileStream,
+          Key: filename
+        };
+        return new import_lib_storage.Upload({
+          client: s3,
+          params: uploadParams
+        }).done();
+      } catch (error) {
+        console.error("Error occurred while uploading the file:", error);
+      }
     }
     async function deleteArchive(organization2, migrationId) {
-      console.log("Deleting organization migration archive from GitHub...\n");
-      await octokit.request(
-        "DELETE /orgs/{org}/migrations/{migration_id}/archive",
-        {
-          org: organization2,
-          migration_id: migrationId
-        }
-      );
+      try {
+        console.log(
+          "Deleting organization migration archive from GitHub...\n"
+        );
+        await octokit.request(
+          "DELETE /orgs/{org}/migrations/{migration_id}/archive",
+          {
+            org: organization2,
+            migration_id: migrationId
+          }
+        );
+      } catch (error) {
+        console.error(
+          "Error occurred while deleting the archive:",
+          error
+        );
+      }
     }
     async function downloadArchive(organization2, migration2, url2) {
       const maxRetries = 3;
@@ -55909,15 +55932,11 @@ async function runDownload(organization) {
               Authorization: `token ${process.env.GH_APIKEY}`
             }
           });
-          console.log(
-            `Creating filename...
-`
-          );
+          console.log(`Creating filename...
+`);
           const filename = `gh_org_archive_${organization2}_${new Date().toJSON().slice(0, 10)}.tar.gz`;
-          console.log(
-            `Starting download...
-`
-          );
+          console.log(`Starting download...
+`);
           const writeStream = fs.createWriteStream(filename);
           console.log("Downloading archive file...\n");
           archiveResponse.data.pipe(writeStream);
@@ -55930,12 +55949,18 @@ async function runDownload(organization) {
               resolve();
             });
             writeStream.on("error", (err) => {
-              console.log("Error while downloading file:", err.message);
+              console.log(
+                "Error while downloading file:",
+                err.message
+              );
               reject(err);
             });
           });
         } catch (error) {
-          console.error(`Error occurred during attempt ${retryCount}:`, error);
+          console.error(
+            `Error occurred during attempt ${retryCount}:`,
+            error
+          );
           if (retryCount === maxRetries) {
             throw error;
           }
