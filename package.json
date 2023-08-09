@@ -39,11 +39,11 @@
     "fs": "^0.0.1-security",
     "jest": "^28.1.1",
     "jshint": "^2.13.4",
-    "prettier": "^2.7.1",
     "ts-jest": "^28.0.4"
   },
   "devDependencies": {
     "eslint": "^8.24.0",
-    "eslint-plugin-jest": "^27.0.4"
+    "eslint-plugin-jest": "^27.0.4",
+    "prettier": "3.0.1"
   }
 }
