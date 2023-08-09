@@ -8,35 +8,48 @@ import axios from 'axios'
 import 'dotenv/config'
 
 // All the GitHub variables
-const githubOrganization: string = process.env.GH_ORG as string
+const githubOrganization: string = process.env.GITHUB_ACTIONS
+    ? core.getInput('github-organization', {required: true})
+    : (process.env.GH_ORG as string)
 const octokit = new Octokit({
-    auth: process.env.GH_APIKEY
+    auth: process.env.GITHUB_ACTIONS
+        ? core.getInput('github-api-key')
+        : (process.env.GH_API_KEY as string)
 })
 
 // All the AWS variables
 const {S3} = AWS_S3
-const bucketName: string = process.env.AWS_BUCKET_NAME as string
+const bucketName: string = process.env.GITHUB_ACTIONS
+    ? core.getInput('aws-bucket-name', {required: true})
+    : (process.env.AWS_BUCKET_NAME as string)
 const s3 = new S3({
-    region: process.env.AWS_BUCKET_REGION as string,
+    region: process.env.GITHUB_ACTIONS
+        ? core.getInput('aws-bucket-region', {required: true})
+        : (process.env.AWS_BUCKET_REGION as string),
     credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY as string,
-        secretAccessKey: process.env.AWS_SECRET_KEY as string
+        accessKeyId: process.env.GITHUB_ACTIONS
+            ? core.getInput('aws-access-key', {required: true})
+            : (process.env.AWS_ACCESS_KEY as string),
+        secretAccessKey: process.env.GITHUB_ACTIONS
+            ? core.getInput('aws-secret-key', {required: true})
+            : (process.env.AWS_SECRET_KEY as string)
     }
 })
 
 // All the script variables
-const downloadMigration: boolean = process.env.DOWNLOAD_MIGRATION === 'true'
+const downloadMigration: boolean =
+    core.getBooleanInput('download-migration', {required: false}) ||
+    process.env.DOWNLOAD_MIGRATION === 'true'
 
 // Check if all the variables necessary are defined
 export function check(): void {
     const requiredVariables = [
         'GH_ORG',
-        'GH_APIKEY',
+        'GH_API_KEY',
         'AWS_BUCKET_NAME',
         'AWS_BUCKET_REGION',
         'AWS_ACCESS_KEY',
-        'AWS_SECRET_KEY',
-        'DOWNLOAD_MIGRATION'
+        'AWS_SECRET_KEY'
     ]
 
     for (const variable of requiredVariables) {
@@ -275,8 +288,10 @@ async function runDownload(organization: string): Promise<void> {
     }
 }
 
-// Check if all variables are defined
-check()
+// Check if all variables are defined when not using Github Actions
+if (!process.env.GITHUB_ACTIONS) {
+    check()
+}
 
 if (!downloadMigration) {
     // Start the backup script when downloadMigration is false
