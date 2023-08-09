@@ -9,7 +9,6 @@ import 'dotenv/config'
 
 // All the GitHub variables
 const githubOrganization: string = process.env.GH_ORG as string
-const githubRepository: string = process.env.GH_REPO as string
 const octokit = new Octokit({
     auth: process.env.GH_APIKEY
 })
@@ -31,7 +30,7 @@ const downloadMigration: boolean = process.env.DOWNLOAD_MIGRATION === 'true'
 // Check if all the variables necessary are defined
 export function check(): void {
   const requiredVariables = [
-      'GH_ORG', 'GH_REPO', 'GH_APIKEY',
+      'GH_ORG', 'GH_APIKEY',
       'AWS_BUCKET_NAME', 'AWS_BUCKET_REGION',
       'AWS_ACCESS_KEY', 'AWS_SECRET_KEY',
       'DOWNLOAD_MIGRATION'
