@@ -41,8 +41,8 @@ const downloadMigration: boolean =
     core.getBooleanInput('download-migration', {required: false}) ||
     process.env.DOWNLOAD_MIGRATION === 'true'
 
-// Check if all the variables necessary are defined
-export function check(): void {
+// Check if all the variables necessary are defined when not using Github Actions
+export function checkEnv(): void {
     const requiredVariables = [
         'GH_ORG',
         'GH_API_KEY',
@@ -290,7 +290,7 @@ async function runDownload(organization: string): Promise<void> {
 
 // Check if all variables are defined when not using Github Actions
 if (!process.env.GITHUB_ACTIONS) {
-    check()
+    checkEnv()
 }
 
 if (!downloadMigration) {
