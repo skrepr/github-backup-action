@@ -1,44 +1,51 @@
 /* eslint-disable no-inner-declarations */
 import {Octokit} from '@octokit/core'
-import * as core from '@actions/core'
 import {Upload} from '@aws-sdk/lib-storage'
 import * as AWS_S3 from '@aws-sdk/client-s3'
-import * as fs from 'fs'
 import axios from 'axios'
 import 'dotenv/config'
+import { 
+  createWriteStream,
+  writeFileSync, 
+  readFileSync, 
+  createReadStream } from 'fs';
+import {
+  getBooleanInput,
+  getInput,
+} from '@actions/core';
 
 // All the GitHub variables
 const githubOrganization: string = process.env.GITHUB_ACTIONS
-    ? core.getInput('github-organization', {required: true})
+    ? getInput('github-organization', {required: true})
     : (process.env.GH_ORG as string)
 const octokit = new Octokit({
     auth: process.env.GITHUB_ACTIONS
-        ? core.getInput('github-api-key')
+        ? getInput('github-api-key')
         : (process.env.GH_API_KEY as string)
 })
 
 // All the AWS variables
 const {S3} = AWS_S3
 const bucketName: string = process.env.GITHUB_ACTIONS
-    ? core.getInput('aws-bucket-name', {required: true})
+    ? getInput('aws-bucket-name', {required: true})
     : (process.env.AWS_BUCKET_NAME as string)
 const s3 = new S3({
     region: process.env.GITHUB_ACTIONS
-        ? core.getInput('aws-bucket-region', {required: true})
+        ? getInput('aws-bucket-region', {required: true})
         : (process.env.AWS_BUCKET_REGION as string),
     credentials: {
         accessKeyId: process.env.GITHUB_ACTIONS
-            ? core.getInput('aws-access-key', {required: true})
+            ? getInput('aws-access-key', {required: true})
             : (process.env.AWS_ACCESS_KEY as string),
         secretAccessKey: process.env.GITHUB_ACTIONS
-            ? core.getInput('aws-secret-key', {required: true})
+            ? getInput('aws-secret-key', {required: true})
             : (process.env.AWS_SECRET_KEY as string)
     }
 })
 
 // All the script variables
 const downloadMigration: boolean =
-    core.getBooleanInput('download-migration', {required: false}) ||
+    getBooleanInput('download-migration', {required: false}) ||
     process.env.DOWNLOAD_MIGRATION === 'true'
 
 // Check if all the variables necessary are defined when not using Github Actions
@@ -103,7 +110,9 @@ async function runMigration(organization: string): Promise<void> {
 
         console.log(repoNames)
 
-        console.log(`\nStarting backup for ${repoNames.length} repositories...\n`)
+        console.log(
+            `\nStarting backup for ${repoNames.length} repositories...\n`
+        )
         // Start the migration on GitHub
         const migration = await octokit.request('POST /orgs/{org}/migrations', {
             org: organization,
@@ -112,7 +121,7 @@ async function runMigration(organization: string): Promise<void> {
         })
 
         // Write the response to a file
-        fs.writeFileSync(
+        writeFileSync(
             'migration_response.json',
             JSON.stringify(migration.data)
         )
@@ -131,7 +140,7 @@ async function runDownload(organization: string): Promise<void> {
     async function retrieveMigrationData() {
         try {
             // Read the contents of the file
-            const fileContents = fs.readFileSync(
+            const fileContents = readFileSync(
                 'migration_response.json',
                 'utf-8'
             )
@@ -198,7 +207,7 @@ async function runDownload(organization: string): Promise<void> {
                         .slice(0, 10)}.tar.gz`
 
                     console.log(`Starting download...\n`)
-                    const writeStream = fs.createWriteStream(filename)
+                    const writeStream = createWriteStream(filename)
                     console.log('Downloading archive file...\n')
                     archiveResponse.data.pipe(writeStream)
 
@@ -240,41 +249,47 @@ async function runDownload(organization: string): Promise<void> {
 
         // Function for uploading archive to our own S3 Bucket
         async function uploadArchive(filename: string): Promise<unknown> {
-          try {
-              console.log('Uploading archive to our own S3 bucket...\n')
-              const fileStream = fs.createReadStream(filename)
-              const uploadParams: AWS_S3.PutObjectCommandInput = {
-                  Bucket: bucketName,
-                  Body: fileStream,
-                  Key: filename
-              }
+            try {
+                console.log('Uploading archive to our own S3 bucket...\n')
+                const fileStream = createReadStream(filename)
+                const uploadParams: AWS_S3.PutObjectCommandInput = {
+                    Bucket: bucketName,
+                    Body: fileStream,
+                    Key: filename
+                }
 
-              // this will upload the archive to S3
-              return new Upload({
-                  client: s3,
-                  params: uploadParams
-              }).done()
-          } catch (error) {
-              console.error('Error occurred while uploading the file:', error)
-          }
-      }
+                // this will upload the archive to S3
+                return new Upload({
+                    client: s3,
+                    params: uploadParams
+                }).done()
+            } catch (error) {
+                console.error('Error occurred while uploading the file:', error)
+            }
+        }
         // Function for deleting archive from Github
-        async function deleteArchive( organization: string, migrationId: number ): Promise<void> {
-          try {
-              console.log(
-                  'Deleting organization migration archive from GitHub...\n'
-              )
-              await octokit.request(
-                  'DELETE /orgs/{org}/migrations/{migration_id}/archive',
-                  {
-                      org: organization,
-                      migration_id: migrationId
-                  }
-              )
-          } catch (error) {
-              console.error('Error occurred while deleting the archive:', error)
-          }
-      }
+        async function deleteArchive(
+            organization: string,
+            migrationId: number
+        ): Promise<void> {
+            try {
+                console.log(
+                    'Deleting organization migration archive from GitHub...\n'
+                )
+                await octokit.request(
+                    'DELETE /orgs/{org}/migrations/{migration_id}/archive',
+                    {
+                        org: organization,
+                        migration_id: migrationId
+                    }
+                )
+            } catch (error) {
+                console.error(
+                    'Error occurred while deleting the archive:',
+                    error
+                )
+            }
+        }
 
         // Download archive from Github and upload it to our own S3 bucket
         downloadArchive(organization, migration.id, migration.url)
