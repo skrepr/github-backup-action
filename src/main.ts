@@ -50,6 +50,7 @@ async function sleep(ms: number): Promise<void> {
 }
 
 async function getRepoNames(organization: string): Promise<string[]> {
+  try {
     console.log('\nGet list of repositories...\n')
 
     let repoNames: string[] = []
@@ -70,35 +71,38 @@ async function getRepoNames(organization: string): Promise<string[]> {
         fetchMore = repos.data.length >= n_results
     }
     return repoNames
+  } catch (error) {
+    console.error('Error occurred while retrieving list of repositories:', error)
+  }
 }
 
 // Function for running the migration
 async function runMigration(organization: string): Promise<void> {
-    try {
-        // Fetch repo names asynchronously
-        const repoNames = await getRepoNames(organization)
+  try {
+      // Fetch repo names asynchronously
+      const repoNames = await getRepoNames(organization)
 
-        console.log(repoNames)
+      console.log(repoNames)
 
-        console.log('\nStarting migration...\n')
+      console.log('\nStarting migration...\n')
 
-    // Start the migration on GitHub
-    const migration = await octokit.request('POST /orgs/{org}/migrations', {
-      org: organization,
-      repositories: repoNames,
-      lock_repositories: false
-    });
+  // Start the migration on GitHub
+  const migration = await octokit.request('POST /orgs/{org}/migrations', {
+    org: organization,
+    repositories: repoNames,
+    lock_repositories: false
+  });
 
-    // Write the response to a file
-    fs.writeFileSync('migration_response.json', JSON.stringify(migration.data));
+  // Write the response to a file
+  fs.writeFileSync('migration_response.json', JSON.stringify(migration.data));
 
-        console.log(
-            `Migration started successfully!\n The current migration id is ${migration.data.id} and the state is currently on ${migration.data.state}\n`
-        )
+      console.log(
+          `Migration started successfully!\n The current migration id is ${migration.data.id} and the state is currently on ${migration.data.state}\n`
+      )
 
-    } catch (error) {
-        console.error('Error occurred during the migration:', error)
-    }
+  } catch (error) {
+      console.error('Error occurred during the migration:', error)
+  }
 }
 
 // Function for downloading the migration
@@ -150,6 +154,7 @@ async function runDownload(organization: string): Promise<void> {
 
       // Function for uploading archive to our own S3 Bucket
       async function uploadArchive(filename: string): Promise<unknown> {
+        try {
           console.log('Uploading archive to our own S3 bucket...\n')
           const fileStream = fs.createReadStream(filename)
           const uploadParams: AWS_S3.PutObjectCommandInput = {
@@ -163,21 +168,25 @@ async function runDownload(organization: string): Promise<void> {
               client: s3,
               params: uploadParams
           }).done();
+        } catch (error) {
+          console.error('Error occurred while uploading the file:', error);
+        }
       }
 
       // Function for deleting archive from Github
-      async function deleteArchive(
-          organization: string,
-          migrationId: number
-      ): Promise<void> {
+      async function deleteArchive(organization: string, migrationId: number): Promise<void> {
+        try {
           console.log('Deleting organization migration archive from GitHub...\n')
-          await octokit.request(
-              'DELETE /orgs/{org}/migrations/{migration_id}/archive',
-              {
-                  org: organization,
-                  migration_id: migrationId
-              }
-          )
+            await octokit.request(
+                'DELETE /orgs/{org}/migrations/{migration_id}/archive',
+                {
+                    org: organization,
+                    migration_id: migrationId
+                }
+            )
+        } catch (error) {
+          console.error('Error occurred while deleting the archive:', error);
+        }
       }
 
       // Function for downloading archive from GitHub S3 environment
