@@ -72,6 +72,7 @@ async function getRepoNames(organization: string): Promise<string[]> {
     return repoNames
   } catch (error) {
     console.error('Error occurred while retrieving list of repositories:', error)
+    throw error;
   }
 }
 
