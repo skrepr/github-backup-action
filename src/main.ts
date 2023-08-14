@@ -20,27 +20,32 @@ const githubOrganization: string =
         ? getInput('github-organization', {required: true})
         : (process.env.GH_ORG as string)
 const octokit = new Octokit({
-    auth: process.env.GITHUB_ACTIONS
-        ? getInput('github-api-key')
-        : (process.env.GH_API_KEY as string)
+    auth:
+        process.env.GITHUB_ACTIONS && !process.env.CI
+            ? getInput('github-api-key')
+            : (process.env.GH_API_KEY as string)
 })
 
 // All the AWS variables
 const {S3} = AWS_S3
-const bucketName: string = process.env.GITHUB_ACTIONS
-    ? getInput('aws-bucket-name', {required: true})
-    : (process.env.AWS_BUCKET_NAME as string)
+const bucketName: string =
+    process.env.GITHUB_ACTIONS && !process.env.CI
+        ? getInput('aws-bucket-name', {required: true})
+        : (process.env.AWS_BUCKET_NAME as string)
 const s3 = new S3({
-    region: process.env.GITHUB_ACTIONS
-        ? getInput('aws-bucket-region', {required: true})
-        : (process.env.AWS_BUCKET_REGION as string),
+    region:
+        process.env.GITHUB_ACTIONS && !process.env.CI
+            ? getInput('aws-bucket-region', {required: true})
+            : (process.env.AWS_BUCKET_REGION as string),
     credentials: {
-        accessKeyId: process.env.GITHUB_ACTIONS
-            ? getInput('aws-access-key', {required: true})
-            : (process.env.AWS_ACCESS_KEY as string),
-        secretAccessKey: process.env.GITHUB_ACTIONS
-            ? getInput('aws-secret-key', {required: true})
-            : (process.env.AWS_SECRET_KEY as string)
+        accessKeyId:
+            process.env.GITHUB_ACTIONS && !process.env.CI
+                ? getInput('aws-access-key', {required: true})
+                : (process.env.AWS_ACCESS_KEY as string),
+        secretAccessKey:
+            process.env.GITHUB_ACTIONS && !process.env.CI
+                ? getInput('aws-secret-key', {required: true})
+                : (process.env.AWS_SECRET_KEY as string)
     }
 })
 
