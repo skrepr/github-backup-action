@@ -1,10 +1,13 @@
 {
   "compilerOptions": {
       "allowSyntheticDefaultImports": true,  // Allow importing modules with a default export from modules with no default export
+      // "allowImportingTsExtensions": true,
+      // "noEmit": true,
       "allowJs": true,                        // Allow importing and using JavaScript files
       "experimentalDecorators": true,         // Enable experimental decorators
       "types": [
           "@types/node",
+          "jest",
       ],
       "outDir": "build",                      // Output directory for transpiled files
       "target": "ESNext",                     // Target the latest ECMAScript version

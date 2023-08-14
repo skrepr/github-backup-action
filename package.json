@@ -1,6 +1,6 @@
 {
   "name": "github-backup-action",
-  "version": "1.0.0",
+  "version": "2.0.1",
   "description": "Github action for backing up Github orgs with migrations",
   "main": "index.js",
   "scripts": {
@@ -42,6 +42,7 @@
     "ts-jest": "^28.0.4"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.3",
     "eslint": "^8.24.0",
     "eslint-plugin-jest": "^27.0.4",
     "prettier": "3.0.1"
