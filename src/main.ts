@@ -1,18 +1,18 @@
 /* eslint-disable no-inner-declarations */
+import {checkEnv} from '../src/check'
+import {sleep} from '../src/sleep'
 import {Octokit} from '@octokit/core'
 import {Upload} from '@aws-sdk/lib-storage'
 import * as AWS_S3 from '@aws-sdk/client-s3'
 import axios from 'axios'
 import 'dotenv/config'
-import { 
-  createWriteStream,
-  writeFileSync, 
-  readFileSync, 
-  createReadStream } from 'fs';
 import {
-  getBooleanInput,
-  getInput,
-} from '@actions/core';
+    createWriteStream,
+    writeFileSync,
+    readFileSync,
+    createReadStream
+} from 'fs'
+import {getInput} from '@actions/core'
 
 // All the GitHub variables
 const githubOrganization: string = process.env.GITHUB_ACTIONS
@@ -44,34 +44,11 @@ const s3 = new S3({
 })
 
 // All the script variables
-const downloadMigration: boolean =
-    getBooleanInput('download-migration', {required: false}) ||
+const downloadMigration =
+    getInput('download-migration', {required: false}) ||
     process.env.DOWNLOAD_MIGRATION === 'true'
 
-// Check if all the variables necessary are defined when not using Github Actions
-export function checkEnv(): void {
-    const requiredVariables = [
-        'GH_ORG',
-        'GH_API_KEY',
-        'AWS_BUCKET_NAME',
-        'AWS_BUCKET_REGION',
-        'AWS_ACCESS_KEY',
-        'AWS_SECRET_KEY'
-    ]
-
-    for (const variable of requiredVariables) {
-        if (!process.env[variable]) {
-            throw new Error(`${variable} is undefined`)
-        }
-    }
-}
-
-// Add sleep function to reduce calls to GitHub API when checking the status of the migration
-async function sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms))
-}
-
-async function getRepoNames(organization: string): Promise<string[]> {
+export async function getRepoNames(organization: string): Promise<string[]> {
     try {
         console.log('\nGet list of repositories...\n')
 
@@ -121,10 +98,7 @@ async function runMigration(organization: string): Promise<void> {
         })
 
         // Write the response to a file
-        writeFileSync(
-            'migration_response.json',
-            JSON.stringify(migration.data)
-        )
+        writeFileSync('migration_response.json', JSON.stringify(migration.data))
 
         console.log(
             `Migration started successfully!\n\nThe current migration id is ${migration.data.id} and the state is currently on ${migration.data.state}\n`
@@ -137,6 +111,7 @@ async function runMigration(organization: string): Promise<void> {
 // Function for downloading the migration
 async function runDownload(organization: string): Promise<void> {
     // Function for retrieving data from the stored file that the runMigration function created
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     async function retrieveMigrationData() {
         try {
             // Read the contents of the file
@@ -154,7 +129,7 @@ async function runDownload(organization: string): Promise<void> {
             return migrationData // Return the parsed data to be used later
         } catch (error) {
             console.error('Error occurred while reading the file:', error)
-            return null
+            throw error
         }
     }
 
@@ -182,7 +157,12 @@ async function runDownload(organization: string): Promise<void> {
         console.log(`State changed to ${state}!\n`)
 
         // Function for downloading archive from GitHub S3 environment
-        async function downloadArchive(organization, migration, url) {
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+        async function downloadArchive(
+            organization: string,
+            migration: number,
+            url: string
+        ) {
             const maxRetries = 3
             const timeoutDuration = 30000 // 30 seconds
             for (let retryCount = 1; retryCount <= maxRetries; retryCount++) {
@@ -191,22 +171,22 @@ async function runDownload(organization: string): Promise<void> {
                         `Requesting download of archive with migration_id: ${migration}...\n`
                     )
 
-                    const archiveUrl = url + '/archive'
+                    const archiveUrl = `${url}/archive`
 
                     const archiveResponse = await axios.get(archiveUrl, {
                         responseType: 'stream',
                         headers: {
-                            Authorization: `token ${process.env.GH_APIKEY}`
+                            Authorization: `token ${process.env.GH_API_KEY}`
                         }
                     })
 
-                    console.log(`Creating filename...\n`)
+                    console.log('Creating filename...\n')
                     // Create a name for the file which has the current date attached to it
                     const filename = `gh_org_archive_${organization}_${new Date()
                         .toJSON()
                         .slice(0, 10)}.tar.gz`
 
-                    console.log(`Starting download...\n`)
+                    console.log('Starting download...\n')
                     const writeStream = createWriteStream(filename)
                     console.log('Downloading archive file...\n')
                     archiveResponse.data.pipe(writeStream)

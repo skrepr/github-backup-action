@@ -54580,7 +54580,7 @@ var require_core = __commonJS({
       return inputs.map((input) => input.trim());
     }
     exports.getMultilineInput = getMultilineInput;
-    function getBooleanInput2(name, options) {
+    function getBooleanInput(name, options) {
       const trueValue = ["true", "True", "TRUE"];
       const falseValue = ["false", "False", "FALSE"];
       const val2 = getInput2(name, options);
@@ -54591,7 +54591,7 @@ var require_core = __commonJS({
       throw new TypeError(`Input does not meet YAML 1.2 "Core Schema" specification: ${name}
 Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
-    exports.getBooleanInput = getBooleanInput2;
+    exports.getBooleanInput = getBooleanInput;
     function setOutput(name, value) {
       const filePath = process.env["GITHUB_OUTPUT"] || "";
       if (filePath) {
@@ -54697,9 +54697,33 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
 // src/main.ts
 var main_exports = {};
 __export(main_exports, {
-  checkEnv: () => checkEnv
+  getRepoNames: () => getRepoNames
 });
 module.exports = __toCommonJS(main_exports);
+
+// src/check.ts
+function checkEnv() {
+  const requiredVariables = [
+    "GH_ORG",
+    "GH_API_KEY",
+    "AWS_BUCKET_NAME",
+    "AWS_BUCKET_REGION",
+    "AWS_ACCESS_KEY",
+    "AWS_SECRET_KEY"
+  ];
+  for (const variable of requiredVariables) {
+    if (!process.env[variable]) {
+      throw new Error(`${variable} is undefined`);
+    }
+  }
+}
+
+// src/sleep.ts
+async function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// src/main.ts
 var import_core = __toESM(require_dist_node8());
 var import_lib_storage = __toESM(require_dist_cjs69());
 var AWS_S3 = __toESM(require_dist_cjs67());
@@ -57664,25 +57688,7 @@ var s3 = new S3({
     secretAccessKey: process.env.GITHUB_ACTIONS ? (0, import_core2.getInput)("aws-secret-key", { required: true }) : process.env.AWS_SECRET_KEY
   }
 });
-var downloadMigration = (0, import_core2.getBooleanInput)("download-migration", { required: false }) || process.env.DOWNLOAD_MIGRATION === "true";
-function checkEnv() {
-  const requiredVariables = [
-    "GH_ORG",
-    "GH_API_KEY",
-    "AWS_BUCKET_NAME",
-    "AWS_BUCKET_REGION",
-    "AWS_ACCESS_KEY",
-    "AWS_SECRET_KEY"
-  ];
-  for (const variable of requiredVariables) {
-    if (!process.env[variable]) {
-      throw new Error(`${variable} is undefined`);
-    }
-  }
-}
-async function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+var downloadMigration = (0, import_core2.getInput)("download-migration", { required: false }) || process.env.DOWNLOAD_MIGRATION === "true";
 async function getRepoNames(organization) {
   try {
     console.log("\nGet list of repositories...\n");
@@ -57724,10 +57730,7 @@ Starting backup for ${repoNames.length} repositories...
       repositories: repoNames,
       lock_repositories: false
     });
-    (0, import_fs.writeFileSync)(
-      "migration_response.json",
-      JSON.stringify(migration.data)
-    );
+    (0, import_fs.writeFileSync)("migration_response.json", JSON.stringify(migration.data));
     console.log(
       `Migration started successfully!
 
@@ -57750,7 +57753,7 @@ async function runDownload(organization) {
       return migrationData;
     } catch (error) {
       console.error("Error occurred while reading the file:", error);
-      return null;
+      throw error;
     }
   }
   try {
@@ -57780,18 +57783,16 @@ async function runDownload(organization) {
             `Requesting download of archive with migration_id: ${migration2}...
 `
           );
-          const archiveUrl = url2 + "/archive";
+          const archiveUrl = `${url2}/archive`;
           const archiveResponse = await axios_default.get(archiveUrl, {
             responseType: "stream",
             headers: {
-              Authorization: `token ${process.env.GH_APIKEY}`
+              Authorization: `token ${process.env.GH_API_KEY}`
             }
           });
-          console.log(`Creating filename...
-`);
+          console.log("Creating filename...\n");
           const filename = `gh_org_archive_${organization2}_${(/* @__PURE__ */ new Date()).toJSON().slice(0, 10)}.tar.gz`;
-          console.log(`Starting download...
-`);
+          console.log("Starting download...\n");
           const writeStream = (0, import_fs.createWriteStream)(filename);
           console.log("Downloading archive file...\n");
           archiveResponse.data.pipe(writeStream);
@@ -57875,7 +57876,7 @@ if (!downloadMigration) {
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  checkEnv
+  getRepoNames
 });
 /*! Bundled license information:
 
