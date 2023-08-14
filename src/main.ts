@@ -15,9 +15,10 @@ import {
 import {getInput} from '@actions/core'
 
 // All the GitHub variables
-const githubOrganization: string = process.env.GITHUB_ACTIONS
-    ? getInput('github-organization', {required: true})
-    : (process.env.GH_ORG as string)
+const githubOrganization: string =
+    process.env.GITHUB_ACTIONS && !process.env.CI
+        ? getInput('github-organization', {required: true})
+        : (process.env.GH_ORG as string)
 const octokit = new Octokit({
     auth: process.env.GITHUB_ACTIONS
         ? getInput('github-api-key')

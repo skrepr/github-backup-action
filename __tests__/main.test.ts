@@ -1,8 +1,18 @@
 import {getRepoNames} from '../src/main'
 
 describe('getRepoNames', () => {
+    let originalEnv: NodeJS.ProcessEnv
+
+    beforeAll(() => {
+        originalEnv = process.env
+    })
+
+    afterEach(() => {
+        process.env = originalEnv // Restore original process.env after each test
+    })
     it('should fetch repository names for the given organization', async () => {
         process.env = {
+            CI: 'true',
             GH_ORG: 'myorg',
             GH_API_KEY: 'apikey',
             AWS_BUCKET_NAME: 'bucket',
@@ -20,6 +30,7 @@ describe('getRepoNames', () => {
 
     it('should handle errors when fetching repository names', async () => {
         process.env = {
+            CI: 'true',
             GH_ORG: 'myorg',
             GH_API_KEY: 'apikey',
             AWS_BUCKET_NAME: 'bucket',
