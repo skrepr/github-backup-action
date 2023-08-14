@@ -52,7 +52,7 @@ jobs:
 
     steps:
     - name: Github Migrations Backup
-      uses: skrepr/github-backup-action@1.0.0
+      uses: skrepr/github-backup-action@2.0.0
       with:
         github-organization: "your-organization-here"
         github-apikey: ${}
@@ -94,7 +94,7 @@ jobs:
         path: migration_response.json
 
     - name: Github Migrations Backup
-      uses: skrepr/github-backup-action@1.0.0
+      uses: skrepr/github-backup-action@2.0.0
       with:
         download-migration: true
         github-organization: "your-organization-here"
