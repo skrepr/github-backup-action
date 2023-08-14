@@ -8,22 +8,17 @@ on: # rebuild any PRs and main branch changes
       - master
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - run: |
-          npm install
-      - run: |
-          npm run lint
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          npm run build
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          npm run test
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install
+      - name: Run linting
+        run: npm run lint
+      - name: Build script
+        run: npm run build
+      - name: Test code
+        run: npm run test
 
