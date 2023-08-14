@@ -57675,17 +57675,17 @@ var {
 // src/main.ts
 var import_fs = require("fs");
 var import_core2 = __toESM(require_core());
-var githubOrganization = process.env.GITHUB_ACTIONS ? (0, import_core2.getInput)("github-organization", { required: true }) : process.env.GH_ORG;
+var githubOrganization = process.env.GITHUB_ACTIONS && !process.env.CI ? (0, import_core2.getInput)("github-organization", { required: true }) : process.env.GH_ORG;
 var octokit = new import_core.Octokit({
-  auth: process.env.GITHUB_ACTIONS ? (0, import_core2.getInput)("github-api-key") : process.env.GH_API_KEY
+  auth: process.env.GITHUB_ACTIONS && !process.env.CI ? (0, import_core2.getInput)("github-api-key") : process.env.GH_API_KEY
 });
 var { S3 } = AWS_S3;
-var bucketName = process.env.GITHUB_ACTIONS ? (0, import_core2.getInput)("aws-bucket-name", { required: true }) : process.env.AWS_BUCKET_NAME;
+var bucketName = process.env.GITHUB_ACTIONS && !process.env.CI ? (0, import_core2.getInput)("aws-bucket-name", { required: true }) : process.env.AWS_BUCKET_NAME;
 var s3 = new S3({
-  region: process.env.GITHUB_ACTIONS ? (0, import_core2.getInput)("aws-bucket-region", { required: true }) : process.env.AWS_BUCKET_REGION,
+  region: process.env.GITHUB_ACTIONS && !process.env.CI ? (0, import_core2.getInput)("aws-bucket-region", { required: true }) : process.env.AWS_BUCKET_REGION,
   credentials: {
-    accessKeyId: process.env.GITHUB_ACTIONS ? (0, import_core2.getInput)("aws-access-key", { required: true }) : process.env.AWS_ACCESS_KEY,
-    secretAccessKey: process.env.GITHUB_ACTIONS ? (0, import_core2.getInput)("aws-secret-key", { required: true }) : process.env.AWS_SECRET_KEY
+    accessKeyId: process.env.GITHUB_ACTIONS && !process.env.CI ? (0, import_core2.getInput)("aws-access-key", { required: true }) : process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.GITHUB_ACTIONS && !process.env.CI ? (0, import_core2.getInput)("aws-secret-key", { required: true }) : process.env.AWS_SECRET_KEY
   }
 });
 var downloadMigration = (0, import_core2.getInput)("download-migration", { required: false }) || process.env.DOWNLOAD_MIGRATION === "true";
