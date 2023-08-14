@@ -27,7 +27,7 @@ inputs:
     description: 'The Secret Key needed to complete authentication to AWS'
     required: true
 runs:
-  using: 'node20'
+  using: 'node16'
   main: 'dist/index.js'
 branding:
   icon: 'upload-cloud'  
