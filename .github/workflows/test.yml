@@ -1,10 +1,11 @@
 name: 'build-test'
 on: # rebuild any PRs and main branch changes
-  pull_request:
+  release:
+    types: [published]
   push:
     branches:
       - main
-      - 'releases/*'
+      - master
 
 jobs:
   lint:
