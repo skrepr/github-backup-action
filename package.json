@@ -30,7 +30,7 @@
     "@aws-sdk/client-s3": "^3.386.0",
     "@aws-sdk/lib-storage": "^3.386.0",
     "@octokit/core": "^5.0.1",
-    "@types/node": "^20.4.9",
+    "@types/node": "^20.8.10",
     "aws-sdk": "^2.1485.0",
     "axios": "^1.4.0",
     "dotenv": "^16.0.2",
